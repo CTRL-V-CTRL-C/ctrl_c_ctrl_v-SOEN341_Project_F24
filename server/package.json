@@ -1,0 +1,32 @@
+{
+  "name": "peercheck-server",
+  "version": "1.0.0",
+  "description": "The server endpoint for the peer check website",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node main.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CTRL-V-CTRL-C/ctrl_c_ctrl_v-SOEN341_Project_F24.git"
+  },
+  "keywords": [
+    "review",
+    "server",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CTRL-V-CTRL-C/ctrl_c_ctrl_v-SOEN341_Project_F24/issues"
+  },
+  "homepage": "https://github.com/CTRL-V-CTRL-C/ctrl_c_ctrl_v-SOEN341_Project_F24#readme",
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
