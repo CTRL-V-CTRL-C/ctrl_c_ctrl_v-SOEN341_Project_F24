@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    height: 100%;
+    align-content: center;
+}
+
+.card {
+    width: 400px;
+    height: 450px;;
+    padding: 20px; /* Add padding for better spacing */
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.153);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items */
+    
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /*to make border rounded*/
+    width: 350px; /* less than card size */
+    box-sizing: border-box;
+}
+.userinfo {
+    margin-bottom: 15px; /* Space between inputs */
+}
+.btn:hover {
+    background-color: #0056b3; /* Darker on hover */
+}
