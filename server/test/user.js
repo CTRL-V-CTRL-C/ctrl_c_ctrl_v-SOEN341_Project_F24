@@ -1,8 +1,7 @@
-import test, { suite, it } from 'node:test'
+import { suite, it, mock } from 'node:test'
 import assert from 'node:assert'
 import request from 'supertest'
 import { app } from '../server.js'
-
 
 suite("POST requests to create a user", () => {
     it("should respond with 200 when creating a user with name and password", async (t) => {

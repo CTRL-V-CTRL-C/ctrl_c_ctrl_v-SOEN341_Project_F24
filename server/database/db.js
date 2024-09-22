@@ -1,4 +1,6 @@
 import pg from 'pg'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const user = process.env.db_user
 const password = process.env.db_password
@@ -19,9 +21,15 @@ const config = {
     },
 };
 
-
-const client = new pg.Client(config);
-// TODO: connect with the parameters
-// await client.connect()
+let client = undefined;
+const mockedClient = {
+    query: async (query, params) => { console.log(`queried: ${query} with paramas ${params}`) }
+}
+if (process.env.PROD) {
+    client = new pg.Client(config)
+    await client.connect()
+} else {
+    client = mockedClient
+}
 
 export { client as db }
