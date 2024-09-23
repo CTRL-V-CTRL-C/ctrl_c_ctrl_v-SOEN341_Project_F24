@@ -12,7 +12,7 @@ db.query("CREATE TABLE IF NOT EXISTS users (\
   role      char(4) NOT NULL\
   )");
 
-//Create Courses table
+//TODO: Create Courses table
 
-//Create Teams table
+//TODO: Create Teams table
 
