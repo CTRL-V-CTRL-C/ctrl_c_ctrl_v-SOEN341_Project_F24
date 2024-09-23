@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 
 //Create users table
-db.query("CREATE TABLE IF NOT EXISTS users (\
+await db.query("CREATE TABLE IF NOT EXISTS users (\
   user_id   serial PRIMARY KEY,\
   username  varchar(30) UNIQUE NOT NULL,\
   hash      bytea NOT NULL,\
@@ -12,7 +12,10 @@ db.query("CREATE TABLE IF NOT EXISTS users (\
   role      char(4) NOT NULL\
   )");
 
+console.log("Created users table");
+
 //TODO: Create Courses table
 
 //TODO: Create Teams table
 
+db.end();
