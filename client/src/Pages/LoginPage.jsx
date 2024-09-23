@@ -1,24 +1,27 @@
+import * as React from 'react';
 import './LoginPage.css'
 
-function LoginPage(){
-    return(
+function LoginPage() {
+    return (
         <>
-        <div class="container"></div>
-    <div className="d-flex justify-content-center h-100"></div>
-    <div className="card">
-        <form class="login-form">
-            <div class="userinfo">
-                <input type="text" class="form-control" placeholder="username"/>
+            <img src="https://www.concordia.ca/content/dam/common/logos/Concordia-logo.jpeg"
+                alt="concordia logo" width="300" height="100" />
+
+            <div className="card">
+                <form class="login-form">
+                    <div class="userinfo">
+                        <input type="text" class="form-control" placeholder="username" />
+                    </div>
+
+                    <div class="userinfo">
+                        <input type="password" class="form-control" placeholder="password" />
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="Login" class="btn" />
+                    </div>
+                </form>
             </div>
 
-            <div class="userinfo">
-                <input type="password" class="form-control" placeholder="password"/>
-            </div>
-            <div class="submit">
-                <input type="submit" value="Login" class="btn"/>
-            </div>
-        </form>
-    </div>
         </>
     )
 }
