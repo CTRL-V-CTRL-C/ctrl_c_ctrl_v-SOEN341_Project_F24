@@ -1,18 +1,18 @@
 import './App.css'
-import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import PageHolder from './Pages/PageHolder';
 import NavBar from './Pages/Components/NavBar';
+import './Pages/Components/Styles/BackgroundImage.css';
 
 function App() {
 
   return (
-    <>
-      <NavBar/>
+    <div className="background-image-container">
+      <NavBar />
       <Router>
-        <PageHolder/>
+        <PageHolder />
       </Router>
-    </>
+    </div>
   )
 }
 

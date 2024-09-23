@@ -2,3 +2,14 @@
   text-align: center;
 }
 
+body {
+  color: rgb(37, 5, 5);
+}
+
+a {
+  color: inherit;
+}
+
+html, body {
+  height: 100%;
+}

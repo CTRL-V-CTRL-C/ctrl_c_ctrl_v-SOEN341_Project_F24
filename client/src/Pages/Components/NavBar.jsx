@@ -1,26 +1,18 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import './Styles/NavBar.css';
-/**
- * Navigation bar to be used on all pages
- * @returns {ReactElement}
- */
+
 function NavBar() {
 
-    const [userLoggedIn, setUserLoggerIn] = useState(false)
-
-    async function handleLogout() {
-        await fetch("/authentication/logout");
-        auth.setUserLoggedIn(false);
-    }
+    //const [userLoggedIn, setUserLoggerIn] = useState(false);
 
     return (
         <div id="navbar">
-            <div class="nav-sub">
+            <div className="nav-sub">
                 <li>
                     <a href="/"> Home </a>
                 </li>
             </div>
-            <div class="nav-sudb">
+            <div className="nav-sub">
                 <li>
                     <a href="/loginAccount"> Login </a>
                 </li>
@@ -28,7 +20,6 @@ function NavBar() {
                     <a href="/registerAccount"> Sign Up </a>
                 </li>
             </div>
-            
         </div>
     );
 }

@@ -13,30 +13,25 @@
   list-style-type: none;
   cursor: pointer;
   font-size: 1.5em;
-  color: var(--sub-color);
   text-wrap: nowrap;
 }
 
 .nav-sub {
     display: flex;
-    width: 80%;
     max-width: 450px;
     min-width: 100px;
     margin-right: 20px;
 }
 
 #navbar li:hover, #navbar a:hover {
-    color: var(--text-color);
+    color: rgb(240, 205, 205);
 }
 
 a:link {
   text-decoration: none;
+  
 }
 
 a:visited {
-    color: var(--sub-color);
-}
-
-#navbar li:active, #navbar a:active {
-    color: var(--accent-color);
+    text-decoration: none;
 }
