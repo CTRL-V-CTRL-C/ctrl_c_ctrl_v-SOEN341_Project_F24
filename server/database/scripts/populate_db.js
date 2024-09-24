@@ -29,7 +29,7 @@ for (let i = 0; i < 11; i++) {
     "Joe",
     "Parker",
     getSchoolNum(),
-    "PROF"
+    "INST"
   ]);
 }
 
