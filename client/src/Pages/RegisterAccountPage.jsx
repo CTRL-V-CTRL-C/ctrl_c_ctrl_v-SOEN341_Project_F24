@@ -6,6 +6,12 @@ function RegisterAccountPage() {
     <div className="registration-form">
       <form className="form">
         <p className="title">Create an Account </p>
+        <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
+          <input type="checkbox" id="filter" />
+          <span>STUDENT</span>
+          <span>INSTRUCTOR</span>
+        </label>
+
         <div className="flex">
           <label>
             <input required="" placeholder="" type="text" className="input" />
@@ -17,11 +23,11 @@ function RegisterAccountPage() {
             <span>Lastname</span>
           </label>
         </div>
-
+        {/* 
         <label>
           <input required="" placeholder="" type="email" className="input" />
           <span>Email</span>
-        </label>
+        </label> */}
 
         <label>
           <input required="" placeholder="" type="text" className="input" />
