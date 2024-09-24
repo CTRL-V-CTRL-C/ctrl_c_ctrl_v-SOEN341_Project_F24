@@ -3,6 +3,11 @@
   line-height: 1.5;
   font-weight: 400;
   
+
+  /* color-scheme: light dark;
+  color: rgba(17, 16, 16, 0.87);
+  background-color: #ece1e1; */
+
   font-synthesis: none;
   /* text-rendering: optimizeLegibility; */
   -webkit-font-smoothing: antialiased;
@@ -15,6 +20,11 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+html,
+body {
+  height: 100%;
+}
+
 html,
 body {
   height: 100%;

@@ -1,15 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import LoginPage from './Pages/LoginPage'
+import { BrowserRouter as Router } from 'react-router-dom';
+import PageHolder from './Pages/PageHolder';
+import NavBar from './Pages/Components/NavBar';
+import './Pages/Components/Styles/BackgroundImage.css';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-      <LoginPage/>
+    <>
+      <NavBar />
+      <Router>
+        <PageHolder />
+      </Router>
+    </>
   )
 }
 
-export default App
+export default App;

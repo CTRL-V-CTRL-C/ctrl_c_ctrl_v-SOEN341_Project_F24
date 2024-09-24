@@ -1,16 +1,15 @@
 #root {
   text-align: center;
-  height: 100%;
-  background-image: url(".//assets/images/backgroundPhoto.png");
-  background-size:cover;
-  background-repeat: no-repeat;
-}
-body{
-  color: rgb(37, 5, 5); 
 }
 
+body {
+  color: rgb(37, 5, 5);
+}
+
+a {
+  color: inherit;
+}
 
 html, body {
   height: 100%;
 }
-
