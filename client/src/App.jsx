@@ -7,12 +7,12 @@ import './Pages/Components/Styles/BackgroundImage.css';
 function App() {
 
   return (
-    <div className="background-image-container">
+    <>
       <NavBar />
       <Router>
         <PageHolder />
       </Router>
-    </div>
+    </>
   )
 }
 

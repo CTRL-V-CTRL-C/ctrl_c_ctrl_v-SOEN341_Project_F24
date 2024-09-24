@@ -1,4 +1,4 @@
-div.background-image-container {
+html {
     background-image: url("../../../assets/images/backgroundimage.png");
     background-size:cover;
     background-repeat: no-repeat;
