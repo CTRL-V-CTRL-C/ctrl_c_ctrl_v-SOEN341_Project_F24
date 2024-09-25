@@ -2,6 +2,7 @@ import './LoginPage.css';
 
 function LoginPage() {
     return (
+        
         <div className="card">
             
             <form class="login-form">
@@ -14,7 +15,8 @@ function LoginPage() {
                     <input type="password" class="form-control" placeholder="password" />
                 </div>
                 <input type="submit" value="Login" class="btn" />
-                <p className="login">Don't have an account ? <a href="/registerAccount">Sign up</a> </p>
+                <p className="forgotPassword"> <a href="/home">Forgot password</a> </p> 
+                <p className="login">Don't have an account ? <a href="/registerAccount">Create Account</a> </p>
             </form>
         </div>
     );

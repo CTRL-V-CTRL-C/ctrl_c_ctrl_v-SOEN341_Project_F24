@@ -43,7 +43,7 @@ function RegisterAccountPage() {
           <span>Confirm password</span>
         </label>
         <button className="submit">Sign Up</button>
-        <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
+        <p className="signin">Already have an account ? <a href="/loginAccount">Sign in</a> </p>
       </form>
     </div>
   )

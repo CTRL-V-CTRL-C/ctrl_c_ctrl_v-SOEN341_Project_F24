@@ -1,4 +1,4 @@
-// import { useState } from 'react';
+
 import './Styles/NavBar.css';
 
 function NavBar() {
@@ -19,7 +19,7 @@ function NavBar() {
                 <li>
                     <a href="/registerAccount"> Sign Up </a>
                 </li>
-            </div>
+            </div> 
         </div>
     );
 }
