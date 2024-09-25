@@ -15,18 +15,21 @@ function RegisterAccountPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(<RxCrossCircled color='red' />);
   const [isPasswordValid, setIsPasswordValid] = useState(<RxCrossCircled color='red' />);
+  const [arePasswordsCorrect, setArePasswordsCorrect] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
 
+  // Check if the confimr password is the same as the original password
   const checkPassword = useCallback(() => {
     if (password == confirmPassword && confirmPassword.length >= 8) {
       setIsPasswordConfirmed(<RxCheckCircled color='green' />);
-      setSubmitEnabled(true);
+      setArePasswordsCorrect(true);
     } else {
       setIsPasswordConfirmed(<RxCrossCircled color='red' />);
-      setSubmitEnabled(false);
+      setArePasswordsCorrect(false);
     }
   }, [password, confirmPassword]);
 
+  // Validate both password and confirm password whenever password is changed
   useEffect(() => {
     setSubmitEnabled(false);
     checkPassword();
@@ -37,12 +40,26 @@ function RegisterAccountPage() {
     }
   }, [password, checkPassword]);
 
+  // Only allow submission if all fields have been entered
+  useEffect(() => {
+    setSubmitEnabled((firstname && lastname && email && userID && password && confirmPassword && arePasswordsCorrect));
+  }, [firstname, lastname, email, userID, password, confirmPassword, arePasswordsCorrect]);
+
+  // Validate password confirmation whenever it is changed
   useEffect(() => {
     checkPassword();
   }, [confirmPassword, checkPassword]);
 
-  function registerAccount() {
-    if (!(firstname && lastname && email && userID && password)) {
+  // Handles form submit
+  // TODO: Description
+  function registerAccount(event) {
+
+    //Stops the form from submitting
+    event.preventDefault();
+
+
+    let form = event.currentTarget;
+    if (!form.checkValidity()) {
       return;
     }
     //For testing purposes only:
@@ -58,7 +75,7 @@ function RegisterAccountPage() {
 
   return (
     <div className="registration-form">
-      <div className="form">
+      <form className="form" onSubmit={(e) => registerAccount(e)}>
         <p className="title">Create an Account </p>
         <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
           <input type="checkbox" id="filter" checked={isInstructor} onChange={() => setIsInstructor(!isInstructor)} />
@@ -73,13 +90,10 @@ function RegisterAccountPage() {
         <FormInput fieldName={"Email"} fieldType={"email"} setField={setEmail} />
         <FormInput fieldName={isInstructor ? "Instructor ID" : "Student ID"} fieldType={"text"} setField={setUserID} />
         <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
-        <label>
-          <input required placeholder="" type={"password"} className="input" onChange={(e) => setConfirmPassword(e.target.value)} />
-          <span className="field-label">{"Confirm Password"}{isPasswordConfirmed} </span>
-        </label>
-        <button disabled={!submitEnabled} className="submit" onClick={registerAccount}>Sign Up</button>
+        <FormInput fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
+        <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>
         <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
-      </div>
+      </form>
     </div>
   );
 }
