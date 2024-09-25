@@ -3,7 +3,9 @@ import './LoginPage.css';
 function LoginPage() {
     return (
         <div className="card">
+            
             <form class="login-form">
+            <p className="title">Login </p>
                 <div class="userinfo">
                     <input type="text" class="form-control" placeholder="username" />
                 </div>
@@ -11,9 +13,8 @@ function LoginPage() {
                 <div class="userinfo">
                     <input type="password" class="form-control" placeholder="password" />
                 </div>
-                <div class="submit">
-                    <input type="submit" value="Login" class="btn" />
-                </div>
+                <input type="submit" value="Login" class="btn" />
+                <p className="login">Don't have an account ? <a href="/registerAccount">Sign up</a> </p>
             </form>
         </div>
     );
