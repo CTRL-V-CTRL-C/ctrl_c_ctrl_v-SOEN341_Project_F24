@@ -85,7 +85,14 @@
     transform: .3s ease;
 }
 
-.submit:hover {
+.submit:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
+.submit:enabled:hover {
     background-color: #873957af;
     cursor: pointer;
 }
