@@ -56,7 +56,8 @@ if (process.env.PROD) {
 
 let client = new pg.Client(config);
 const mockedClient = {
-    query: async (query, params) => { console.log(`queried: ${JSON.stringify(query)} with paramas ${params}`) }
+    query: async (query, params) => { console.log(`queried: ${JSON.stringify(query)} with paramas ${params}`) },
+    end: async () => { console.log("database client disconnected"); }
 };
 
 try {

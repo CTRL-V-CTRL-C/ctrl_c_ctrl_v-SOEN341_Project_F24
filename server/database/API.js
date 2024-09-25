@@ -31,9 +31,13 @@ async function createUser(db, username, password_hash) {
         text: `INSERT INTO ${table} (username, password) VALUES ($1, $2)`, // this query is wrong
         values: [username, password_hash]
     }
-    console.log("here")
-    await db.query(query)
-    console.log("and now here");
+
+    try {
+        await db.query(query);
+    } catch (error) {
+        console.error("There was an error while querying the database");
+        console.error(error);
+    }
 
     return true
 }
