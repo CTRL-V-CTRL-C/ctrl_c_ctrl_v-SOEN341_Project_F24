@@ -8,26 +8,28 @@ let getSchoolNum = () => ++schoolNum;
 
 //Make students
 for (let i = 0; i < 11; i++) {
-  await db.query("INSERT INTO users (username, hash, salt, f_name, l_name, school_id, role)\
-   VALUES ($1,$2,$3,$4,$5,$6,$7)", [
+  await db.query("INSERT INTO users (username, hash, salt, f_name, l_name, email, school_id, role)\
+   VALUES ($1,$2,$3,$4,$5,$6,$7,$8)", [
     "user" + getUserNum(),
     "4d2f87e14f62b3bc58e97d0d0002bd6b",
     "superlongsalt123",
     "Joe",
     "Parker",
+    `JoeParker${usernum}@gmail.com`,
     getSchoolNum(),
     "STUD"
   ]);
 }
 //Make professors
 for (let i = 0; i < 11; i++) {
-  await db.query("INSERT INTO users (username, hash, salt, f_name, l_name, school_id, role)\
-   VALUES ($1,$2,$3,$4,$5,$6,$7)", [
+  await db.query("INSERT INTO users (username, hash, salt, f_name, l_name, email, school_id, role)\
+   VALUES ($1,$2,$3,$4,$5,$6,$7,$8)", [
     "user" + getUserNum(),
     "4d2f87e14f62b3bc58e97d0d0002bd6b",
     "superlongsalt123",
     "Joe",
     "Parker",
+    `JoeParker${usernum}@gmail.com`,
     getSchoolNum(),
     "INST"
   ]);
