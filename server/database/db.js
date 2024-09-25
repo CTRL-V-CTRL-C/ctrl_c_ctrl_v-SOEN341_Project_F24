@@ -1,6 +1,7 @@
 import pg from 'pg'
 import fs from 'node:fs'
 import dotenv from 'dotenv'
+import log from '../logger.js';
 dotenv.config()
 
 // all the configs to connect to the production database
@@ -23,7 +24,7 @@ let config = undefined;
 
 // connect to prod if in prod else connect to the test
 if (process.env.PROD) {
-    console.info("Using the production database");
+    log.info("Using the production database");
     config = {
         user,
         password,
@@ -37,7 +38,7 @@ if (process.env.PROD) {
         },
     };
 } else {
-    console.info("Using the test database");
+    log.info("Using the test database");
 
     config = {
         user: test_user,
@@ -56,20 +57,20 @@ if (process.env.PROD) {
 
 let client = new pg.Client(config);
 const mockedClient = {
-    query: async (query, params) => { console.log(`queried: ${JSON.stringify(query)} with paramas ${params}`) },
-    end: async () => { console.log("database client disconnected"); }
+    query: async (query, params) => { log.info(`queried: ${JSON.stringify(query)} with paramas ${params}`) },
+    end: async () => { log.info("database client disconnected"); }
 };
 
 try {
     await client.connect();
 } catch (error) {
-    console.warn(`There was an error while connecting to the database`);
-    console.warn(error);
+    log.warn(`There was an error while connecting to the database`);
+    log.warn(error);
     if (process.env.PROD) {
-        console.error("The server was started in production and couldn't connect to the database, shutting down");
+        log.error("The server was started in production and couldn't connect to the database, shutting down");
         process.exit(1);
     } else {
-        console.info("Using the mocked client")
+        log.info("Using the mocked client")
         client = mockedClient;
     }
 }
