@@ -14,7 +14,7 @@ import log from '../logger.js'
  * @returns {bool} true if the username and password are valid, false otherwise
  */
 function verifyUser(userObject) {
-    for (const key of Object.keys(userObject)) {
+    for (const key of Object.values(userObject)) {
         if (!key) {
             return false;
         }
