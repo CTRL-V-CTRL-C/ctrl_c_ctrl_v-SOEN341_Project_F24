@@ -1,4 +1,3 @@
-
 import './Styles/NavBar.css';
 
 function NavBar() {

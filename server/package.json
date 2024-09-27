@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "node main.js",
-    "test": "node test.js"
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,13 @@
   },
   "homepage": "https://github.com/CTRL-V-CTRL-C/ctrl_c_ctrl_v-SOEN341_Project_F24#readme",
   "dependencies": {
-    "express": "^4.21.0"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "pg": "^8.13.0",
+    "pino": "^9.4.0"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5"
+    "pino-pretty": "^11.2.2",
+    "supertest": "^7.0.0"
   }
 }

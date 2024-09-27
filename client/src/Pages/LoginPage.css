@@ -1,4 +1,10 @@
-
+.login-wrap{
+    display:flex;
+    justify-content: center;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    
+}
 .card {
     width: 400px;
     height: 450px;;
@@ -8,9 +14,6 @@
     border-color:#a57788;
     box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1); 
     display: flex;
-    margin-top: 5rem;
-    margin-bottom: 5rem;
-    margin-left: 33rem;
     justify-content: center;
 }
 
@@ -18,6 +21,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     
 }
 .title {
@@ -28,7 +32,7 @@
     position: relative;
     display: flex;
     padding-left: 30px;
-    padding-bottom: 70px;
+    padding-bottom: 50px;
 }
 input {
     padding: 10px;

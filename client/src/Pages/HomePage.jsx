@@ -3,7 +3,7 @@ function HomePage() {
         <>
             <p> HOME PAGE </p>
         </>
-    )
+    );
 }
 
 export default HomePage;
