@@ -54,8 +54,8 @@ if (process.env.PROD) {
     };
 }
 
-
-let client = new pg.Pool(config);
+let pool = new pg.Pool(config);
+let client = new pg.Client(config);
 const mockedClient = {
     query: async (query, params) => { log.info(`queried: ${JSON.stringify(query)} with paramas ${params}`) },
     end: async () => { log.info("database client disconnected"); }
@@ -75,4 +75,4 @@ try {
     }
 }
 
-export { client as db }
+export { client as db, pool }
