@@ -57,7 +57,7 @@ function RegisterAccountPage() {
     //Stops the form from submitting
     event.preventDefault();
 
-    //store the info locally 
+    //store the info locally to test login page
     //localStorage.setItem("formData", JSON.stringify(formData));
 
     let form = event.currentTarget;

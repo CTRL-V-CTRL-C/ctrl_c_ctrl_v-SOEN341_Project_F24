@@ -41,6 +41,9 @@ input {
     width: 350px; /* less than card size */
     box-sizing: border-box;
 }
+.error-message{
+    color: red;
+}
 .btn{
     
     border-radius: 10px; /*to make border rounded*/
