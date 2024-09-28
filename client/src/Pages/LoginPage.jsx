@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from 'react';
 import FormInput from './Components/Forms/FormInput';
 import './LoginPage.css';
 
@@ -9,11 +9,10 @@ function LoginPage() {
     const [message, setMessage] = useState("");
 
 
-    function Login(event) {
+    function loginAccount(event) {
 
         //Stops the form from submitting
         event.preventDefault();
-
 
         // Get stored user data from localStorage
         const storedUserData = localStorage.getItem("userData");
@@ -29,7 +28,6 @@ function LoginPage() {
             ) {
                 console.log("Login successful!"); //test
                 setMessage("Login successful!");//just for now (should redirect)
-                
             } else {
                 console.log("Invalid email or password."); //test
                 setMessage("Invalid email or password.");
@@ -41,25 +39,17 @@ function LoginPage() {
     };
 
     return (
-        <div className="login-wrap">
-            <div className="card">
-                <form className="login-form" onSubmit={(e) =>Login(e)}>
-                    <p className="title">Login </p>
-                    <div className="userinfo">
-                        <FormInput fieldName={"Email"} fieldType={"email"} setField={setEmail} />
-                    </div>
-                    <div className="userinfo">
-                        <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} />
-                    </div>
-                    <div className = "error-message">
+        <div className="registration-form">
+            <form className="form login-form" onSubmit={(e) => loginAccount(e)}>
+                <p className="title">Login </p>
+                <FormInput fieldName={"Email"} fieldType={"email"} setField={setEmail} />
+                <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} />
+                <div className="error-message">
                     {message && <p>{message}</p>}
-                    </div>
-                    <input type="submit" value="Login" className="btn" />
-                    <p className="forgotPassword"> <a href="/home">Forgot password</a> </p>
-                    <p className="login">Don't have an account? <a href="/registerAccount">Create Account</a> </p>
-                </form>
-            </div>
-            
+                </div>
+                <button disabled={false} className="submit" type='submit'>Sign In</button>
+                <p className="signin">Don&apos;t have an account? <a href="/registerAccount">Create Account</a>  </p>
+            </form>
         </div>
     );
 }

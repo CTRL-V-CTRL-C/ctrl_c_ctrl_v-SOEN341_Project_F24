@@ -1,6 +1,5 @@
 import "../Styles/FormInput.css";
 import PropTypes from 'prop-types';
-import "../Styles/FormInput.css";
 
 function FormInput({ fieldName, fieldType, setField, isPasswordValid }) {
 

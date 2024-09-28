@@ -5,25 +5,11 @@
     margin-bottom: 5rem;
     
 }
-.card {
-    width: 400px;
-    height: 450px;;
-    padding: 20px; 
-    border-radius: 15px;
-    border-style: solid;
-    border-color:#a57788;
-    box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1); 
-    display: flex;
-    justify-content: center;
-}
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    
+    width:30%;
 }
+
 .title {
     font-size: 28px;
     color: #873957;
@@ -32,36 +18,25 @@
     position: relative;
     display: flex;
     padding-left: 30px;
-    padding-bottom: 50px;
 }
-input {
-    padding: 10px;
-    border: 2px solid #873957;
-    border-radius: 4px; /*to make border rounded*/
-    width: 350px; /* less than card size */
-    box-sizing: border-box;
-}
+
 .error-message{
     color: red;
+    font-size: small;
 }
-.btn{
-    
-    border-radius: 10px; /*to make border rounded*/
-    background-color: #dddaa4;
-    
-}
+
 .userinfo {
     margin-bottom: 15px; /* Space between inputs */
 }
+
 .btn:hover {
     background-color: #b5af3c; /* Darker on hover */
 }
+
 .login a:hover {
     text-decoration: underline #873957;
 }
+
 .forgotPassword{
     margin-left: 15;
-}
-.forgotPassword a:hover {
-    text-decoration: underline #873957;
 }
