@@ -39,7 +39,6 @@ if (process.env.PROD) {
     };
 } else {
     log.info("Using the test database");
-
     config = {
         user: test_user,
         password: test_password,
@@ -54,7 +53,7 @@ if (process.env.PROD) {
     };
 }
 
-
+let pool = new pg.Pool(config);
 let client = new pg.Client(config);
 const mockedClient = {
     query: async (query, params) => { log.info(`queried: ${JSON.stringify(query)} with paramas ${params}`) },
@@ -75,4 +74,4 @@ try {
     }
 }
 
-export { client as db }
+export { client as db, pool }
