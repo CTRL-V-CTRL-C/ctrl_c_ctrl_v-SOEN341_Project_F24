@@ -42,8 +42,18 @@ const requireAuth = (req, res, next) => {
   }
 }
 
+//Require to be logged out to attempt certain endpoints
+const requireNoAuth = (req, res, next) => {
+  if (req.session.user) {
+    log.warn({}, `Authenticated user tried to access ${req.originalUrl}`);
+    res.status(401).json({ error: "Can't be logged in" }); // User is already authenticated
+  } else {
+    next(); // User not authenticated, continue to next middleware
+  }
+}
+
 //Login with correct username and hash
-router.post("/login", async (req, res) => {
+router.post("/login", requireNoAuth, async (req, res) => {
   let username = req.body.username;
   let hash = req.body.hash;
 
@@ -70,7 +80,7 @@ router.post("/login", async (req, res) => {
 });
 
 //Get the salt associated with the username to compute the correct hash
-router.post("/login/get-salt", async (req, res) => {
+router.post("/login/get-salt", requireNoAuth, async (req, res) => {
   let username = req.body.username;
   try {
 
@@ -97,12 +107,13 @@ router.post("/login/get-salt", async (req, res) => {
 
 //Logout and destroy the authentication session
 router.post("/logout", requireAuth, async (req, res) => {
+  let user = req.session.user;
   req.session.destroy(error => {
     if (error) {
-      log.error(error, `Failed to destroy session for ${req.session.user.email}`);
+      log.error(error, `Failed to destroy session for ${user.email}`);
       res.status(500).json({ error: "Something went wrong on our end" });
     }
-    log.info({}, `Successfully destroyed session for ${req.session.user.email}`);
+    log.info({}, `Successfully destroyed session for ${user.email}`);
     res.clearCookie("authentication");
     res.status(200).json({ loggedOut: true });
   });
