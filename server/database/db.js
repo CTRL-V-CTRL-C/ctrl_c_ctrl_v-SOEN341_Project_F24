@@ -39,7 +39,6 @@ if (process.env.PROD) {
     };
 } else {
     log.info("Using the test database");
-
     config = {
         user: test_user,
         password: test_password,
