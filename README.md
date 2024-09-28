@@ -1,7 +1,5 @@
 # ctrl_c_ctrl_v-SOEN341_Project_F24
 
-[![pipeline status](TODO LINK)](TODO LINK)
-
 ## Members
 
 - Mauricio Murillo
