@@ -4,7 +4,7 @@ import FormInput from './Components/Forms/FormInput';
 import { RxCrossCircled, RxCheckCircled } from "react-icons/rx";
 import { postData } from '../Controller/FetchModule';
 // import loadArgon2idWasm from 'argon2id';
-import { Argon2BrowserHashOptions } from 'argon2-browser'
+// import { Argon2BrowserHashOptions } from 'argon2-browser'
 
 function RegisterAccountPage() {
 
@@ -64,17 +64,17 @@ function RegisterAccountPage() {
     }
 
     (async () => {
-      let role = isInstructor ? "instructor" : "student";
-      let password_hash;
+      let role = isInstructor ? "INST" : "STUD";
+      let password_hash = "passwordhash";
       let password_salt = "ao3nd9ueh748ewdn"
 
-      Argon2BrowserHashOptions.hash({ pass: password, salt: password_salt })
-        .then(h => password_hash = h)
-        .catch(e => console.error(e.message, e.code))
+      // Argon2BrowserHashOptions.hash({ pass: password, salt: password_salt })
+      //   .then(h => password_hash = h)
+      //   .catch(e => console.error(e.message, e.code))
 
       console.log("Here")
 
-      const data = await postData("/user/create", {
+      const data = await postData("/api/user/create", {
         "username": email,
         "firstName": firstname,
         "lastName": lastname,
