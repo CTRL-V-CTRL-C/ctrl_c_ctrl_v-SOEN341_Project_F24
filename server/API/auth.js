@@ -4,6 +4,7 @@ import sessionStore from 'connect-pg-simple';
 import { db, pool } from '../database/db.js';
 import dotenv from 'dotenv';
 import log from '../logger.js';
+import argon2 from 'argon2';
 dotenv.config();
 
 const router = express.Router();
@@ -52,56 +53,39 @@ const requireNoAuth = (req, res, next) => {
   }
 }
 
-//Login with correct username and hash
+//Login with correct username and password
 router.post("/login", requireNoAuth, async (req, res) => {
-  let username = req.body.username;
-  let hash = req.body.hash;
+  const username = req.body.username;
+  const password = req.body.password;
 
   try {
 
-    let query = await db.query("SELECT user_id, f_name, l_name, email, school_id, role FROM users WHERE username = $1 AND hash = $2", [username, hash]);
+    const hashQuery = await db.query("SELECT * FROM users WHERE username = $1", [username]);
+    if (hashQuery.rows.length != 1) {
+      log.warn({}, `User ${username} tried to log in but does not exist`);
+      res.status(404).json({ msg: "Incorrect username or password" });
+    }
 
-    if (query.rows.length != 1) {
+    const hash = hashQuery.rows[0].hash;
+    delete hashQuery.rows[0].hash;
 
-      log.warn({}, `User ${username} Failed to log in`);
-      res.status(404).json({ login: "failure" });
+    const success = await argon2.verify(hash.toString(), password);
+
+    if (success) {
+
+      log.info({}, `User ${username} Successfully logged in`);
+      req.session.user = hashQuery.rows[0];
+      res.status(200).json({ msg: "Successfully logged in" });
 
     } else {
 
-      log.info({}, `User ${username} Successfully logged in`);
-      req.session.user = query.rows[0];
-      res.status(200).json({ login: "success" });
+      log.warn({}, `User ${username} Failed to log in`);
+      res.status(404).json({ msg: "Incorrect username or password" });
 
     }
   } catch (error) {
     log.error(error, `Something went wrong trying to log in for user ${username}`);
-    res.status(500).json({ error: "Something went wrong on our end" });
-  }
-});
-
-//Get the salt associated with the username to compute the correct hash
-router.post("/login/get-salt", requireNoAuth, async (req, res) => {
-  let username = req.body.username;
-  try {
-
-    let query = await db.query("SELECT salt FROM users WHERE username = $1", [username]);
-
-    if (query.rows.length != 1) {
-
-      log.warn({}, `User ${username} tried to log in but does not exist`);
-      res.status(404).json({ login: "failure" });
-
-    } else {
-
-      res.json({
-        username: username,
-        salt: query.rows[0].salt,
-      });
-
-    }
-  } catch (error) {
-    log.error(error, `Something went wrong trying to fetch the salt for user ${username}`);
-    res.status(500).json({ error: "Something went wrong on our end" });
+    res.status(500).json({ msg: "Something went wrong on our end, try again in a bit" });
   }
 });
 
@@ -111,16 +95,17 @@ router.post("/logout", requireAuth, async (req, res) => {
   req.session.destroy(error => {
     if (error) {
       log.error(error, `Failed to destroy session for ${user.email}`);
-      res.status(500).json({ error: "Something went wrong on our end" });
+      res.status(500).json({ msg: "Something went wrong on our end, try again in a bit" });
     }
     log.info({}, `Successfully destroyed session for ${user.email}`);
     res.clearCookie("authentication");
-    res.status(200).json({ loggedOut: true });
+    res.status(200).json({ msg: "Successfully logged out" });
   });
 });
 
+//Test whether or not you are authenticated
 router.post("/test-authentication", requireAuth, (req, res) => {
-  res.status(200).json({ isAuthenticated: true });
+  res.status(200).json({ msg: "User is authenticated" });
 });
 
 export { router, requireAuth };
