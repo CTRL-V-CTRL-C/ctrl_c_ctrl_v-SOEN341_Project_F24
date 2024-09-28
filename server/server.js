@@ -4,12 +4,12 @@ import { router as authRouter } from './API/auth.js';
 
 const app = express()
 
-app.use("", authRouter);
+app.use("/api", authRouter);
 
 app.get("/", (req, res) => {
     res.send('Hello World!')
 })
 
-app.use("/user", userRouter)
+app.use("/api/user", userRouter)
 
 export { app }
