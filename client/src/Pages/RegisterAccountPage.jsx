@@ -65,7 +65,7 @@ function RegisterAccountPage() {
 
     (async () => {
       const role = isInstructor ? "INST" : "STUD";
-      const data = await postData("/api/user/create", {
+      const dataResponse = await postData("/api/user/create", {
         "username": email,
         "firstName": firstname,
         "lastName": lastname,
@@ -74,6 +74,7 @@ function RegisterAccountPage() {
         "role": role,
         "password": password
       }, "POST");
+      const data = await dataResponse.json();
       setFeedbackMessage(data.created ? navigate("/login") : "ERROR: Account creation failed");
     })();
   }

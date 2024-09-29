@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { postData } from '../Controller/FetchModule';
 import FormInput from './Components/Forms/FormInput';
 import './LoginPage.css';
 
@@ -21,16 +22,7 @@ function LoginPage() {
         setIsButtonDisabled(true);
 
         //Login post
-        const loginURL = new URL("/api/login", location.origin);
-        const loginResponse = await fetch(loginURL, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: email, password: password })
-        });
-
+        const loginResponse = await postData("/api/login", { username: email, password: password }, "POST");
         const loginJSON = await loginResponse.json();
 
         if (loginResponse.status === 200) {
