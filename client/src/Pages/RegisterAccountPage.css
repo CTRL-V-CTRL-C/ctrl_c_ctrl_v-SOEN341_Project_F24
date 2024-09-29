@@ -5,6 +5,11 @@
     margin-bottom: 5rem;
 }
 
+.error-message {
+    color: red;
+    font-size: small;
+}
+
 .form {
     display: flex;
     flex-direction: column;

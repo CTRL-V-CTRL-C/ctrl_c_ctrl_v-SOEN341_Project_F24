@@ -2,9 +2,12 @@ import './RegisterAccountPage.css';
 import { useCallback, useEffect, useState } from 'react';
 import FormInput from './Components/Forms/FormInput';
 import { RxCrossCircled, RxCheckCircled } from "react-icons/rx";
-
+import { postData } from '../Controller/FetchModule';
+import { useNavigate } from "react-router-dom";
 
 function RegisterAccountPage() {
+
+  const navigate = useNavigate();
 
   const [isInstructor, setIsInstructor] = useState(false);
   const [firstname, setFirstname] = useState("");
@@ -17,6 +20,7 @@ function RegisterAccountPage() {
   const [isPasswordValid, setIsPasswordValid] = useState(<RxCrossCircled color='red' />);
   const [arePasswordsCorrect, setArePasswordsCorrect] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   // Check if the confirm password is the same as the original password
   const checkPassword = useCallback(() => {
@@ -51,28 +55,27 @@ function RegisterAccountPage() {
   }, [confirmPassword, checkPassword]);
 
   // Handles form submit
-  // TODO: Description
+  // Creates an account with the information filled in the form
   function registerAccount(event) {
-
-    //Stops the form from submitting
-    event.preventDefault();
-
-    //store the info locally to test login page
-    //localStorage.setItem("formData", JSON.stringify(formData));
-
+    event.preventDefault(); //Stops the form from submitting
     let form = event.currentTarget;
     if (!form.checkValidity()) {
       return;
     }
-    //For testing purposes only:
-    console.log("registering account with: \n");
-    console.log(isInstructor);
-    console.log(firstname);
-    console.log(lastname);
-    console.log(email);
-    console.log(userID);
-    console.log(password);
-    console.log("-----end-----");
+
+    (async () => {
+      const role = isInstructor ? "INST" : "STUD";
+      const data = await postData("/api/user/create", {
+        "username": email,
+        "firstName": firstname,
+        "lastName": lastname,
+        "email": email,
+        "schoolID": userID,
+        "role": role,
+        "password": password
+      }, "POST");
+      setFeedbackMessage(data.created ? navigate("/login") : "ERROR: Account creation failed");
+    })();
   }
 
   return (
@@ -94,7 +97,9 @@ function RegisterAccountPage() {
         <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
         <FormInput fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
         <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>
-        <p className="signin">Already have an account ? <a href="/loginAccount">Sign in</a> </p>
+        <div className="error-message">
+          {feedbackMessage && <p>{feedbackMessage}</p>}
+        </div> <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
       </form>
     </div>
   );
