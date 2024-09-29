@@ -1,0 +1,42 @@
+.login-wrap{
+    display:flex;
+    justify-content: center;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    
+}
+
+.login-form {
+    width:30%;
+}
+
+.title {
+    font-size: 28px;
+    color: #873957;
+    font-weight: 600;
+    letter-spacing: -1px;
+    position: relative;
+    display: flex;
+    padding-left: 30px;
+}
+
+.error-message{
+    color: red;
+    font-size: small;
+}
+
+.userinfo {
+    margin-bottom: 15px; /* Space between inputs */
+}
+
+.btn:hover {
+    background-color: #b5af3c; /* Darker on hover */
+}
+
+.login a:hover {
+    text-decoration: underline #873957;
+}
+
+.forgotPassword{
+    margin-left: 15;
+}

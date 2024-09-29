@@ -9,7 +9,7 @@
 async function fetchData(route) {
     const url = new URL(route, location.origin);
     const response = await fetch(url);
-    return await response.json();
+    return response;
 }
 
 /**
@@ -30,7 +30,7 @@ async function postData(route, body, method) {
             "Content-Type": "application/json"
         },
     });
-    return await response.json();
+    return response;
 }
 
 export { fetchData, postData };

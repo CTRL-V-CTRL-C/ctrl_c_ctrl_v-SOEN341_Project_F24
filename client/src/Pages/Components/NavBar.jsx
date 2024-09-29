@@ -18,7 +18,7 @@ function NavBar() {
                 <li>
                     <a href="/registerAccount"> Sign Up </a>
                 </li>
-            </div>
+            </div> 
         </div>
     );
 }

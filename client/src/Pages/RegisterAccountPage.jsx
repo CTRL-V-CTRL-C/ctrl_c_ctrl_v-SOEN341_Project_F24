@@ -22,7 +22,7 @@ function RegisterAccountPage() {
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
 
-  // Check if the confimr password is the same as the original password
+  // Check if the confirm password is the same as the original password
   const checkPassword = useCallback(() => {
     if (password == confirmPassword && confirmPassword.length >= 8) {
       setIsPasswordConfirmed(<RxCheckCircled color='green' />);
@@ -65,7 +65,7 @@ function RegisterAccountPage() {
 
     (async () => {
       const role = isInstructor ? "INST" : "STUD";
-      const data = await postData("/api/user/create", {
+      const dataResponse = await postData("/api/user/create", {
         "username": email,
         "firstName": firstname,
         "lastName": lastname,
@@ -74,7 +74,8 @@ function RegisterAccountPage() {
         "role": role,
         "password": password
       }, "POST");
-      setFeedbackMessage(data.created ? navigate("/login") : "ERROR: Account creation failed");
+      const data = await dataResponse.json();
+      setFeedbackMessage(data.created ? navigate("/loginAccount") : "ERROR: Account creation failed");
     })();
   }
 

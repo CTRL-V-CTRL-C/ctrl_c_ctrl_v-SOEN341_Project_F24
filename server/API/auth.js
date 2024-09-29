@@ -39,7 +39,7 @@ const requireAuth = (req, res, next) => {
     next(); // User is authenticated, continue to next middleware
   } else {
     log.warn({}, `Unauthorised user tried to access ${req.originalUrl}`);
-    res.status(401).json({ error: "Unauthorised" }); // User is not authenticated
+    res.status(401).json({ msg: "Unauthorised to perform this action" }); // User is not authenticated
   }
 }
 
@@ -47,7 +47,7 @@ const requireAuth = (req, res, next) => {
 const requireNoAuth = (req, res, next) => {
   if (req.session.user) {
     log.warn({}, `Authenticated user tried to access ${req.originalUrl}`);
-    res.status(401).json({ error: "Can't be logged in" }); // User is already authenticated
+    res.status(401).json({ msg: "Can't be logged in to perform this action" }); // User is already authenticated
   } else {
     next(); // User not authenticated, continue to next middleware
   }
@@ -64,24 +64,24 @@ router.post("/login", requireNoAuth, async (req, res) => {
     if (hashQuery.rows.length != 1) {
       log.warn({}, `User ${username} tried to log in but does not exist`);
       res.status(404).json({ msg: "Incorrect username or password" });
-    }
-
-    const hash = hashQuery.rows[0].hash;
-    delete hashQuery.rows[0].hash;
-
-    const success = await argon2.verify(hash.toString(), password);
-
-    if (success) {
-
-      log.info({}, `User ${username} Successfully logged in`);
-      req.session.user = hashQuery.rows[0];
-      res.status(200).json({ msg: "Successfully logged in" });
-
     } else {
+      const hash = hashQuery.rows[0].hash;
+      delete hashQuery.rows[0].hash;
 
-      log.warn({}, `User ${username} Failed to log in`);
-      res.status(404).json({ msg: "Incorrect username or password" });
+      const success = await argon2.verify(hash.toString(), password);
 
+      if (success) {
+
+        log.info({}, `User ${username} Successfully logged in`);
+        req.session.user = hashQuery.rows[0];
+        res.status(200).json({ msg: "Successfully logged in" });
+
+      } else {
+
+        log.warn({}, `User ${username} Failed to log in`);
+        res.status(404).json({ msg: "Incorrect username or password" });
+
+      }
     }
   } catch (error) {
     log.error(error, `Something went wrong trying to log in for user ${username}`);
