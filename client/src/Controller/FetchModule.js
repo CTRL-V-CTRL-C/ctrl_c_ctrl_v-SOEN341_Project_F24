@@ -7,16 +7,8 @@
  * @returns {JSON} data
  */
 async function fetchData(url) {
-    try {
-        const response = await fetch(url);
-        if (response.ok) {
-            return await response.json();
-        } else {
-            throw Error("Something Went wrong fetching data");
-        }
-    } catch {
-        return undefined;
-    }
+    const response = await fetch(url);
+    return await response.json();
 }
 
 /**
@@ -29,23 +21,15 @@ async function fetchData(url) {
  */
 async function postData(route, body, method) {
     const url = new URL(route, location.origin);
-    try {
-        const response = await fetch(url, {
-            method: method,
-            body: JSON.stringify(body),
-            headers: {
-                'Accept': 'application/json',
-                "Content-Type": "application/json"
-            },
-        });
-        if (response.ok) {
-            return await response.json();
-        } else {
-            throw Error("Something Went wrong posting data: ");
-        }
-    } catch {
-        return undefined;
-    }
+    const response = await fetch(url, {
+        method: method,
+        body: JSON.stringify(body),
+        headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json"
+        },
+    });
+    return await response.json();
 }
 
 export { fetchData, postData };
