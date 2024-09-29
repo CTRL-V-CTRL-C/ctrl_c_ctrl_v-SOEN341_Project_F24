@@ -3,8 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 import FormInput from './Components/Forms/FormInput';
 import { RxCrossCircled, RxCheckCircled } from "react-icons/rx";
 import { postData } from '../Controller/FetchModule';
-// import loadArgon2idWasm from 'argon2id';
-// import { Argon2BrowserHashOptions } from 'argon2-browser'
 
 function RegisterAccountPage() {
 
@@ -53,27 +51,16 @@ function RegisterAccountPage() {
   }, [confirmPassword, checkPassword]);
 
   // Handles form submit
-  // TODO: Description
+  // Creates an account with the information filled in the form
   function registerAccount(event) {
-    //Stops the form from submitting
-    event.preventDefault();
-    console.log("hhh")
+    event.preventDefault(); //Stops the form from submitting
     let form = event.currentTarget;
     if (!form.checkValidity()) {
       return;
     }
 
     (async () => {
-      let role = isInstructor ? "INST" : "STUD";
-      let password_hash = "passwordhash";
-      let password_salt = "ao3nd9ueh748ewdn"
-
-      // Argon2BrowserHashOptions.hash({ pass: password, salt: password_salt })
-      //   .then(h => password_hash = h)
-      //   .catch(e => console.error(e.message, e.code))
-
-      console.log("Here")
-
+      const role = isInstructor ? "INST" : "STUD";
       const data = await postData("/api/user/create", {
         "username": email,
         "firstName": firstname,
@@ -81,8 +68,7 @@ function RegisterAccountPage() {
         "email": email,
         "schoolID": userID,
         "role": role,
-        "password_hash": password_hash,
-        "salt": password_salt,
+        "password": password
       }, "POST");
       console.log(data)
     })();
