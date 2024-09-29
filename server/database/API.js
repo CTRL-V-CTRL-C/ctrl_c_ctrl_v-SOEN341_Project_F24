@@ -37,17 +37,17 @@ async function createUser(db, userObject) {
     const table = "users"
     let hash = undefined;
     try {
-        hash = Buffer.from(userObject.password_hash, "hex")
+        hash = Buffer.from(userObject.password_hash)
     } catch (error) {
         return false;
     }
     const query = {
         name: "register-user",
-        text: `INSERT INTO ${table} (username, hash, salt, f_name, l_name, email, school_id, role) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        text: `INSERT INTO ${table} (username, hash, f_name, l_name, email, school_id, role) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         values: [
             userObject.username, hash,
-            userObject.salt, userObject.firstName,
+            userObject.firstName,
             userObject.lastName, userObject.email,
             userObject.schoolID, userObject.role
         ]
