@@ -61,8 +61,7 @@ function RegisterAccountPage() {
 
     (async () => {
       const role = isInstructor ? "INST" : "STUD";
-      const url = new URL("/api/user/create", location.origin);
-      const data = await postData(url, {
+      const data = await postData("/api/user/create", {
         "username": email,
         "firstName": firstname,
         "lastName": lastname,

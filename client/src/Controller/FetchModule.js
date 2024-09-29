@@ -27,7 +27,8 @@ async function fetchData(url) {
  * @param {String} method 
  * @returns {Object}
  */
-async function postData(url, body, method) {
+async function postData(route, body, method) {
+    const url = new URL(route, location.origin);
     try {
         const response = await fetch(url, {
             method: method,
@@ -40,7 +41,7 @@ async function postData(url, body, method) {
         if (response.ok) {
             return await response.json();
         } else {
-            throw Error("Something Went wrong posting data");
+            throw Error("Something Went wrong posting data: ");
         }
     } catch {
         return undefined;
