@@ -39,7 +39,7 @@ const requireAuth = (req, res, next) => {
     next(); // User is authenticated, continue to next middleware
   } else {
     log.warn({}, `Unauthorised user tried to access ${req.originalUrl}`);
-    res.status(401).json({ error: "Unauthorised" }); // User is not authenticated
+    res.status(401).json({ msg: "Unauthorised to perform this action" }); // User is not authenticated
   }
 }
 
@@ -47,7 +47,7 @@ const requireAuth = (req, res, next) => {
 const requireNoAuth = (req, res, next) => {
   if (req.session.user) {
     log.warn({}, `Authenticated user tried to access ${req.originalUrl}`);
-    res.status(401).json({ error: "Can't be logged in" }); // User is already authenticated
+    res.status(401).json({ msg: "Can't be logged in to perform this action" }); // User is already authenticated
   } else {
     next(); // User not authenticated, continue to next middleware
   }
