@@ -17,6 +17,7 @@ function RegisterAccountPage() {
   const [isPasswordValid, setIsPasswordValid] = useState(<RxCrossCircled color='red' />);
   const [arePasswordsCorrect, setArePasswordsCorrect] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   // Check if the confimr password is the same as the original password
   const checkPassword = useCallback(() => {
@@ -71,6 +72,7 @@ function RegisterAccountPage() {
         "password": password
       }, "POST");
       console.log(data)
+      setFeedbackMessage(data.created ? "" : "ERROR: Account creation failed");
     })();
   }
 
@@ -93,7 +95,9 @@ function RegisterAccountPage() {
         <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
         <FormInput fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
         <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>
-        <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
+        <div className="error-message">
+          {feedbackMessage && <p>{feedbackMessage}</p>}
+        </div> <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
       </form>
     </div>
   );
