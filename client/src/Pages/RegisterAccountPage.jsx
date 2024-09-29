@@ -75,7 +75,7 @@ function RegisterAccountPage() {
         "password": password
       }, "POST");
       const data = await dataResponse.json();
-      setFeedbackMessage(data.created ? navigate("/login") : "ERROR: Account creation failed");
+      setFeedbackMessage(data.created ? navigate("/loginAccount") : "ERROR: Account creation failed");
     })();
   }
 
