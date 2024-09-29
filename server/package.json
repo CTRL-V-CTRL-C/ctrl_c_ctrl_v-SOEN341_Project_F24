@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/CTRL-V-CTRL-C/ctrl_c_ctrl_v-SOEN341_Project_F24#readme",
   "dependencies": {
+    "argon2": "^0.41.1",
     "connect-pg-simple": "^10.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
