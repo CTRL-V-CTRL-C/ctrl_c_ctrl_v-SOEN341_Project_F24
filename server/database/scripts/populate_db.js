@@ -10,11 +10,10 @@ const getRandomInt = (min, max) => Math.floor(getRandomNumber(min, max));
 
 //Make students
 for (let i = 0; i < 11; i++) {
-  await db.query("INSERT INTO users (username, hash, salt, f_name, l_name, email, school_id, role)\
-   VALUES ($1,$2,$3,$4,$5,$6,$7,$8)", [
+  await db.query("INSERT INTO users (username, hash, f_name, l_name, email, school_id, role)\
+   VALUES ($1,$2,$3,$4,$5,$6,$7)", [
     "user" + getUserNum(),
-    "4d2f87e14f62b3bc58e97d0d0002bd6b",
-    "superlongsalt123",
+    "$argon2id$v=19$m=65536,t=3,p=4$hu6FGPJVFZxzd/zqI3HoEg$EUQ1Lil7Ed4TLQFOhGD1xppanajwqJae8FQmKDxPgsU",
     "Joe",
     "Parker",
     `JoeParker${usernum}@gmail.com`,
@@ -24,11 +23,10 @@ for (let i = 0; i < 11; i++) {
 }
 //Make professors
 for (let i = 0; i < 11; i++) {
-  await db.query("INSERT INTO users (username, hash, salt, f_name, l_name, email, school_id, role)\
-   VALUES ($1,$2,$3,$4,$5,$6,$7,$8)", [
+  await db.query("INSERT INTO users (username, hash, f_name, l_name, email, school_id, role)\
+   VALUES ($1,$2,$3,$4,$5,$6,$7)", [
     "user" + getUserNum(),
-    "4d2f87e14f62b3bc58e97d0d0002bd6b",
-    "superlongsalt123",
+    "$argon2id$v=19$m=65536,t=3,p=4$hu6FGPJVFZxzd/zqI3HoEg$EUQ1Lil7Ed4TLQFOhGD1xppanajwqJae8FQmKDxPgsU",
     "Joe",
     "Parker",
     `JoeParker${usernum}@gmail.com`,
