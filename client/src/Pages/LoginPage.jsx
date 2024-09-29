@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FormInput from './Components/Forms/FormInput';
 import './LoginPage.css';
 
 function LoginPage() {
 
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -33,34 +35,10 @@ function LoginPage() {
 
         if (loginResponse.status === 200) {
             setMessage(loginJSON.msg);
+            navigate("/");
         } else {
             setMessage(loginJSON.msg);
         }
-
-
-
-        // // Get stored user data from localStorage
-        // const storedUserData = localStorage.getItem("userData");
-
-        // if (storedUserData) {
-        //     // Parse the stored user data
-        //     const parsedUserData = JSON.parse(storedUserData);
-
-        //     // Compare the email and password entered with the stored data
-        //     if (
-        //         email === parsedUserData.email &&
-        //         password === parsedUserData.password
-        //     ) {
-        //         console.log("Login successful!"); //test
-        //         setMessage("Login successful!");//just for now (should redirect)
-        //     } else {
-        //         console.log("Invalid email or password."); //test
-        //         setMessage("Invalid email or password.");
-        //     }
-        // } else {
-        //     console.log("Invalid email or password.");//test
-        //     setMessage("Invalid email or password.");
-        // }
 
         setIsButtonDisabled(false);
     };
@@ -69,7 +47,7 @@ function LoginPage() {
         <div className="registration-form">
             <form className="form login-form" onSubmit={(e) => loginAccount(e)}>
                 <p className="title">Login </p>
-                <FormInput fieldName={"Email"} fieldType={"text"} setField={setEmail} />
+                <FormInput fieldName={"Email"} fieldType={"email"} setField={setEmail} />
                 <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} />
                 <div className="error-message">
                     {message && <p>{message}</p>}
