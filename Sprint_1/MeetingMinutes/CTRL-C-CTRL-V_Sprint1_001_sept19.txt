@@ -1,0 +1,35 @@
+Date: September 19th, 2024
+Time: 4:15pm-6:00pm
+	
+Location: Concordia University H8 Lab Room
+
+Attendees: 
+Mauricio Murillo
+Rym Dallali, 
+Nolan Ganz
+Khalil Labban
+Jaden Wright-Maurais
+Carla Chamandi
+
+Agenda:
+Organizing project structure
+Writing user stories
+Setting up sprint iterations
+
+Discussion: 
+For this meeting, we reviewed and discussed the sprint 1 document and carefully went over this week's requirements. 
+We recreated the repository to be able to set up an organization on GitHub for easier setup and team collaboration. 
+We discussed and finalized the main frameworks that will be used in this project.
+Discussion on which database to use will be continued another time. 
+We split up into groups and worked on specific user stories; completed 4 user stories in total.
+Discussion on whether to allow users to login to website using google account. Not decided yet. 
+Discussion on possible deployment of the final project. 
+
+Important notes:
+
+For this project, we decided to use: 
+
+-Node.js
+-JavaScript
+-React
+-Option the use Render for possible deployment 

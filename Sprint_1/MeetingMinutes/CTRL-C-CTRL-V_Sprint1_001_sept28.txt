@@ -1,0 +1,18 @@
+Date: September 28, 2024
+Time: 1:41 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Nolan Ganz
+Khalil Labban
+Carla Chamandi
+Jaden Wright-Maurais
+Mauricio Murillo
+Agenda:
+Debugging hashing issues
+PR reviews
+Discussion:
+PR for proxy setup was reviewed.
+Debugging was conducted on the salt & hashing package.
+The frontend login was connected to the backend, with hashing moved to the backend for account creation.
+Continued learning react

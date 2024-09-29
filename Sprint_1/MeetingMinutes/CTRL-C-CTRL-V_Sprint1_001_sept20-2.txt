@@ -1,0 +1,22 @@
+Date: September 20th, 2024
+Time: 3:55pm-4:15pm
+	
+Location: Discord voice chat 
+
+Attendees: 
+
+Rym Dallali, 
+Jaden Wright-Maurais
+Carla Chamandi
+
+Discussion: 
+
+Demoed how to properly clone a repo and run the pull request 
+The proper GitHub commands (how to download all files and switch branches)
+How to create a branch from an assigned task and work on code locally. 
+Confirmed that UI designs should be finished by latest Monday, September 23rd, in order to have enough time for implementation. 
+
+
+Important notes:
+
+Jaden and Carla will be unavailable Friday, September 27th - Sunday, September 29th, thus their assigned tasks will be complete by Thursday.

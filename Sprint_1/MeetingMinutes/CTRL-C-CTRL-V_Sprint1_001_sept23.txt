@@ -1,0 +1,19 @@
+Date: September 23, 2024
+Time: 10:51 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Nolan Ganz
+Mauricio Murillo
+Jaden Wright-Maurais
+Khalil Labban
+Carla Chamandi
+Agenda:
+Postgres database
+PR review
+React learning
+Discussion:
+Postgres datatypes and syntax were learned.
+Build, drop, and populate scripts for the users table were created.
+PR comments were reviewed, and hashing functions for the database were discussed.
+Continued working on the login page while learning React.

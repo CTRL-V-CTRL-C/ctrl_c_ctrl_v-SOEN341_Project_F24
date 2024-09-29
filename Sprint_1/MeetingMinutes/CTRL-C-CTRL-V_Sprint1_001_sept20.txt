@@ -1,0 +1,21 @@
+Date: September 20, 2024
+Time: 2:04 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Mauricio Murillo
+Jaden Wright-Maurais
+Khalil Labban
+Carla Chamandi
+Nolan Ganz
+Agenda:
+Revising user stories
+Testing and approving tasks
+Database decisions
+Discussion:
+Went over all user stories, added labels, and updated priorities.
+Teammates helped with the user stories.
+Task #39 was tested and approved.
+The login UI design was started.
+Database selection and setup were finalized by Nolan Ganz and Mauricio Murillo.
+Various PRs and acceptance tests were reviewed, and labels were added.

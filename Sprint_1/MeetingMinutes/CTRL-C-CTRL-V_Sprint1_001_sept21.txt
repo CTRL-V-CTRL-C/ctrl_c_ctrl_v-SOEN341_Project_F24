@@ -1,0 +1,16 @@
+Date: September 21, 2024
+Time: 12:43 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Mauricio Murillo
+Jaden Wright-Maurais
+Khalil Labban
+Carla Chamandi
+Nolan Ganz
+Agenda:
+UI design work
+Cloud service setup
+Discussion:
+UI design for the login and sign-up pages was worked on.
+The cloud service was set up to host the database

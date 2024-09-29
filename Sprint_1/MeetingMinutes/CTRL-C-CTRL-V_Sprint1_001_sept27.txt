@@ -1,0 +1,17 @@
+Date: September 27, 2024
+Time: 4:08 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Nolan Ganz
+Khalil Labban
+Carla Chamandi
+Jaden Wright-Maurais
+Mauricio Murillo
+Agenda:
+API for user login
+Linking frontend to backend
+Discussion:
+API for user login was started and completed.
+PRs for user login were reviewed.
+The team faced challenges with linking the frontend to the backend for account registration.
