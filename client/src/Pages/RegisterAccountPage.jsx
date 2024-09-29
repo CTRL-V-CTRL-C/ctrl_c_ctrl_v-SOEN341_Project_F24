@@ -3,8 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import FormInput from './Components/Forms/FormInput';
 import { RxCrossCircled, RxCheckCircled } from "react-icons/rx";
 import { postData } from '../Controller/FetchModule';
+import { useNavigate } from "react-router-dom";
 
 function RegisterAccountPage() {
+
+  const navigate = useNavigate();
 
   const [isInstructor, setIsInstructor] = useState(false);
   const [firstname, setFirstname] = useState("");
@@ -71,8 +74,7 @@ function RegisterAccountPage() {
         "role": role,
         "password": password
       }, "POST");
-      console.log(data)
-      setFeedbackMessage(data.created ? "" : "ERROR: Account creation failed");
+      setFeedbackMessage(data.created ? navigate("/login") : "ERROR: Account creation failed");
     })();
   }
 
