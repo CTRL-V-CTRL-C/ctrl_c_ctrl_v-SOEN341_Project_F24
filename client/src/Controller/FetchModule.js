@@ -6,7 +6,8 @@
  * @param {String} url 
  * @returns {JSON} data
  */
-async function fetchData(url) {
+async function fetchData(route) {
+    const url = new URL(route, location.origin);
     const response = await fetch(url);
     return await response.json();
 }
