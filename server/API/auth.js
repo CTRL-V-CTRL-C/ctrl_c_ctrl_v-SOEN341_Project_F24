@@ -64,24 +64,24 @@ router.post("/login", requireNoAuth, async (req, res) => {
     if (hashQuery.rows.length != 1) {
       log.warn({}, `User ${username} tried to log in but does not exist`);
       res.status(404).json({ msg: "Incorrect username or password" });
-    }
-
-    const hash = hashQuery.rows[0].hash;
-    delete hashQuery.rows[0].hash;
-
-    const success = await argon2.verify(hash.toString(), password);
-
-    if (success) {
-
-      log.info({}, `User ${username} Successfully logged in`);
-      req.session.user = hashQuery.rows[0];
-      res.status(200).json({ msg: "Successfully logged in" });
-
     } else {
+      const hash = hashQuery.rows[0].hash;
+      delete hashQuery.rows[0].hash;
 
-      log.warn({}, `User ${username} Failed to log in`);
-      res.status(404).json({ msg: "Incorrect username or password" });
+      const success = await argon2.verify(hash.toString(), password);
 
+      if (success) {
+
+        log.info({}, `User ${username} Successfully logged in`);
+        req.session.user = hashQuery.rows[0];
+        res.status(200).json({ msg: "Successfully logged in" });
+
+      } else {
+
+        log.warn({}, `User ${username} Failed to log in`);
+        res.status(404).json({ msg: "Incorrect username or password" });
+
+      }
     }
   } catch (error) {
     log.error(error, `Something went wrong trying to log in for user ${username}`);
