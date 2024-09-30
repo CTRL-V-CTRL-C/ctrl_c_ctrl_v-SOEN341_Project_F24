@@ -1,0 +1,66 @@
+,,,,wedw,,,
+SPRINT 1,,,,,,,
+Issue #,User Story Title/Task Title,Description/Associated Tasks,Due Date,"Priority (low, medium, high)","Risk (low, medium, high) + explanation",Responsible,Story Points
+#3,MGMT.001 - Create setup skeleton project with the tech stack,"- Setup the frontend with vite and react
+- Setup the backend with express",20/09/2024,high,low - already know how to do it,Mauricio,0
+#7,TSK.001.001 - Design UI for the Register page.,- Design the UI for the account creation page,21/09/2024,high,low - this is just a drawing,Khalil,3
+#8,TSK.001.003 - Make a form in the website to register a new user.,- Create a form to accept user input necessary for account creation.,24/09/2024,high,"medium - react knowledge is already aquired, however the API is still being developped",Rym,3
+#9,TSK.001.004 - Create a table in the database to store usernames and passwords (with salt and hash),- Create a table in the database to store a user's username and securely hashed password,24/09/2024,high,medium - already know how to create databases however review is required,Nolan,1
+#42,"TSK.001.006 - Make Database build, populate, and drop scripts",- Create build/drop/populate scripts for the database,24/09/2024,high,medium - already know how to populate databases however review is required,Nolan,2
+#10,TSK.001.005 - Make an HTTP endpoint in the server to create a user in the database,- Make an HTTP endpoint in the express server to register a user in the database,26/09/2024,high,"medium - knowledge about express is already aquired, however the API contract is not set yet and we don't know the fields we need",Mauricio,3
+#11,TSK.001.002 - Implement the UI for the Register page,- Implement the account registration page ui design,24/09/2024,high,"medium - react knowledge is already aquired, however the API is still being developped",Rym,3
+#29,TSK.004.001 - Design login page user interface,- Design the ui for the login page,23/09/2024,high,low - creative freedom is pretty big. just a drawing is neccessary,Carla,3
+#31,TSK.004.003 - Create endpoints on the server to verify login credentials,- Create endpoints on the server to verify login by verifying the password hash,27/09/2024,high,high - knowledge about this is not known. Have to research how to do it and what is best for our application,Nolan,4
+#48,TSK.002.005 - Create database tables to organize team creation,- Create the build/drop/populate scripts to organize students into teams,26/09/2024,med,"medium - database knoledge is there, however need clarification for specification",Mauricio,2
+#52,MGMT.002.004 - Complete the README file,- Complete the README file based on rubric,29/09/2024,high,low - just write some text,Rym,0
+#44,TSK.001.007 - Implement frontend logic for account creation,"- Implement frontend logic for user account creation.
+- Added password validation and confirmation
+- Connect frontend to the backend using API routes",29/09/2024,high,"medium - react knowledge is already aquired, however the API is still being developped",Rym,Rym
+#30,TSK.004.002 - Implement design for the login page with a form to input credentials,- Make the ui design a reality with react and connect it to the backend api,29/09/2024,high,"medium - react knowledge is already aquired, the api is done however it might still contain bugs",Jaden,4
+#59,TSK.004.004 - Create a functional navigation bar,- Have the navbar reflect a users status of being logged in and improve visuals,29/09/2024,high,medium - the api is available however it might still contain bugs,Rym,3
+#60,MGMT.002.002 - Create and add sprint planning with correct formatting,- Create and make sure the sprint planning is consistent with the rubric,29/09/2024,high,low - just verifying the formatting,"Nolan, Rym, Mauricio, Jaden, Khalil, Carla",4
+#61,MGMT.002.001 - Create and add meeting minutes with correct formatting,- Create and make sure meeting minutes are consistent with the rubric,29/09/2024,high,low - verifying that the formatting is good,Nolan,1
+#1,US.001 - Creating an account,- As a user I would like to create an account (student or instructor) in the website with my username and password to use when I login.,29/09/2024,high,"medium - the knowledge of creating users, databases, endpoints is very common however each decision needs to be corroborated with the requirements and could lead to redoing the story",Mauricio,8
+#4,US.004 - User Login,"As a user, I would like to login using the credentials I used when creating my account.",29/09/2024,high,"high - the login of the user still needs to be research since we have to implement our own authentication system. Researching hashing, security for sessions is necessary",Nolan,8
+,,,,,,,
+SPRINT 2,,,,,,,
+Issue #,User Story Title/Task Title,Description/Associated Tasks,Due Date,"Priority (low, medium, high)","Risk (low, medium, high) + explanation",Responsible,Story Points
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+SPRINT 3,,,,,,,
+Issue #,User Story Title/Task Title,Description/Associated Tasks,Due Date,"Priority (low, medium, high)","Risk (low, medium, high) + explanation",Responsible,Story Points
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+SPRINT 4,,,,,,,
+Issue #,User Story Title/Task Title,Description/Associated Tasks,Due Date,"Priority (low, medium, high)","Risk (low, medium, high) + explanation",Responsible,Story Points
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+SPRINT 5,,,,,,,
+Issue #,User Story Title/Task Title,Description/Associated Tasks,Due Date,"Priority (low, medium, high)","Risk (low, medium, high) + explanation",Responsible,Story Points
