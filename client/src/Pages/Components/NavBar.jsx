@@ -1,51 +1,45 @@
+import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import './Styles/NavBar.css';
 import AuthContext from '../../Context/AuthContext';
 import { useContext } from "react";
 import { postData } from '../../Controller/FetchModule';
-import { useNavigate } from 'react-router-dom';
 
-/**
- * Navigation bar to be used on all pages
- * @returns {ReactElement}
- */
 function NavBar() {
+    const [scrollTop, setScrollTop] = useState(0);
     const auth = useContext(AuthContext);
-    const navigate = useNavigate();
 
     async function handleLogout() {
         await postData("/api/logout", {}, "POST");
         auth.setUserLoggedIn(false);
     }
 
+    useEffect(() => {
+        const onScroll = e => {
+            setScrollTop(e.target.documentElement.scrollTop);
+        };
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [scrollTop]);
+
     return (
-        <div id="navbar">
-            <div id="nav-sub">
-                <li>
-                    <a href="/">
-                        Home
-                    </a>
-                </li>
-            </div>
-            <div className="nav-sub">
-                {
-                    auth.userLoggedIn ?
-                        <a href='#'>
-                            <p onClick={(async () => { await handleLogout(); navigate("/"); })} href="/home">
-                                Logout
-                            </p>
-                        </a>
+        <nav className="nav affix">
+            <div id="mainListDiv" className="main_list">
+                <ul className="navlinks">
+                    <li><NavLink className="navlink" to="/">Home</NavLink></li>
+                    <div className="spacer" />
+                    {auth.userLoggedIn ?
+                        <li><NavLink onClick={(async () => { await handleLogout() })} className="navlink" to="/">Logout</NavLink></li>
                         :
                         <>
-                            <li>
-                                <a href="/loginAccount"> Login </a>
-                            </li>
-                            <li>
-                                <a href="/registerAccount"> Sign Up </a>
-                            </li>
+                            <li><NavLink className="navlink" to="/loginAccount">Login</NavLink></li>
+                            <li><NavLink className="navlink" to="/registerAccount">Sign Up</NavLink></li>
+
                         </>
-                }
+                    }
+                </ul>
             </div>
-        </div>
+        </nav>
     );
 }
 
