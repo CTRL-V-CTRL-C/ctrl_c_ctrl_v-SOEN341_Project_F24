@@ -9,9 +9,10 @@ Carla Chamandi
 Jaden Wright-Maurais
 Mauricio Murillo
 Agenda:
-Finalizing registration
+Finalizing registration and sprint
 Sprint planning consistency
 Discussion:
 Registration was completed, and work began on the navbar.
 Ensured sprint planning and meeting minutes were consistent with the rubric.
 Backend connection for the login page was finalized.
+Github issues maintenance
