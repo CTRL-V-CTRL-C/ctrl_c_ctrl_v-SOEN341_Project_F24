@@ -1,6 +1,8 @@
 import './Styles/NavBar.css';
 import AuthContext from '../../Context/AuthContext';
 import { useContext } from "react";
+import { postData } from '../../Controller/FetchModule';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Navigation bar to be used on all pages
@@ -8,11 +10,12 @@ import { useContext } from "react";
  */
 function NavBar() {
     const auth = useContext(AuthContext);
+    const navigate = useNavigate();
 
     async function handleLogout() {
-        await fetch("/api/logout");
+        await postData("/api/logout", {}, "POST");
         auth.setUserLoggedIn(false);
-        console.log("LOGGING OUT")
+        console.log("LOGGING OUT");
     }
 
     return (
@@ -27,8 +30,8 @@ function NavBar() {
             <div className="nav-sub">
                 {
                     auth.userLoggedIn ?
-                        <a href='/'>
-                            <p onClick={async () => { await handleLogout() }} href="/home">
+                        <a href='#'>
+                            <p onClick={(async () => { await handleLogout(); navigate("/"); })} href="/home">
                                 Logout
                             </p>
                         </a>
