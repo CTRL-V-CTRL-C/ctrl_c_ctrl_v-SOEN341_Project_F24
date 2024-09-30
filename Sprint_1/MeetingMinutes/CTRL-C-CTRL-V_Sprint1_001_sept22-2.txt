@@ -1,0 +1,17 @@
+Date: September 22th, 2024
+Time: 3:00pm-3:30pm
+Location: Video Call 
+Attendees: 
+Carla Chamandi
+Khalil Labban
+Agenda 
+Discuss main UI designs for registration page 
+Discussion: 
+collaborated on Register page design 
+placement of the elements 
+Color palette 
+User inputs
+Font-design 
+Buttons and which page they would lead to 
+Page decoration
+

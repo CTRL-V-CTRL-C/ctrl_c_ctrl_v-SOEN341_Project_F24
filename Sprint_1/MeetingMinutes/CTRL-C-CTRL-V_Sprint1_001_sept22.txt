@@ -1,0 +1,19 @@
+Date: September 22, 2024
+Time: 4:55 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Nolan Ganz
+Mauricio Murillo
+Jaden Wright-Maurais
+Khalil Labban
+Carla Chamandi
+Agenda:
+Database operations
+UI design continuation
+Frontend routing implementation
+Discussion:
+Database users were created to set up tables and perform CRUD operations.
+UI design for the login and registration pages continued, with team collaboration.
+Frontend routing for login and registration pages was implemented.
+React basics were learned.

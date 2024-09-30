@@ -1,0 +1,19 @@
+Date: September 25, 2024
+Time: 11:26 AM
+Location: Discord
+Attendees:
+Rym Dallali
+Carla Chamandi
+Jaden Wright-Maurais
+Nolan Ganz
+Mauricio Murillo
+Khalil Labban
+Agenda:
+Finalizing login and registration pages
+PR reviews
+React learning
+Discussion:
+Frontend logic for account registration was finished.
+The login page was reworked with collaboration from multiple team members.
+PRs were reviewed, with research conducted on authentication best practices.
+Hotfixes were applied to PRs.

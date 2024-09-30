@@ -1,0 +1,17 @@
+Date: September 24, 2024
+Time: 12:02 PM
+Location: Discord
+Attendees:
+Rym Dallali
+Khalil Labban
+Carla Chamandi
+Nolan Ganz
+Mauricio Murillo
+Jaden Wright-Maurais
+Agenda:
+UI implementation for the register page
+React learning
+Discussion:
+UI implementation for the registration page was completed, and a PR was created.
+Frontend logic for the register page began.
+React learning was started by team members, along with API research.
