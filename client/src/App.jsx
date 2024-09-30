@@ -9,7 +9,6 @@ import { postData } from './Controller/FetchModule';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  console.log(userLoggedIn);
   useEffect(() => {
     (async () => {
       if (!userLoggedIn) {
@@ -22,7 +21,6 @@ function App() {
         }
       }
     })();
-    console.log("looged in: " + userLoggedIn)
   }, [userLoggedIn]);
 
   return (

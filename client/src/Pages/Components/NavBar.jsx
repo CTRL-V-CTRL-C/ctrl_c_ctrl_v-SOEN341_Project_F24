@@ -15,7 +15,6 @@ function NavBar() {
     async function handleLogout() {
         await postData("/api/logout", {}, "POST");
         auth.setUserLoggedIn(false);
-        console.log("LOGGING OUT");
     }
 
     return (
