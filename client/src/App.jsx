@@ -15,7 +15,6 @@ function App() {
         const authResponse = await postData("/api/test-authentication", {}, "POST");
         if (authResponse.status === 200) {
           setUserLoggedIn(true);
-          console.log("1")
         } else {
           setUserLoggedIn(false)
         }
