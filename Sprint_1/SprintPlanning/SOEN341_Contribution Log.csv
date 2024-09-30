@@ -1,0 +1,128 @@
+Time Start,Time End,Members,Activities,Hours
+16/09/2024,22/09/2024,Nolan Ganz,"- Create user stories and tasks (+ extra verification)
+- Setup repo, organisation and branch rules
+- Setup cloud service to host database
+- Setup database users, and permissions",- 4 hours
+,,Rym Dallali,"- Create user stories and tasks (+ extra verification)
+- Write the README file",- 3 hours
+,,Mauricio Murillo,"- Created user stories and tasks
+- Setup skeleton project for front and backend with the tech stack
+- Reviwed concept art
+- Created PR for creating a user in HTTP endpoint",- 5 hours
+,,Khalil Labban,"- Create user stories and tasks 
+- Begin learning React
+- Create UI designs
+- Some frontend code",- 4 hours
+,,Jaden Wright-Maurais,"- helped create user stories
+- started Learnt react
+- reviewed UI sample",-4 hours
+,,Carla Chamandi,"-Worked on the UI design
+- Learned react
+- Did Some frontend coding (login) 
+- Worked on some user stories ",4 hours
+23/09/2024,29/09/2024,Nolan Ganz,"- Learn Postgresql syntax
+- Create build/drop/populate scripts for users table
+- Reviewed PRs
+- Researched and implemented login and authentication in the backend
+- Implemented functionality to connect frontend login page to backend api
+- Helped a little with account creation frontend
+- Fixed various bugs
+- Make sprint planning doc and meeting minutes",- 30 hours
+,,Rym Dallali,"- Implement the Register page UI according to designs.
+- Implement the Register page logic and connect it with backend api.
+- Help work and fix the login page.
+- Create a functional navbar
+- Reviewed PRs.
+- Helped out with project running and github.
+- Completed the README file.",- 25 hours
+,,Mauricio Murillo,"- Create build and populate scripts for the user team creation
+- Researched how to implement hashing in client and server
+- Merged PRs
+- Reviewed repo maintainability",- 12 hours
+,,Khalil Labban,"
+- Continued learning React
+- Create more UI designs
+- Some frontend code
+- Researched potential functions to implement",-10 hours 
+,,Jaden Wright-Maurais,"-continues learning react 
+- created folders and proper file names in accordance to task 11 (no merge conflicts )
+- implemented the login page based on UI design 
+- Researched APIs
+- helped finalize the final UI designs for login and register page ",12 hours 
+,,Carla Chamandi,"-Worked on the UI design
+- Learned react
+- Helped with some frontend coding (login) 
+- Worked on some user stories  
+-Research on APIs",-10 hours 
+30/09/2024,06/10/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+07/10/2024,13/10/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+14/10/2024,20/10/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+21/10/2024,27/10/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+28/10/2024,03/11/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+04/11/2024,10/11/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+11/11/2024,17/11/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+18/11/2024,24/11/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+25/11/2024,01/12/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+02/12/2024,08/12/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+09/12/2024,15/12/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
+16/12/2024,22/12/2024,Nolan Ganz,,
+,,Rym Dallali,,
+,,Mauricio Murillo,,
+,,Khalil Labban,,
+,,Jaden Wright-Maurais,,
+,,Carla Chamandi,,
