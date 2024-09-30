@@ -27,7 +27,6 @@ function LoginPage() {
 
         if (loginResponse.status === 200) {
             auth.setUserLoggedIn(true);
-            console.log("2")
             setMessage(loginJSON.msg);
             navigate("/");
         } else {
