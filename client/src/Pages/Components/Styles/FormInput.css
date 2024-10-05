@@ -35,7 +35,8 @@
 }
 
 .form label .input:focus+span,
-.form label .input:valid+span {
+.form label .input:valid+span,
+.form label .input:not(:placeholder-shown)+span {
     top: 30px;
     font-size: 0.7em;
     font-weight: 600;
