@@ -1,7 +1,11 @@
 CREATE TABLE IF NOT EXISTS teams
 (
     team_id   SERIAL PRIMARY KEY,
-    team_name VARCHAR(32) NOT NULL
+    team_name VARCHAR(32) NOT NULL,
+    course_id INTEGER NOT NULL,
+    FOREIGN KEY(course_id) REFERENCES courses(course_id)
+        ON DELETE CASCADE,
+    UNIQUE(team_name, course_id)
 );
 
 CREATE TABLE IF NOT EXISTS team_members
