@@ -55,8 +55,8 @@ const requireNoAuth = (req, res, next) => {
 
 //Login with correct username and password
 router.post("/login", requireNoAuth, async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const username = req.body.username.normalize("NFKC").toLocaleLowerCase();
+  const password = req.body.password.normalize("NFKC");
 
   try {
 

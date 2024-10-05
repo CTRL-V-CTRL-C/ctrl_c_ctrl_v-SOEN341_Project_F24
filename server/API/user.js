@@ -14,13 +14,13 @@ router.use(express.json(jsonConfigs));
 router.route("/create")
     .post(async (req, res) => {
         const userObject = {
-            username: req.body.username,
-            password: req.body.password,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            schoolID: req.body.schoolID,
-            role: req.body.role
+            username: req.body.username.normalize("NFKC").toLocaleLowerCase(),
+            password: req.body.password.normalize("NFKC"),
+            firstName: req.body.firstName.normalize("NFKC").toLocaleLowerCase(),
+            lastName: req.body.lastName.normalize("NFKC").toLocaleLowerCase(),
+            email: req.body.email.normalize("NFKC").toLocaleLowerCase(),
+            schoolID: req.body.schoolID.normalize("NFKC").toLocaleUpperCase(),
+            role: req.body.role.normalize("NFKC").toLocaleUpperCase()
         }
         userObject.password_hash = await argon2.hash(userObject.password);
         const goodResult = await createUser(db, userObject);
