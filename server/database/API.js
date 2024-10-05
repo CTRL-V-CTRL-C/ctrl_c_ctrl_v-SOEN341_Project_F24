@@ -1,11 +1,17 @@
 import pg from 'pg'
 import log from '../logger.js'
+
+//Account creation validation
+const namePattern = /^[a-zA-Z'\-]+$/v;
+const emailPattern = /^[a-zA-Z0-9.]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/v;
+const studentIDPattern = /^[Ss][Tt][Uu][Dd][0-9]{4,4}$/v;
+const InstructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
+
 /**
  * 
  * @param {object} userObject the object containing all the information about a user
  * @param {string} userObject.username
  * @param {string} userObject.password_hash
- * @param {string} userObject.salt
  * @param {string} userObject.firstName
  * @param {string} userObject.lastName
  * @param {string} userObject.email
@@ -19,8 +25,13 @@ function verifyUser(userObject) {
             return false;
         }
     }
+    let valid = !!userObject.firstName.match(namePattern) &&
+        !!userObject.lastName.match(namePattern) &&
+        !!userObject.email.match(emailPattern) &&
+        !!userObject.role.match(/(STUD|INST)/) &&
+        !!userObject.schoolID.match(!!userObject.role.match(/INST/) ? InstructorIDPattern : studentIDPattern);
     // TODO: verification for the username and passwords (verify lengt, hash, etc.)
-    return true
+    return valid;
 }
 
 /**
