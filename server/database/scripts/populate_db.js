@@ -37,14 +37,21 @@ for (let i = 0; i < 11; i++) {
 
 console.log("Populated users table");
 
-//TODO: Populate Courses table
+//Populate Courses table
+const numberOfCourses = 5;
+for (let course_id = 1; course_id <= numberOfCourses; course_id++) {
+  await db.query("INSERT INTO courses (course_name, instructor_id) VALUES ($1,$2)",
+    [`test_course_${course_id}`, getRandomInt(12, 22)]
+  );
+}
 
-//TODO: Populate Teams table
+console.log("Populated courses table");
 
+//Populate Teams table
 const numberOfTeams = 10;
 for (let team_id = 1; team_id <= numberOfTeams; team_id++) {
-  await db.query("INSERT INTO teams (team_name) VALUES ($1)",
-    [`test_team_${team_id}`]
+  await db.query("INSERT INTO teams (team_name, course_id) VALUES ($1,$2)",
+    [`test_team_${team_id}`, getRandomInt(1, numberOfCourses)]
   );
   for (let index = 0; index < getRandomInt(1, 5); index++) {
     await db.query("INSERT INTO team_members (user_id, team_id) VALUES ($1, $2)",
