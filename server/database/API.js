@@ -5,7 +5,9 @@ import log from '../logger.js'
 const namePattern = /^[a-zA-Z'\-]+$/v;
 const emailPattern = /^[a-zA-Z0-9.]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/v;
 const studentIDPattern = /^[Ss][Tt][Uu][Dd][0-9]{4,4}$/v;
-const InstructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
+const instructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
+const rolePattern = /^(STUD|INST)$/v;
+const isInstructorPattern = /^INST$/v;
 
 /**
  * 
@@ -25,11 +27,11 @@ function verifyUser(userObject) {
             return false;
         }
     }
-    let valid = !!userObject.firstName.match(namePattern) &&
-        !!userObject.lastName.match(namePattern) &&
-        !!userObject.email.match(emailPattern) &&
-        !!userObject.role.match(/(STUD|INST)/) &&
-        !!userObject.schoolID.match(!!userObject.role.match(/INST/) ? InstructorIDPattern : studentIDPattern);
+    let valid = namePattern.test(userObject.firstName) &&
+        namePattern.test(userObject.lastName) &&
+        emailPattern.test(userObject.email) &&
+        rolePattern.test(userObject.role) &&
+        isInstructorPattern.test(userObject.role) ? instructorIDPattern.test(userObject.schoolID) : studentIDPattern.test(userObject.schoolID);
     // TODO: verification for the username and passwords (verify lengt, hash, etc.)
     return valid;
 }
