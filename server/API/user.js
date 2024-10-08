@@ -5,14 +5,9 @@ import argon2 from 'argon2';
 
 const router = express.Router();
 
-const jsonConfigs = {
-    limit: 50 * 1000, // 50 kb max json limit
-}
-router.use(express.json(jsonConfigs));
-
 // creating a user in the database
 router.route("/create")
-    .post(async (req, res) => {
+    .post(async (req, res, next) => {
         const userObject = {
             username: req.body.username,
             password: req.body.password,
@@ -23,12 +18,13 @@ router.route("/create")
             role: req.body.role
         }
         userObject.password_hash = await argon2.hash(userObject.password);
-        const goodResult = await createUser(db, userObject);
-        if (goodResult) {
-            res.json({ created: true });
+        const error = await createUser(db, userObject);
+        if (error) {
+            res.status(400).json({ error });
         } else {
-            res.status(400).json({ created: false });
+            res.json({ created: true });
         }
+        next();
     });
 
 export { router }

@@ -2,7 +2,7 @@ import { suite, it, after } from 'node:test'
 import assert from 'node:assert'
 import request from 'supertest'
 import { app } from '../server.js'
-import { db } from '../database/db.js'
+import { db, pool } from '../database/db.js'
 
 function randomLetters(maxLength) {
     const r = (Math.random() + 1).toString(36).substring(2)
@@ -17,24 +17,27 @@ suite("POST requests to create a user", () => {
     // disconnect from the database after the tests
     after(async () => {
         await db.end();
+        await pool.end();
     });
 
     it("should respond with 200 when creating a user with name and password", async (t) => {
+        const email = `test.${randomLetters()}@mail.com`;
         const user = {
-            username: `test_${randomLetters()}`,
-            password_hash: "73f07a34e3dad5929ed6fac8725824caa6bce13667d9380ffe24784d7c9d3311",
-            salt: "QTHGVmyPK7PC4FK2",
+            username: email,
+            password: "some password",
             firstName: "John",
             lastName: "Smith",
-            email: `test.${randomLetters()}@mail.com`,
+            email,
             schoolID: `${randomLetters(8)}`,
             role: "INST"
         }
         const response = await request(app)
-            .post("/user/create")
+            .post("/api/user/create")
             .set("Accept", "application/json")
-            .send(user);
-        assert.equal(response.status, 200);
+            .send(user)
+            .expect(200)
+            .timeout(1000); // timesout after 1 second in case the app crashes
+
         assert.match(response.headers["content-type"], /json/);
     });
 })
