@@ -14,7 +14,6 @@ router.use(express.json(jsonConfigs));
 router.route("/create")
     .post(async (req, res) => {
         const userObject = {
-            username: req.body.username.normalize("NFKC").toLocaleLowerCase(),
             password: req.body.password.normalize("NFKC"),
             firstName: req.body.firstName.normalize("NFKC").toLocaleLowerCase(),
             lastName: req.body.lastName.normalize("NFKC").toLocaleLowerCase(),

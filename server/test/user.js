@@ -12,6 +12,10 @@ function randomLetters(maxLength) {
     return r
 }
 
+function randomNumber(length) {
+    return Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
+}
+
 suite("POST requests to create a user", () => {
 
     // disconnect from the database after the tests
@@ -21,17 +25,15 @@ suite("POST requests to create a user", () => {
 
     it("should respond with 200 when creating a user with name and password", async (t) => {
         const user = {
-            username: `test_${randomLetters()}`,
-            password_hash: "73f07a34e3dad5929ed6fac8725824caa6bce13667d9380ffe24784d7c9d3311",
-            salt: "QTHGVmyPK7PC4FK2",
+            password: "password",
             firstName: "John",
             lastName: "Smith",
             email: `test.${randomLetters()}@mail.com`,
-            schoolID: `${randomLetters(8)}`,
+            schoolID: `INST${randomNumber(4)}`,
             role: "INST"
         }
         const response = await request(app)
-            .post("/user/create")
+            .post("/api/user/create")
             .set("Accept", "application/json")
             .send(user);
         assert.equal(response.status, 200);

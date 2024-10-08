@@ -71,7 +71,6 @@ function RegisterAccountPage() {
     (async () => {
       const role = isInstructor ? "INST" : "STUD";
       const dataResponse = await postData("/api/user/create", {
-        "username": email.normalize("NFKC").toLocaleLowerCase(),
         "firstName": firstname.normalize("NFKC").toLocaleLowerCase(),
         "lastName": lastname.normalize("NFKC").toLocaleLowerCase(),
         "email": email.normalize("NFKC").toLocaleLowerCase(),
