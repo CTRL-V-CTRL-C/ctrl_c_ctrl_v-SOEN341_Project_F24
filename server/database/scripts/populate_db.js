@@ -10,29 +10,25 @@ const getRandomInt = (min, max) => Math.floor(getRandomNumber(min, max));
 
 //Make students
 for (let i = 0; i < 11; i++) {
-  getUserNum();
-  getSchoolNum();
   await db.query("INSERT INTO users (hash, f_name, l_name, email, school_id, role)\
    VALUES ($1,$2,$3,$4,$5,$6)", [
     "$argon2id$v=19$m=65536,t=3,p=4$hu6FGPJVFZxzd/zqI3HoEg$EUQ1Lil7Ed4TLQFOhGD1xppanajwqJae8FQmKDxPgsU",
     "Joe",
     "Parker",
-    `JoeParker${usernum}@gmail.com`,
-    `STUD${schoolNum}`,
+    `JoeParker${getUserNum()}@gmail.com`,
+    `STUD${getSchoolNum()}`,
     "STUD"
   ]);
 }
 //Make professors
 for (let i = 0; i < 11; i++) {
-  getUserNum();
-  getSchoolNum();
   await db.query("INSERT INTO users (hash, f_name, l_name, email, school_id, role)\
    VALUES ($1,$2,$3,$4,$5,$6)", [
     "$argon2id$v=19$m=65536,t=3,p=4$hu6FGPJVFZxzd/zqI3HoEg$EUQ1Lil7Ed4TLQFOhGD1xppanajwqJae8FQmKDxPgsU",
     "Joe",
     "Parker",
-    `JoeParker${usernum}@gmail.com`,
-    `INST${schoolNum}`,
+    `JoeParker${getUserNum()}@gmail.com`,
+    `INST${getSchoolNum()}`,
     "INST"
   ]);
 }
