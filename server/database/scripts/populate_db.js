@@ -2,7 +2,7 @@ import { db } from "../db.js";
 
 //Populate users table
 let usernum = 0;
-let schoolNum = 10000000;
+let schoolNum = 1000;
 let getUserNum = () => ++usernum;
 let getSchoolNum = () => ++schoolNum;
 const getRandomNumber = (min, max) => (Math.random() * (max - min)) + min;
@@ -10,27 +10,25 @@ const getRandomInt = (min, max) => Math.floor(getRandomNumber(min, max));
 
 //Make students
 for (let i = 0; i < 11; i++) {
-  await db.query("INSERT INTO users (username, hash, f_name, l_name, email, school_id, role)\
-   VALUES ($1,$2,$3,$4,$5,$6,$7)", [
-    "user" + getUserNum(),
+  await db.query("INSERT INTO users (hash, f_name, l_name, email, school_id, role)\
+   VALUES ($1,$2,$3,$4,$5,$6)", [
     "$argon2id$v=19$m=65536,t=3,p=4$hu6FGPJVFZxzd/zqI3HoEg$EUQ1Lil7Ed4TLQFOhGD1xppanajwqJae8FQmKDxPgsU",
     "Joe",
     "Parker",
-    `JoeParker${usernum}@gmail.com`,
-    getSchoolNum(),
+    `JoeParker${getUserNum()}@gmail.com`,
+    `STUD${getSchoolNum()}`,
     "STUD"
   ]);
 }
 //Make professors
 for (let i = 0; i < 11; i++) {
-  await db.query("INSERT INTO users (username, hash, f_name, l_name, email, school_id, role)\
-   VALUES ($1,$2,$3,$4,$5,$6,$7)", [
-    "user" + getUserNum(),
+  await db.query("INSERT INTO users (hash, f_name, l_name, email, school_id, role)\
+   VALUES ($1,$2,$3,$4,$5,$6)", [
     "$argon2id$v=19$m=65536,t=3,p=4$hu6FGPJVFZxzd/zqI3HoEg$EUQ1Lil7Ed4TLQFOhGD1xppanajwqJae8FQmKDxPgsU",
     "Joe",
     "Parker",
-    `JoeParker${usernum}@gmail.com`,
-    getSchoolNum(),
+    `JoeParker${getUserNum()}@gmail.com`,
+    `INST${getSchoolNum()}`,
     "INST"
   ]);
 }
