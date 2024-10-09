@@ -77,7 +77,7 @@ function RegisterAccountPage() {
         "schoolID": userID.normalize("NFKC").toLocaleUpperCase(),
         "role": role.normalize("NFKC").toLocaleUpperCase(),
         "password": password.normalize("NFKC")
-      }, "POST");
+      });
       const data = await dataResponse.json();
       setFeedbackMessage(data.created ? navigate("/loginAccount") : "ERROR: Account creation failed");
     })();

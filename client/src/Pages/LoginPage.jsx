@@ -22,7 +22,7 @@ function LoginPage() {
         setIsButtonDisabled(true);
 
         //Login post
-        const loginResponse = await postData("/api/login", { email: email.normalize("NFKC").toLocaleLowerCase(), password: password.normalize("NFKC") }, "POST");
+        const loginResponse = await postData("/api/login", { email: email.normalize("NFKC").toLocaleLowerCase(), password: password.normalize("NFKC") });
         const loginJSON = await loginResponse.json();
 
         if (loginResponse.status === 200) {
