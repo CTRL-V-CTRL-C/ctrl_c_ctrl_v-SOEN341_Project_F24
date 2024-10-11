@@ -6,6 +6,7 @@ import './Pages/Components/Styles/BackgroundImage.css';
 import AuthContext from './Context/AuthContext';
 import { useEffect, useState } from 'react';
 import { postData } from './Controller/FetchModule';
+import SideMenu from './Pages/Components/SideMenu';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -30,6 +31,7 @@ function App() {
 
       <Router>
         <NavBar />
+        <SideMenu />
         <PageHolder />
       </Router>
     </AuthContext.Provider>
