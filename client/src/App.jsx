@@ -10,14 +10,19 @@ import SideMenu from './Pages/Components/SideMenu';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [isInstructor, setIsInstructor] = useState(false);
+
   useEffect(() => {
     (async () => {
       if (!userLoggedIn) {
         const authResponse = await postData("/api/test-authentication", {});
         if (authResponse.status === 200) {
+          let authJSON = await authResponse.json()
           setUserLoggedIn(true);
+          setIsInstructor(authJSON.isInstructor);
         } else {
           setUserLoggedIn(false)
+          setIsInstructor(false);
         }
       }
     })();
@@ -27,7 +32,8 @@ function App() {
     <AuthContext.Provider value={{
       userLoggedIn,
       setUserLoggedIn,
-      
+      isInstructor,
+      setIsInstructor
     }}>
 
       <Router>

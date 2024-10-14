@@ -13,7 +13,6 @@ function LoginPage() {
     const [message, setMessage] = useState("");
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-
     async function loginAccount(event) {
         //Stops the form from submitting
         event.preventDefault();
@@ -27,12 +26,12 @@ function LoginPage() {
 
         if (loginResponse.status === 200) {
             auth.setUserLoggedIn(true);
+            auth.setIsInstructor(loginJSON.isInstructor);
             setMessage(loginJSON.msg);
             navigate("/");
         } else {
             setMessage(loginJSON.msg);
         }
-
         setIsButtonDisabled(false);
     };
 

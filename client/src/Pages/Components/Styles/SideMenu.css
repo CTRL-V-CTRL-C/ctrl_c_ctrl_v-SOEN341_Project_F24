@@ -9,6 +9,7 @@ body:has(nav.sidebar-on) {
     height: 100vh;
     width: 240px;
     position: fixed;
+    display: inline-block;
     top: 0;
     left: 0;
     z-index: 5;
@@ -39,9 +40,12 @@ body:has(nav.sidebar-on) {
         list-style: none;
         padding: 0.5em 0;
         margin: 0;
+        display: inline-block;
+
 
         li {
-            padding: 0.5em 1em 0.5em 3em;
+            padding: 0.5em 4em 0.5em 4em;
+            margin: 1em 0em 1em 0em;
             font-size: 0.95em;
             font-weight: regular;
             background-position: left 15px center;
@@ -63,6 +67,14 @@ body:has(nav.sidebar-on) {
 
         }
     }
+}
+
+.add-course-btn {
+    border: 1px solid rgb(255, 211, 211);
+    border-radius: 100px;
+    width:fit-content;
+    text-align: center;
+    box-shadow: 5px 3px 15px 0px rgba(82, 52, 52, 0.92);
 }
 
 @media screen and (max-width:900px) and (min-width:400px) {

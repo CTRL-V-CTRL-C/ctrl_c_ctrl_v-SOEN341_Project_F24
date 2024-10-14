@@ -3,7 +3,9 @@ import React from 'react';
 const AuthContext = React.createContext(
     {
         userLoggedIn: false,
-        setUserLoggedIn: () => { }
+        setUserLoggedIn: () => { },
+        isInstructor: false,
+        setIsInstructor: () => { }
     }
 );
 

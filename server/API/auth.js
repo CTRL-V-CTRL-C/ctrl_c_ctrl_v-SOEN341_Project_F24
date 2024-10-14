@@ -73,14 +73,14 @@ router.post("/login", requireNoAuth, async (req, res) => {
       if (success) {
         log.info({}, `User ${email} Successfully logged in`);
         req.session.user = hashQuery.rows[0];
-        req.session.user.isStudent = req.session.user.role === "STUD";
+        req.session.user.isInstructor = req.session.user.role === "INST";
         res.status(200).json({
           msg: "Successfully logged in",
           fName: req.session.user.f_name,
           lName: req.session.user.l_name,
           email: req.session.user.email,
-          id: req.session.user.school_id,
-          isStudent: req.session.user.isStudent,
+          schoolId: req.session.user.school_id,
+          isInstructor: req.session.user.isInstructor,
         });
 
       } else {
@@ -112,7 +112,10 @@ router.post("/logout", requireAuth, async (req, res) => {
 
 //Test whether or not you are authenticated
 router.post("/test-authentication", requireAuth, (req, res) => {
-  res.status(200).json({ msg: "User is authenticated" });
+  res.status(200).json({
+    msg: "User is authenticated",
+    isInstructor: req.session.user.isInstructor,
+  });
 });
 
 export { router, requireAuth };
