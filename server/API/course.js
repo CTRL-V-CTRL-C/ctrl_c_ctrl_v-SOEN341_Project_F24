@@ -3,6 +3,28 @@ import { db } from '../database/db.js';
 import { requireAuth } from './auth.js';
 import log from '../logger.js';
 
+async function requireIsInCourse(req, res, next) {
+  const courseId = req.params.courseId;
+  try {
+    let hasCourse;
+    if (req.session.user.isInstructor) {
+      hasCourse = await db.query("SELECT course_id FROM courses WHERE instructor_id = $1 AND course_id = $2", [req.session.user.userId, courseId]);
+    } else {
+      hasCourse = await db.query("SELECT DISTINCT t.course_id FROM teams t JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1 AND t.course_id = $2", [req.session.user.userId, courseId]);
+    }
+
+    if (hasCourse.rows.length == 1) {
+      next();
+    } else {
+      res.status(401).json({ msg: "You do not have permission to access this course" });
+    }
+
+  } catch (error) {
+    log.error(error, `Something went wrong trying to verify ${req.session.user.email} is in course ${courseId}`);
+    res.status(500).json({ msg: "Something went wrong trying to perform that action with the course, please try again later" });
+  }
+}
+
 const router = express.Router();
 
 const jsonConfigs = {
@@ -28,11 +50,10 @@ router.get("/get-courses", requireAuth, async (req, res) => {
   }
 });
 
-router.get("/get-students/:courseId", requireAuth, async (req, res) => {
+router.get("/get-students/:courseId", requireAuth, requireIsInCourse, async (req, res) => {
   const courseId = req.params.courseId;
   try {
-    let hasCourse = await db.query("SELECT course_id FROM courses WHERE instructor_id = $1 AND course_id = $2", [req.session.user.userId, courseId]);
-    if (!req.session.user.isInstructor || hasCourse.rows.length != 1) {
+    if (!req.session.user.isInstructor) {
       res.status(401).json({ msg: "You do not have permission to get the students for this course" });
     } else {
       let studentQuery = await db.query("SELECT DISTINCT f_name, l_name, school_id, email, u.user_id FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id JOIN users u ON tm.user_id = u.user_id WHERE c.course_id = $1", [courseId]);
@@ -45,4 +66,4 @@ router.get("/get-students/:courseId", requireAuth, async (req, res) => {
   }
 });
 
-export { router };
+export { router, requireIsInCourse };
