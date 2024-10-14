@@ -1,7 +1,7 @@
 function OtherTeams() {
     return (
         <p>
-            OTHER TEAMS
+            OTHER TEAMS of the group 
         </p>
     )
 }
