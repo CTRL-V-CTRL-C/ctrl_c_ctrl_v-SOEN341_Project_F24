@@ -26,7 +26,8 @@ function App() {
   return (
     <AuthContext.Provider value={{
       userLoggedIn,
-      setUserLoggedIn
+      setUserLoggedIn,
+      
     }}>
 
       <Router>
