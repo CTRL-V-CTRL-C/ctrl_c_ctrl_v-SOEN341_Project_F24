@@ -8,7 +8,7 @@ function NavBar() {
     const auth = useContext(AuthContext);
 
     async function handleLogout() {
-        await postData("/api/logout", {}, "POST");
+        await postData("/api/logout", {});
         auth.setUserLoggedIn(false);
     }
 

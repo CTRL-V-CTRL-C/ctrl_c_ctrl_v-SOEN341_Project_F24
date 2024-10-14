@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
   user_id   SERIAL PRIMARY KEY,
-  username  VARCHAR(30) UNIQUE NOT NULL,
   hash      BYTEA NOT NULL,
   f_name    VARCHAR(20) NOT NULL,
   l_name    VARCHAR(20) NOT NULL,

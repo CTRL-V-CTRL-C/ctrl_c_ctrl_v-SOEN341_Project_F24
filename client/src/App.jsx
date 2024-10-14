@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     (async () => {
       if (!userLoggedIn) {
-        const authResponse = await postData("/api/test-authentication", {}, "POST");
+        const authResponse = await postData("/api/test-authentication", {});
         if (authResponse.status === 200) {
           setUserLoggedIn(true);
         } else {

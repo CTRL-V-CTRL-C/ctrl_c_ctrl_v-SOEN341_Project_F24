@@ -12,6 +12,14 @@ async function fetchData(route) {
     return response;
 }
 
+async function postData(route, body) {
+    return await sendData(route, body, "POST");
+}
+
+async function putData(route, body) {
+    return await sendData(route, body, "PUT");
+}
+
 /**
  * Generic post function to post/put given data using
  * the given method (post/put)
@@ -20,7 +28,7 @@ async function fetchData(route) {
  * @param {String} method 
  * @returns {Object}
  */
-async function postData(route, body, method) {
+async function sendData(route, body, method) {
     const url = new URL(route, location.origin);
     const response = await fetch(url, {
         method: method,
@@ -33,4 +41,4 @@ async function postData(route, body, method) {
     return response;
 }
 
-export { fetchData, postData };
+export { fetchData, postData, putData };

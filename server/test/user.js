@@ -12,6 +12,10 @@ function randomLetters(maxLength) {
     return r
 }
 
+function randomNumber(length) {
+    return Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
+}
+
 suite("POST requests to create a user", () => {
 
     // disconnect from the database after the tests
@@ -21,14 +25,12 @@ suite("POST requests to create a user", () => {
     });
 
     it("should respond with 200 when creating a user with name and password", async (t) => {
-        const email = `test.${randomLetters()}@mail.com`;
         const user = {
-            username: email,
-            password: "some password",
+            password: "password",
             firstName: "John",
             lastName: "Smith",
-            email,
-            schoolID: `${randomLetters(8)}`,
+            email: `test.${randomLetters()}@mail.com`,
+            schoolID: `INST${randomNumber(4)}`,
             role: "INST"
         }
         const response = await request(app)

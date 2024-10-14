@@ -22,6 +22,11 @@ function RegisterAccountPage() {
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
 
+  const namePattern = "^[a-zA-Z'\\-]+$";
+  const emailPattern = "^[a-zA-Z0-9.]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+$";
+  const studentIDPattern = "^[Ss][Tt][Uu][Dd][0-9]{4,4}$";
+  const InstructorIDPattern = "^[Ii][Nn][Ss][Tt][0-9]{4,4}$";
+
   // Check if the confirm password is the same as the original password
   const checkPassword = useCallback(() => {
     if (password == confirmPassword && confirmPassword.length >= 8) {
@@ -66,14 +71,13 @@ function RegisterAccountPage() {
     (async () => {
       const role = isInstructor ? "INST" : "STUD";
       const dataResponse = await postData("/api/user/create", {
-        "username": email,
-        "firstName": firstname,
-        "lastName": lastname,
-        "email": email,
-        "schoolID": userID,
-        "role": role,
-        "password": password
-      }, "POST");
+        "firstName": firstname.normalize("NFKC").toLocaleLowerCase(),
+        "lastName": lastname.normalize("NFKC").toLocaleLowerCase(),
+        "email": email.normalize("NFKC").toLocaleLowerCase(),
+        "schoolID": userID.normalize("NFKC").toLocaleUpperCase(),
+        "role": role.normalize("NFKC").toLocaleUpperCase(),
+        "password": password.normalize("NFKC")
+      });
       const data = await dataResponse.json();
       setFeedbackMessage(data.created ? navigate("/loginAccount") : "ERROR: Account creation failed");
     })();
@@ -90,11 +94,11 @@ function RegisterAccountPage() {
         </label>
 
         <div className="flex">
-          <FormInput fieldName={"Firstname"} fieldType={"text"} setField={setFirstname} />
-          <FormInput fieldName={"Lastname"} fieldType={"text"} setField={setLastname} />
+          <FormInput fieldName={"Firstname"} pattern={namePattern} fieldType={"text"} setField={setFirstname} />
+          <FormInput fieldName={"Lastname"} pattern={namePattern} fieldType={"text"} setField={setLastname} />
         </div>
-        <FormInput fieldName={"Email"} fieldType={"email"} setField={setEmail} />
-        <FormInput fieldName={isInstructor ? "Instructor ID" : "Student ID"} fieldType={"text"} setField={setUserID} />
+        <FormInput fieldName={"Email"} pattern={emailPattern} fieldType={"email"} setField={setEmail} />
+        <FormInput fieldName={isInstructor ? "Instructor ID" : "Student ID"} pattern={isInstructor ? InstructorIDPattern : studentIDPattern} fieldType={"text"} setField={setUserID} />
         <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
         <FormInput fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
         <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>

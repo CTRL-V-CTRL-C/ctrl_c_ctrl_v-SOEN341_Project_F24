@@ -53,17 +53,17 @@ const requireNoAuth = (req, res, next) => {
   }
 }
 
-//Login with correct username and password
+//Login with correct email and password
 router.post("/login", requireNoAuth, async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const email = req.body.email.normalize("NFKC").toLocaleLowerCase();
+  const password = req.body.password.normalize("NFKC");
 
   try {
 
-    const hashQuery = await db.query("SELECT * FROM users WHERE username = $1", [username]);
+    const hashQuery = await db.query("SELECT * FROM users WHERE email = $1", [email]);
     if (hashQuery.rows.length != 1) {
-      log.warn({}, `User ${username} tried to log in but does not exist`);
-      res.status(404).json({ msg: "Incorrect username or password" });
+      log.warn({}, `User ${email} tried to log in but does not exist`);
+      res.status(404).json({ msg: "Incorrect email or password" });
     } else {
       const hash = hashQuery.rows[0].hash;
       delete hashQuery.rows[0].hash;
@@ -71,20 +71,27 @@ router.post("/login", requireNoAuth, async (req, res) => {
       const success = await argon2.verify(hash.toString(), password);
 
       if (success) {
-
-        log.info({}, `User ${username} Successfully logged in`);
+        log.info({}, `User ${email} Successfully logged in`);
         req.session.user = hashQuery.rows[0];
-        res.status(200).json({ msg: "Successfully logged in" });
+        req.session.user.isStudent = req.session.user.role === "STUD";
+        res.status(200).json({
+          msg: "Successfully logged in",
+          fName: req.session.user.f_name,
+          lName: req.session.user.l_name,
+          email: req.session.user.email,
+          id: req.session.user.school_id,
+          isStudent: req.session.user.isStudent,
+        });
 
       } else {
 
-        log.warn({}, `User ${username} Failed to log in`);
-        res.status(404).json({ msg: "Incorrect username or password" });
+        log.warn({}, `User ${email} Failed to log in`);
+        res.status(404).json({ msg: "Incorrect email or password" });
 
       }
     }
   } catch (error) {
-    log.error(error, `Something went wrong trying to log in for user ${username}`);
+    log.error(error, `Something went wrong trying to log in for user ${email}`);
     res.status(500).json({ msg: "Something went wrong on our end, try again in a bit" });
   }
 });
