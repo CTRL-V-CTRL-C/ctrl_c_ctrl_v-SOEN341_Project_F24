@@ -28,7 +28,7 @@ function LoginPage() {
             auth.setUserLoggedIn(true);
             auth.setIsInstructor(loginJSON.isInstructor);
             setMessage(loginJSON.msg);
-            navigate("/");
+            navigate("/teams");
         } else {
             setMessage(loginJSON.msg);
         }

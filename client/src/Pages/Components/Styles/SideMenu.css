@@ -15,7 +15,6 @@ body:has(nav.sidebar-on) {
     z-index: 5;
     outline: none;
     background-color:rgb(180, 142, 142);
-    padding-top: 4rem;
 
     .avatar {
         background: rgba(0, 0, 0, 0.1);
