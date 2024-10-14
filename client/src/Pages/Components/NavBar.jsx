@@ -26,6 +26,7 @@ function NavBar() {
                         <>
                             <li><NavLink className="navlink" to="/loginAccount">Login</NavLink></li>
                             <li><NavLink className="navlink" to="/registerAccount">Sign Up</NavLink></li>
+                            <li><NavLink className="navlink" to="/OtherTeams">Other Teams</NavLink></li>
                         </>
                     }
                 </ul>

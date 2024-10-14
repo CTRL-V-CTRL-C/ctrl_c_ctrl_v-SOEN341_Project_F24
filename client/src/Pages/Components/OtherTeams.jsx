@@ -1,3 +1,6 @@
+import TeamsPage from "./TeamsPage";
+
+
 function OtherTeams() {
     return (
         <p>
