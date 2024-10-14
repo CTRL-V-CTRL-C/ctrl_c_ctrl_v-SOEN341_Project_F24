@@ -71,10 +71,17 @@ router.post("/login", requireNoAuth, async (req, res) => {
       const success = await argon2.verify(hash.toString(), password);
 
       if (success) {
-
         log.info({}, `User ${email} Successfully logged in`);
         req.session.user = hashQuery.rows[0];
-        res.status(200).json({ msg: "Successfully logged in" });
+        req.session.user.isStudent = req.session.user.role === "STUD";
+        res.status(200).json({
+          msg: "Successfully logged in",
+          fName: req.session.user.f_name,
+          lName: req.session.user.l_name,
+          email: req.session.user.email,
+          id: req.session.user.school_id,
+          isStudent: req.session.user.isStudent,
+        });
 
       } else {
 
