@@ -1,7 +1,24 @@
 
+@media screen and (max-width: 300px) {
+    
+    #whole{
+       margin-right: 100px;
+        margin-left: 50px;
+        margin-top: 35px;
+    }
+}
+*{
+    color:black;
+}
+#whole{
+    margin-right: 200px;
+    margin-left: 100px;
+    margin-top: 70px;
+}
 #TitlePosition{
-   margin-right: 800px;
-    margin-top: 40px;
+    width: fit-content;
+
+  
  
 }
 #PageTitle{
@@ -10,3 +27,21 @@
     font-size: xx-large;
     font-weight: bold;
 }
+
+#TableStyle{
+width: 100%;
+ border-collapse: collapse;
+
+}
+
+th, td {
+    border: 3px solid #ddd;
+    padding-left: 8px;
+    padding-right:8px;
+  }
+
+  
+  th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
