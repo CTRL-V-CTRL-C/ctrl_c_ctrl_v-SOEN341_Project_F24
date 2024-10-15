@@ -1,8 +1,11 @@
+import '../Styles/MembersPage.css';
+
 function MembersPage() {
     return (
-        <p>
-            MEMBERS PAGE
+      <div id="TitlePosition"><p id="PageTitle">
+            Student List
         </p>
+        </div>  
     )
 }
 
