@@ -8,7 +8,6 @@ function CVSUpload() {
         <div>
             <button onClick = {() => setButtonPopup(true)}>Upload</button> 
             <PopUp trigger ={buttonPopup}setTrigger= {setButtonPopup}>
-               <h3>My PopUp</h3> 
             </PopUp>
         </div>
     );
