@@ -1,0 +1,9 @@
+.my-team {
+    color: black;
+    align-items: start;
+}
+
+.teammate-card {
+    display: flex;
+    flex-direction: row;
+}

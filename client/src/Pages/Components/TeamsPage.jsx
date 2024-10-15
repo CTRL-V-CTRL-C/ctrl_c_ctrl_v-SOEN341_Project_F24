@@ -1,10 +1,10 @@
 import "./Styles/TeamsPage.css";
 import AuthContext from "../../Context/AuthContext";
 import { useContext, useState } from "react";
-import AllTeams from "./AllTeams";
-import MembersPage from "./MembersPage";
-import MyTeam from "./MyTeam";
-import OtherTeams from "./OtherTeams";
+import AllTeams from "./Teams/AllTeams";
+import MembersPage from "./Teams/MembersPage";
+import MyTeam from "./Teams/MyTeam";
+import OtherTeams from "./Teams/OtherTeams";
 
 function TeamsPage() {
 
