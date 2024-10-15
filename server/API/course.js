@@ -55,10 +55,10 @@ router.get("/get-students/:courseId", requireAuth, requireIsInCourse, async (req
   try {
     if (!req.session.user.isInstructor) {
       res.status(401).json({ msg: "You do not have permission to get the students for this course" });
-    } else {
-      let studentQuery = await db.query("SELECT DISTINCT f_name, l_name, school_id, email, u.user_id FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id JOIN users u ON tm.user_id = u.user_id WHERE c.course_id = $1", [courseId]);
-      res.status(200).json(studentQuery.rows);
+      return;
     }
+    let studentQuery = await db.query("SELECT DISTINCT f_name, l_name, school_id, email, u.user_id FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id JOIN users u ON tm.user_id = u.user_id WHERE c.course_id = $1", [courseId]);
+    res.status(200).json(studentQuery.rows);
 
   } catch (error) {
     log.error(error, `Something went wrong trying to get all the students in a course for ${req.session.user.email}`);
