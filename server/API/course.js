@@ -39,7 +39,7 @@ router.get("/get-courses", requireAuth, async (req, res) => {
     if (req.session.user.isInstructor) {
       courseQuery = await db.query("SELECT course_id, course_name FROM courses JOIN users ON instructor_id = user_id WHERE user_id = $1", [req.session.user.userId]);
     } else {
-      courseQuery = await db.query("SELECT DISTINCT c.course_id, course_name FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1", [req.session.user.userId]);
+      courseQuery = await db.query("SELECT c.course_id, course_name FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1", [req.session.user.userId]);
     }
 
     res.status(200).json(courseQuery.rows);
@@ -57,7 +57,7 @@ router.get("/get-students/:courseId", requireAuth, requireIsInCourse, async (req
       res.status(401).json({ msg: "You do not have permission to get the students for this course" });
       return;
     }
-    let studentQuery = await db.query("SELECT DISTINCT f_name, l_name, school_id, email, u.user_id FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id JOIN users u ON tm.user_id = u.user_id WHERE c.course_id = $1", [courseId]);
+    let studentQuery = await db.query("SELECT f_name, l_name, school_id, email, u.user_id FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id JOIN users u ON tm.user_id = u.user_id WHERE c.course_id = $1", [courseId]);
     res.status(200).json(studentQuery.rows);
 
   } catch (error) {

@@ -54,7 +54,7 @@ router.get("/get-my-team/:courseId", requireAuth, requireIsInCourse, async (req,
         WHERE t.course_id = $1 AND t.team_id IN \
           (SELECT team_id FROM team_members WHERE user_id = $2) \
         GROUP BY t.team_id", [courseId, req.session.user.userId]);
-    res.status(200).json(teamQuery.rows);
+    res.status(200).json(teamQuery.rows[0]);
 
   } catch (error) {
     log.error(error, `Something went wrong trying to get all the students in a course for ${req.session.user.email}`);
