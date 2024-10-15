@@ -26,12 +26,26 @@ router.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 3600000,
+    maxAge: 1 * 60 * 60 * 1000, // one hour
     secure: false,
     httpOnly: true,
     sameSite: 'strict'
   }
 }));
+
+/**
+ * a middleware to make sure that the logged in user is a teacher
+ * @param {express.Request} req the request
+ * @param {express.Response} res the response
+ * @param {express.NextFunction} next the function to call the next middleware
+ */
+function requireTeacher(req, res, next) {
+  if (req.session.user.isStudent) {
+    res.status(401).send(); // unauthorized
+    return;
+  }
+  next();
+}
 
 //Backend authentication to allow use of certain endpoints
 const requireAuth = (req, res, next) => {
@@ -64,32 +78,34 @@ router.post("/login", requireNoAuth, async (req, res) => {
     if (hashQuery.rows.length != 1) {
       log.warn({}, `User ${email} tried to log in but does not exist`);
       res.status(404).json({ msg: "Incorrect email or password" });
-    } else {
-      const hash = hashQuery.rows[0].hash;
-      delete hashQuery.rows[0].hash;
-
-      const success = await argon2.verify(hash.toString(), password);
-
-      if (success) {
-        log.info({}, `User ${email} Successfully logged in`);
-        req.session.user = hashQuery.rows[0];
-        req.session.user.isStudent = req.session.user.role === "STUD";
-        res.status(200).json({
-          msg: "Successfully logged in",
-          fName: req.session.user.f_name,
-          lName: req.session.user.l_name,
-          email: req.session.user.email,
-          id: req.session.user.school_id,
-          isStudent: req.session.user.isStudent,
-        });
-
-      } else {
-
-        log.warn({}, `User ${email} Failed to log in`);
-        res.status(404).json({ msg: "Incorrect email or password" });
-
-      }
+      return;
     }
+
+    let hash = hashQuery.rows[0].hash;
+    delete hashQuery.rows[0].hash;
+    hash = hash.toString();
+
+    const success = await argon2.verify(hash, password);
+
+    if (!success) {
+      log.warn({}, `User ${email} Failed to log in`);
+      res.status(400).json({ msg: "Incorrect email or password" });
+      return;
+    }
+
+    log.info({}, `User ${email} Successfully logged in`);
+    req.session.user = hashQuery.rows[0];
+    req.session.user.isStudent = req.session.user.role === "STUD";
+    res.status(200).json({
+      msg: "Successfully logged in",
+      fName: req.session.user.f_name,
+      lName: req.session.user.l_name,
+      email: req.session.user.email,
+      id: req.session.user.school_id,
+      isStudent: req.session.user.isStudent,
+    });
+
+
   } catch (error) {
     log.error(error, `Something went wrong trying to log in for user ${email}`);
     res.status(500).json({ msg: "Something went wrong on our end, try again in a bit" });
@@ -103,6 +119,7 @@ router.post("/logout", requireAuth, async (req, res) => {
     if (error) {
       log.error(error, `Failed to destroy session for ${user.email}`);
       res.status(500).json({ msg: "Something went wrong on our end, try again in a bit" });
+      return;
     }
     log.info({}, `Successfully destroyed session for ${user.email}`);
     res.clearCookie("authentication");
@@ -115,4 +132,4 @@ router.post("/test-authentication", requireAuth, (req, res) => {
   res.status(200).json({ msg: "User is authenticated" });
 });
 
-export { router, requireAuth };
+export { router, requireAuth, requireTeacher };

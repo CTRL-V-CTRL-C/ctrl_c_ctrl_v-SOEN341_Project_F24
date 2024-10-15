@@ -2,7 +2,7 @@ import pg from 'pg'
 import log from '../logger.js'
 
 //Account creation validation
-const namePattern = /^[a-zA-Z'\-]+$/v;
+const namePattern = /^[a-zA-Z'\-_]+$/v;
 const emailPattern = /^[a-zA-Z0-9.]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/v;
 const studentIDPattern = /^[Ss][Tt][Uu][Dd][0-9]{4,4}$/v;
 const instructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
@@ -86,10 +86,6 @@ async function createUser(db, userObject) {
  * @param {string[]} members the array containing the user ids of the members
  */
 function verifyMembers(members) {
-    if (!Array.isArray(members)) {
-        log.debug("The team mebers could not be create because it is not an array");
-        return false;
-    }
     if (members.length == 0) {
         log.debug("The team was not created since there are no members");
         return false;
@@ -124,47 +120,52 @@ async function getUserIds(db, emails) {
 
 /**
  * @param {pg.Client} db the database to query
+ * @param {string[]} courseID the id of the course for which the team must be created
  * @param {string} teamName the name of the team
  * @param {string[]} emails the emails of the members of the team
+ * @returns {Promise<Error | null>} an error if the team could not be created, null otherwise
  */
-async function createTeam(db, teamName, emails) {
+async function createTeam(db, courseID, teamName, emails) {
     const query = {
         name: 'create-team',
-        text: "INSERT INTO teams (team_name) VALUES ($1) RETURNING team_id;",
-        values: [teamName]
+        text: "INSERT INTO teams (team_name, course_id) VALUES ($1, $2) RETURNING team_id;",
+        values: [teamName, courseID]
     }
     let teamId = undefined;
     try {
         const result = await db.query(query);
         const row = result.rows[0];
-        log.info(row);
         teamId = row.team_id;
     } catch (error) {
-        log.error("There was an error while querying the database");
+        log.error("There was an error while creating a team");
         log.error(error);
         return error;
     }
-    addTeamMembers(teamId, emails);
+    if (!(Array.isArray(emails) && emails.length != 0)) {
+        return null;
+    }
+    return await addTeamMembers(db, teamId, emails);
 }
 
 /**
  * @param {pg.Client} db
  * @param {string} teamId the id of the team
  * @param {string[]} members the emails of the member of
+ * @returns {Promise<Error | null>} an error if the members could not be added to the team, null otherwise
  */
-async function addTeamMembers(teamId, members) {
+async function addTeamMembers(db, teamId, members) {
     if (!verifyMembers(members)) {
         log.info("Team members were not added");
-        return;
+        return new Error("the team members could not be verified");
     }
 
     let userIds = undefined;
     try {
-        userIds = await getUserIds(members);
+        userIds = await getUserIds(db, members);
     } catch (error) {
         log.error("There was an error while getting the user id's");
         log.error(error);
-        return;
+        return error;
     }
 
     const values = userIds.flatMap((member) => [teamId, member]);
@@ -175,7 +176,6 @@ async function addTeamMembers(teamId, members) {
     }
     preparedValues = preparedValues.substring(0, preparedValues.length - 1);
     const sqlQuery = `INSERT INTO team_members (team_id, user_id) VALUES ${preparedValues};`
-    log.debug(sqlQuery);
     const query = {
         name: "add-team-members",
         text: sqlQuery,
@@ -184,9 +184,35 @@ async function addTeamMembers(teamId, members) {
     try {
         await db.query(query);
     } catch (error) {
-        log.error("There was an error while querying the database");
+        log.error("There was an error while adding team members");
         log.error(error);
+        return error;
+    }
+    return null;
+}
+
+/**
+ * creates a course entry in the database
+ * @param {pg.Client} db the database
+ * @param {string} instructorID the id of the instructor
+ * @param {string} courseName the name of the course
+ * @returns {Promise<Error | string>}
+ */
+async function createCourse(db, instructorID, courseName) {
+    const query = {
+        name: "create-course",
+        text: "INSERT INTO courses (course_name, instructor_id) VALUES ($1, $2) RETURNING course_id;",
+        values: [courseName, instructorID]
+    }
+    try {
+        const result = await db.query(query);
+        const courseID = result.rows[0].course_id;
+        return courseID;
+    } catch (error) {
+        log.error("There was an error while creating the courses");
+        log.error(error);
+        return error;
     }
 }
 
-export { createUser, createTeam }
+export { createUser, createTeam, createCourse };

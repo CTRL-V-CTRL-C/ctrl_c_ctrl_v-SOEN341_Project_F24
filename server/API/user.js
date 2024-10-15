@@ -16,7 +16,14 @@ router.route("/create")
             schoolID: req.body.schoolID.normalize("NFKC").toLocaleUpperCase(),
             role: req.body.role.normalize("NFKC").toLocaleUpperCase()
         }
-        userObject.password_hash = await argon2.hash(userObject.password);
+        const argon2Options = {
+            memoryCost: 19 * 2 ** 10, // 19MiB
+            hashLength: 32,
+            timeCost: 2,
+            parallelism: 1,
+            type: argon2.argon2id
+        }
+        userObject.password_hash = await argon2.hash(userObject.password, argon2Options);
         const error = await createUser(db, userObject);
         if (error) {
             res.status(400).json({ error });

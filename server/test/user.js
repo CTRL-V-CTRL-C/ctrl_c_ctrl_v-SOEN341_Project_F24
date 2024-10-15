@@ -3,18 +3,7 @@ import assert from 'node:assert'
 import request from 'supertest'
 import { app } from '../server.js'
 import { db, pool } from '../database/db.js'
-
-function randomLetters(maxLength) {
-    const r = (Math.random() + 1).toString(36).substring(2)
-    if (maxLength) {
-        return r.substring(r.length - maxLength)
-    }
-    return r
-}
-
-function randomNumber(length) {
-    return Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
-}
+import { randomLetters, randomNumber } from './utils.js'
 
 suite("POST requests to create a user", () => {
 

@@ -8,11 +8,12 @@ router.route("/create")
     .post(async (req, res, next) => {
         const teamName = req.body.teamName;
         const members = req.body.members;
-        const result = await createTeam(db, teamName, members);
-        if (result) {
-            res.json({ created: true });
+        const courseID = req.body.courseID;
+        const result = await createTeam(db, courseID, teamName, members);
+        if (result instanceof Error) {
+            res.status(400).json({ error: result });
         } else {
-            res.status(400).json({ created: false });
+            res.json({ created: true });
         }
         next();
     });

@@ -3,30 +3,25 @@ import assert from 'node:assert'
 import request from 'supertest'
 import { app } from '../server.js'
 import { db, pool } from '../database/db.js'
+import { randomLetters, randomNumber } from './utils.js'
 
 const UserRole = {
     Student: "STUD",
     Instructor: "INST"
 }
 
-function randomLetters(maxLength) {
-    const r = (Math.random() + 1).toString(36).substring(2)
-    if (maxLength) {
-        return r.substring(r.length - maxLength)
-    }
-    return r
-}
-
 async function createUser(userRole) {
+    if (userRole == undefined) {
+        userRole = UserRole.Student;
+    }
     const email = `test.${randomLetters()}@mail.com`;
-    const password = "1234";
+    const password = "password";
     const user = {
-        username: email,
-        password: "some password",
+        password,
         firstName: "test_user",
         lastName: "test_user",
         email,
-        schoolID: `${randomLetters(8)}`,
+        schoolID: userRole + randomNumber(4),
         role: userRole
     }
     await request(app)
@@ -39,11 +34,16 @@ async function createUser(userRole) {
 }
 
 async function loginUser(email, password) {
-    // TODO: login the user
+    const response = await request(app)
+        .post("/api/login")
+        .set("Accept", "application/json")
+        .send({ email, password })
+        .expect(200);
+    return response.headers['set-cookie'];
 }
 
 async function createCourse(instructorEmail, instructorPassword) {
-    await loginUser(instructorEmail, instructorPassword);
+    const loginCookie = await loginUser(instructorEmail, instructorPassword);
     const course = {
         courseName: `test_course_${randomLetters()}`,
     };
@@ -51,13 +51,19 @@ async function createCourse(instructorEmail, instructorPassword) {
         .post("/api/courses/create")
         .set("Accept", "application/json")
         .send(course)
+        .set("Cookie", loginCookie)
         .timeout(1000)
         .expect(200);
+    return response.body.courseID;
 }
 
+/**
+ * @type {string[]}
+ */
 const testEmails = [];
 
 suite("POST requests to create a team", () => {
+
     // disconnect from the database after the tests
     after(async () => {
         await db.end();
@@ -67,14 +73,18 @@ suite("POST requests to create a team", () => {
     before(async () => {
         const teamSize = 3;
         for (let index = 0; index < teamSize; index++) {
-            testEmails.push(await createUser());
+            const student = await createUser(UserRole.Student)
+            testEmails.push(student.email);
         }
     })
 
     it("should respond with 200 when creating a team with no members", async (t) => {
+        const teacher = await createUser(UserRole.Instructor);
+
+        const courseID = await createCourse(teacher.email, teacher.password);
         const team = {
             teamName: "test_team",
-            courseId: ""
+            courseID,
             members: [],
         }
         const response = await request(app)
@@ -86,9 +96,12 @@ suite("POST requests to create a team", () => {
         assert.equal(response.status, 200);
     });
 
-    it("should respond with 200 when creating a team with some members", { skip: true }, async (t) => {
+    it("should respond with 200 when creating a team with some members", async (t) => {
+        const teacher = await createUser(UserRole.Instructor);
+        const courseID = await createCourse(teacher.email, teacher.password);
         const team = {
             teamName: "test_team",
+            courseID,
             members: testEmails,
         }
         const response = await request(app)
