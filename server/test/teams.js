@@ -121,7 +121,8 @@ suite("POST requests to create a team", () => {
 suite("POST requests to delete teams", () => {
     it("should respond with 200 when deleting a team", async () => {
         const teacher = await createUser(UserRole.Instructor);
-        const courseID = await createCourse(teacher.email, teacher.password);
+        const loginCookie = await loginUser(teacher.email, teacher.password);
+        const courseID = await createCourse(teacher.email, teacher.password, loginCookie);
         const team = {
             teamName: "test_team",
             courseID,
@@ -132,6 +133,7 @@ suite("POST requests to delete teams", () => {
         const response = await request(app)
             .post("/api/teams/create")
             .set("Accept", "application/json")
+            .set("Cookie", loginCookie)
             .send(team)
             .expect(200)
             .timeout(1000);
@@ -141,6 +143,7 @@ suite("POST requests to delete teams", () => {
         await request(app)
             .post("/api/teams/delete")
             .set("Accept", "application/json")
+            .set("Cookie", loginCookie)
             .send({ teamID })
             .expect(200)
             .timeout(1000);
