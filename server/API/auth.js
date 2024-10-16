@@ -72,15 +72,23 @@ router.post("/login", requireNoAuth, async (req, res) => {
 
       if (success) {
         log.info({}, `User ${email} Successfully logged in`);
-        req.session.user = hashQuery.rows[0];
-        req.session.user.isStudent = req.session.user.role === "STUD";
+        req.session.user = {
+          userId: hashQuery.rows[0].user_id,
+          fName: hashQuery.rows[0].f_name,
+          lName: hashQuery.rows[0].l_name,
+          email: hashQuery.rows[0].email,
+          schoolId: hashQuery.rows[0].school_id,
+          role: hashQuery.rows[0].role,
+          isInstructor: hashQuery.rows[0].role === "INST",
+        };
+
         res.status(200).json({
           msg: "Successfully logged in",
-          fName: req.session.user.f_name,
-          lName: req.session.user.l_name,
+          fName: req.session.user.fName,
+          lName: req.session.user.lName,
           email: req.session.user.email,
-          id: req.session.user.school_id,
-          isStudent: req.session.user.isStudent,
+          schoolId: req.session.user.schoolId,
+          isInstructor: req.session.user.isInstructor,
         });
 
       } else {
