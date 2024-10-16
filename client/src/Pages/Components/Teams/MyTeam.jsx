@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import "../Styles/MyTeam.css";
+import { MdOutlineRateReview, MdEmail } from "react-icons/md";
+import Evaluation from "./Evaluation";
 
 function MyTeam() {
 
     const [teamInfo, setTeamInfo] = useState({ email: "", f_name: "", l_name: "", members: [] });
+    const [evaluatingMember, setEvaluatingMember] = useState({});
 
     useEffect(() => {
         setTeamInfo({
@@ -24,19 +27,23 @@ function MyTeam() {
 
     return (
         <div className="my-team">
-            <div> {teamInfo.team_name} </div>
-            <div className="teammates">
-                {teamInfo.members.map((member, i) =>
-                    <div className="teammate-card" key={i}>
-                        <div className="teammate-info">
-                            <p> {member.f_name} {member.l_name}</p>
-                            <p>{member.email} </p>
+            <div className="my-team-info">
+                <div className="team-name"> {teamInfo.team_name} </div>
+                <div className="teammates-card">
+                    {teamInfo.members.map((member, i) =>
+                        <div className="teammate-card" key={i}>
+                            <div className="teammate-info">
+                                <p className="teammate-details"> {member.f_name} {member.l_name}</p>
+                                <p className="teammate-details"> <MdEmail className="email-icon" />{member.email} </p>
+                            </div>
+                            <div className="review-btn" onClick={(e) => reviewTeammate(e)}> <MdOutlineRateReview className="review-icon" /> Review </div>
                         </div>
-                        <button onClick={(e) => reviewTeammate(e)}> Review </button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
+            <Evaluation />
         </div>
+
     )
 }
 

@@ -1,9 +1,83 @@
-.my-team {
-    color: black;
+.my-team-info {
+    color: rgb(61, 8, 8);
     align-items: start;
+    background-color: #f9f2f1;
+    width: fit-content;
+    margin-top: 5rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    border-radius: 1.5rem;
+    border: solid rgba(95, 62, 62, 0.167) 1px;
+    box-shadow: 5px 3px 15px 0px rgba(82, 52, 52, 0.198);
+    height: fit-content;
+}
+
+.my-team {
+    display:flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+}
+
+.team-name {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    font-size:2.5rem;
+    text-align: left;
+    padding-left: 2rem;
+    border-bottom: solid rgba(95, 62, 62, 0.34) 1px;
+}
+
+.teammates-card {
+    border-radius: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .teammate-card {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding:0rem 2rem 0rem 2rem ;
+}
+
+.teammate-info {
+    padding-right: 5rem;
+}
+
+.review-btn:hover {
+    cursor:pointer;
+}
+
+.review-btn {
+    font-size: 1.5rem;
+}
+
+.review-icon {
+    vertical-align: text-bottom;
+}
+
+.email-icon {
+    vertical-align: text-top;
+    padding-right: 0.25rem;
+}
+
+/* EVALUATION CARD */
+
+.criteria-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.criteria-name {
+    padding-right: 3rem;
+}
+
+.evaluation-btn {
+    margin-bottom: 1.5rem;
 }
