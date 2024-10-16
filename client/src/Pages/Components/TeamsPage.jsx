@@ -21,11 +21,14 @@ function TeamsPage() {
                         <span>Teams</span>
                         <span>Members</span>
                     </label>
-                    {teamsView ?
+                  
+                    {teamsView ? 
                         <AllTeams />
                         :
                         <MembersPage />
                     }
+
+                    
                 </>
                 :
                 <>
@@ -34,13 +37,18 @@ function TeamsPage() {
                         <span>My Team</span>
                         <span>Other Teams</span>
                     </label>
+
                     {teamsView ?
                         <MyTeam />
                         :
                         <OtherTeams />
                     }
                 </>}
+
         </div >
+
+
+
     );
 
 }
