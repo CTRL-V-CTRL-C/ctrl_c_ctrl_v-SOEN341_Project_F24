@@ -20,9 +20,8 @@ function MyTeam() {
         });
     }, [])
 
-    function reviewTeammate(e) {
-        console.log("REVIEWING TEAMMATE");
-        console.log(e);
+    function reviewTeammate(i) {
+        setEvaluatingMember(teamInfo.members[i])
     }
 
     return (
@@ -36,12 +35,12 @@ function MyTeam() {
                                 <p className="teammate-details"> {member.f_name} {member.l_name}</p>
                                 <p className="teammate-details"> <MdEmail className="email-icon" />{member.email} </p>
                             </div>
-                            <div className="review-btn" onClick={(e) => reviewTeammate(e)}> <MdOutlineRateReview className="review-icon" /> Review </div>
+                            <div className="review-btn" onClick={() => reviewTeammate(i)}> <MdOutlineRateReview className="review-icon" /> Review </div>
                         </div>
                     )}
                 </div>
             </div>
-            <Evaluation />
+            {Object.keys(evaluatingMember).length !== 0 ? <Evaluation teammate={evaluatingMember} /> : <></>}
         </div>
 
     )

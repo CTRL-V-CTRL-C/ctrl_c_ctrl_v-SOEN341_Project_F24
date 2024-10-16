@@ -9,21 +9,20 @@
     border-radius: 1.5rem;
     border: solid rgba(95, 62, 62, 0.167) 1px;
     box-shadow: 5px 3px 15px 0px rgba(82, 52, 52, 0.198);
-    height: fit-content;
+    min-height: 85%;
+    min-width: 40%;
 }
 
 .my-team {
     display:flex;
     flex-direction: row;
-    /* justify-content: space-between; */
+    justify-content: space-around;
 }
 
 .team-name {
-    padding-top: 2rem;
-    padding-bottom: 1rem;
+    padding: 2rem;
     font-size:2.5rem;
     text-align: left;
-    padding-left: 2rem;
     border-bottom: solid rgba(95, 62, 62, 0.34) 1px;
 }
 
@@ -80,4 +79,15 @@
 
 .evaluation-btn {
     margin-bottom: 1.5rem;
+}
+
+.error {
+    color: red;
+}
+
+.comment-box {
+    width: 85%;
+    height: 100%;
+    max-width: 85%;
+    max-height: 10vh;
 }

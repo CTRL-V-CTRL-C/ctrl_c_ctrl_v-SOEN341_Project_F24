@@ -7,7 +7,8 @@ function StarRating(props) {
     StarRating.propTypes = {
         evaluations: PropTypes.array,
         rating_criteria: PropTypes.number,
-        setEvaluations: PropTypes.func
+        setEvaluations: PropTypes.func,
+        teammate: PropTypes.object
     }
 
     let rate = props.evaluations[props.rating_criteria].rating;
@@ -20,6 +21,7 @@ function StarRating(props) {
         };
 
         props.setEvaluations(updatedEvaluations);
+        console.log(props.teammate);
         console.log(props.evaluations);
     }
 
