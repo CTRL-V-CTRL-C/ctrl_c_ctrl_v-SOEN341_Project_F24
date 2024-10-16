@@ -21,8 +21,6 @@ function StarRating(props) {
         };
 
         props.setEvaluations(updatedEvaluations);
-        console.log(props.teammate);
-        console.log(props.evaluations);
     }
 
     return (

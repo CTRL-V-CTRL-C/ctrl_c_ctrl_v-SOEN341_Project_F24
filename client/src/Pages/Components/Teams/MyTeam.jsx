@@ -13,9 +13,9 @@ function MyTeam() {
             team_name: "Team 1",
             members:
                 [
-                    { email: "bob.bobson@gmail.com", f_name: "Bob", l_name: "Bobson" },
-                    { email: "john.johnson@gmail.com", f_name: "John", l_name: "Johnson" },
-                    { email: "richard.richardson@gmail.com", f_name: "Richard", l_name: "Richardson" },
+                    { email: "bob.bobson@gmail.com", f_name: "Bob", l_name: "Bobson", team_id: 1, user_id: 27 },
+                    { email: "john.johnson@gmail.com", f_name: "John", l_name: "Johnson", team_id: 1, user_id: 56 },
+                    { email: "richard.richardson@gmail.com", f_name: "Richard", l_name: "Richardson", team_id: 1, user_id: 2 },
                 ]
         });
     }, [])
