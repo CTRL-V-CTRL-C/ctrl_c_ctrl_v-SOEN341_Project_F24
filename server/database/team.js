@@ -138,8 +138,8 @@ async function deleteTeam(db, teamID) {
 /**
  * checks if a teacher made a particular team
  * @param {pg.Client} db 
- * @param {string} teamID the id of the team
- * @param {string} teacherID the id of the teacher
+ * @param {number} teamID the id of the team
+ * @param {number} teacherID the id of the teacher
  * @return {Promise<boolean>} if the teacher made the team, false otherwise
  */
 async function teacherMadeTeam(db, teamID, teacherID) {

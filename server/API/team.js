@@ -24,7 +24,7 @@ router.route("/create")
 router.route("/delete")
     .post(async (req, res, next) => {
         const teamID = req.body.teamID;
-        if (!(await teacherMadeTeam(db, teamID, req.session.user.school_id))) {
+        if (!(await teacherMadeTeam(db, teamID, req.session.user.user_id))) {
             res.status(403).json({ error: "You are not the teacher of that course" });
             next();
             return;
