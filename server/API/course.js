@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCourse, createUser } from '../database/API.js';
+import { createCourse } from '../database/course.js';
 import { db } from '../database/db.js';
 import { requireAuth, requireTeacher } from './auth.js';
 

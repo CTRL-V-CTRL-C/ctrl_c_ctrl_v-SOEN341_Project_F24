@@ -21,7 +21,8 @@ router.route("/create")
             hashLength: 32,
             timeCost: 2,
             parallelism: 1,
-            type: argon2.argon2id
+            type: argon2.argon2id,
+            saltLength: 16,
         }
         userObject.password_hash = await argon2.hash(userObject.password, argon2Options);
         const error = await createUser(db, userObject);

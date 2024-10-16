@@ -42,8 +42,7 @@ async function loginUser(email, password) {
     return response.headers['set-cookie'];
 }
 
-async function createCourse(instructorEmail, instructorPassword) {
-    const loginCookie = await loginUser(instructorEmail, instructorPassword);
+async function createCourse(instructorEmail, instructorPassword, loginCookie) {
     const course = {
         courseName: `test_course_${randomLetters()}`,
     };
@@ -80,8 +79,8 @@ suite("POST requests to create a team", () => {
 
     it("should respond with 200 when creating a team with no members", async (t) => {
         const teacher = await createUser(UserRole.Instructor);
-
-        const courseID = await createCourse(teacher.email, teacher.password);
+        const loginCookie = await loginUser(teacher.email, teacher.password);
+        const courseID = await createCourse(teacher.email, teacher.password, loginCookie);
         const team = {
             teamName: "test_team",
             courseID,
@@ -90,15 +89,18 @@ suite("POST requests to create a team", () => {
         const response = await request(app)
             .post("/api/teams/create")
             .set("Accept", "application/json")
+            .set("Cookie", loginCookie)
             .send(team)
             .timeout(1000); // timesout after 1 second in case the app crashes
         assert.match(response.headers["content-type"], /json/);
         assert.equal(response.status, 200);
+        assert.ok(typeof response.body.teamID === 'number');
     });
 
     it("should respond with 200 when creating a team with some members", async (t) => {
         const teacher = await createUser(UserRole.Instructor);
-        const courseID = await createCourse(teacher.email, teacher.password);
+        const loginCookie = await loginUser(teacher.email, teacher.password);
+        const courseID = await createCourse(teacher.email, teacher.password, loginCookie);
         const team = {
             teamName: "test_team",
             courseID,
@@ -107,9 +109,42 @@ suite("POST requests to create a team", () => {
         const response = await request(app)
             .post("/api/teams/create")
             .set("Accept", "application/json")
+            .set("Cookie", loginCookie)
             .send(team)
             .expect(200)
             .timeout(1000); // timesout after 1 second in case the app crashes
         assert.match(response.headers["content-type"], /json/);
+        assert.ok(typeof response.body.teamID === 'number');
     });
+});
+
+suite("POST requests to delete teams", () => {
+    it("should respond with 200 when deleting a team", async () => {
+        const teacher = await createUser(UserRole.Instructor);
+        const courseID = await createCourse(teacher.email, teacher.password);
+        const team = {
+            teamName: "test_team",
+            courseID,
+            members: testEmails,
+        }
+
+        // creating a team
+        const response = await request(app)
+            .post("/api/teams/create")
+            .set("Accept", "application/json")
+            .send(team)
+            .expect(200)
+            .timeout(1000);
+
+        const teamID = response.body.teamID;
+
+        await request(app)
+            .post("/api/teams/delete")
+            .set("Accept", "application/json")
+            .send({ teamID })
+            .expect(200)
+            .timeout(1000);
+
+        assert.match(response.headers["content-type"], /json/);
+    })
 })

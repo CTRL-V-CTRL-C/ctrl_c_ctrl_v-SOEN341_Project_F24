@@ -74,4 +74,25 @@ try {
     }
 }
 
-export { client as db, pool }
+/**
+ * queries the database and returns an error if any or the result
+ * @param {pg.Client} db the database to query
+ * @param {pg.QueryConfig} query the query to send
+ * @param {string?} message the error to be logged if any error occurred
+ * @returns {Promise<pg.QueryResult<any> | Error>} an error if any occured or the result
+ */
+async function queryAndReturnError(db, query, message) {
+    try {
+        return await db.query(query);
+    } catch (error) {
+        if (message) {
+            log.error(message);
+        } else {
+            log.error(`there was an error while querying: ${query}`);
+        }
+        log.error(error);
+        return error;
+    }
+}
+
+export { client as db, pool, queryAndReturnError };

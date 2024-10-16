@@ -1,8 +1,8 @@
 import express from 'express';
 import { router as userRouter } from './API/user.js';
 import { router as authRouter } from './API/auth.js';
-import { router as teamsRouter } from './API/teams.js';
-import { router as coursesRouter } from './API/courses.js'
+import { router as teamsRouter } from './API/team.js';
+import { router as coursesRouter } from './API/course.js'
 
 const app = express()
 

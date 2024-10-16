@@ -52,7 +52,7 @@ const requireAuth = (req, res, next) => {
   if (req.session.user) {
     next(); // User is authenticated, continue to next middleware
   } else {
-    log.warn({}, `Unauthorised user tried to access ${req.originalUrl}`);
+    log.warn({}, `Unauthorized user tried to access ${req.originalUrl}`);
     res.status(401).json({ msg: "Unauthorised to perform this action" }); // User is not authenticated
   }
 }
