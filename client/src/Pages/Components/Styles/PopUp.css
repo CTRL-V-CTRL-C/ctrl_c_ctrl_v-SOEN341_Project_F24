@@ -19,13 +19,19 @@
     width: 100%;
     max-width: 640px;
     background-color: #FFF;
+    justify-content: space-around;
 }
 .popup-inner{
     justify-content: center;
     align-items: center; 
 
 }
-
+.bu{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
 
 .dropZone{
     width:100%;
@@ -34,4 +40,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    border-style: dashed;
+    border-color: rgb(113, 108, 108);
 }
+
