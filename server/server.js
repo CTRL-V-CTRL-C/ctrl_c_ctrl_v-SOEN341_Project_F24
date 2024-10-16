@@ -8,7 +8,7 @@ const app = express()
 
 app.use("/api", authRouter);
 app.use("/api/course", courseRouter);
-app.use("/api/teams", teamRouter);
+app.use("/api/team", teamRouter);
 
 app.get("/", (req, res) => {
     res.send('Hello World!')
