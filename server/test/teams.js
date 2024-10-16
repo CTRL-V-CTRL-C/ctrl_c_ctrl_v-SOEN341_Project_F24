@@ -62,13 +62,6 @@ async function createCourse(instructorEmail, instructorPassword, loginCookie) {
 const testEmails = [];
 
 suite("POST requests to create a team", () => {
-
-    // disconnect from the database after the tests
-    after(async () => {
-        await db.end();
-        await pool.end();
-    });
-
     before(async () => {
         const teamSize = 3;
         for (let index = 0; index < teamSize; index++) {
@@ -119,6 +112,14 @@ suite("POST requests to create a team", () => {
 });
 
 suite("POST requests to delete teams", () => {
+
+    // disconnect from the database after the tests
+    after(async () => {
+        await db.end();
+        await pool.end();
+    });
+
+
     it("should respond with 200 when deleting a team", async () => {
         const teacher = await createUser(UserRole.Instructor);
         const loginCookie = await loginUser(teacher.email, teacher.password);
