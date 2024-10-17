@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import './Styles/NavBar.css';
-import AuthContext from '../../Context/AuthContext';
+import UserContext from '../../Context/UserContext';
 import { useContext } from "react";
 import { postData } from '../../Controller/FetchModule';
 
 function NavBar() {
-    const auth = useContext(AuthContext);
+    const auth = useContext(UserContext);
 
     async function handleLogout() {
         await postData("/api/logout", {});

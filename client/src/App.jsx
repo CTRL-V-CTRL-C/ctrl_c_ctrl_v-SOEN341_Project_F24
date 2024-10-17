@@ -3,14 +3,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import PageHolder from './Pages/PageHolder';
 import NavBar from './Pages/Components/NavBar';
 import './Pages/Components/Styles/BackgroundImage.css';
-import AuthContext from './Context/AuthContext';
+import UserContext from './Context/UserContext';
 import { useEffect, useState } from 'react';
-import { postData } from './Controller/FetchModule';
+import { fetchData, postData } from './Controller/FetchModule';
 import SideMenu from './Pages/Components/SideMenu';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -25,15 +26,25 @@ function App() {
           setIsInstructor(false);
         }
       }
+      fetchCourses();
     })();
   }, [userLoggedIn]);
 
+  const fetchCourses = async () => {
+    const coursesResponse = await fetchData("/api/course/get-courses");
+    const courses = await coursesResponse.json();
+    console.log(courses)
+    setSelectedCourse(courses[0].course_id);
+  }
+
   return (
-    <AuthContext.Provider value={{
+    <UserContext.Provider value={{
       userLoggedIn,
       setUserLoggedIn,
       isInstructor,
-      setIsInstructor
+      setIsInstructor,
+      selectedCourse,
+      setSelectedCourse
     }}>
 
       <Router>
@@ -41,7 +52,7 @@ function App() {
         <SideMenu />
         <PageHolder />
       </Router>
-    </AuthContext.Provider>
+    </UserContext.Provider>
   )
 }
 

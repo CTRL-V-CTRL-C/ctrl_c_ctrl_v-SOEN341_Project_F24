@@ -2,11 +2,11 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../Controller/FetchModule';
 import FormInput from './Components/Forms/FormInput';
-import AuthContext from "../Context/AuthContext";
+import UserContext from "../Context/UserContext";
 import './LoginPage.css';
 
 function LoginPage() {
-    const auth = useContext(AuthContext);
+    const auth = useContext(UserContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
