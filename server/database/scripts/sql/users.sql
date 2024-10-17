@@ -1,6 +1,13 @@
-CREATE TYPE role AS ENUM (
-  'INST', 'STUD'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role') THEN
+        CREATE TYPE role AS ENUM 
+        (
+            'INST', 'STUD'
+        );
+    END IF;
+END$$;
+
 
 CREATE TABLE IF NOT EXISTS users (
   user_id   SERIAL PRIMARY KEY,
