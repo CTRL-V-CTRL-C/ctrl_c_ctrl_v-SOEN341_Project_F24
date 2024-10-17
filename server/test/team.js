@@ -2,8 +2,9 @@ import { suite, it, after, before } from 'node:test';
 import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
-import { db, pool } from '../database/db.js';
-import { randomLetters, randomNumber } from './utils.js'
+import { db } from '../database/db.js';
+import { connectDbIfDisconnected, randomLetters, randomNumber } from './utils.js'
+
 
 async function loginUser(email, password) {
   const response = await request(app)
@@ -24,16 +25,21 @@ async function logoutUser(cookies) {
 }
 
 //Tests based on populate scripts
-suite("GET teams as an instructor", () => {
+suite("GET teams as an instructor", async () => {
   let cookies;
+
+  const test_db = await db.connect();
+
 
   // disconnect from the database after the tests
   after(async () => {
     await logoutUser(cookies);
+    test_db.release();
   });
 
   before(async () => {
     cookies = await loginUser("joeparker13@gmail.com", "password");
+    await connectDbIfDisconnected(db);
   });
 
   it("Should respond with 200 when getting teams in a course they teach", async (t) => {
@@ -69,14 +75,15 @@ suite("GET teams as an instructor", () => {
 
 });
 
-suite("GET my team and other teams as a student", () => {
+suite("GET my team and other teams as a student", async () => {
   let cookies;
+
+  const test_db = await db.connect();
 
   // disconnect from the database after the tests
   after(async () => {
     await logoutUser(cookies);
-    // await db.end();
-    // await pool.end();
+    test_db.release();
   });
 
   before(async () => {
@@ -114,7 +121,6 @@ suite("GET my team and other teams as a student", () => {
     assert.match(response.headers["content-type"], /json/);
     assert.equal(response._body.members.length, 4);
   });
-
 });
 
 const UserRole = {
@@ -164,14 +170,20 @@ async function createCourse(loginCookie) {
  */
 const testEmails = [];
 
-suite("POST requests to create a team", () => {
+suite("POST requests to create a team", async () => {
+  const test_db = await db.connect();
+
+  after(async () => {
+    test_db.release();
+  });
+
   before(async () => {
     const teamSize = 3;
     for (let index = 0; index < teamSize; index++) {
       const student = await createUser(UserRole.Student)
       testEmails.push(student.email);
     }
-  })
+  });
 
   it("should respond with 200 when creating a team with no members", async (t) => {
     const teacher = await createUser(UserRole.Instructor);
@@ -214,12 +226,13 @@ suite("POST requests to create a team", () => {
   });
 });
 
-suite("POST requests to delete teams", () => {
+suite("POST requests to delete teams", async () => {
+
+  const test_db = await db.connect();
 
   // disconnect from the database after the tests
   after(async () => {
-    // await db.end();
-    // await pool.end();
+    test_db.release();
   });
 
 
@@ -235,7 +248,7 @@ suite("POST requests to delete teams", () => {
 
     // creating a team
     const response = await request(app)
-      .post("/api/teams/create")
+      .post("/api/team/create")
       .set("Accept", "application/json")
       .set("Cookie", loginCookie)
       .send(team)
@@ -245,12 +258,12 @@ suite("POST requests to delete teams", () => {
     const teamID = response.body.teamID;
 
     await request(app)
-      .post("/api/teams/delete")
+      .post("/api/team/delete")
       .set("Accept", "application/json")
       .set("Cookie", loginCookie)
       .send({ teamID })
       .expect(200);
 
     assert.match(response.headers["content-type"], /json/);
-  })
-})
+  });
+});

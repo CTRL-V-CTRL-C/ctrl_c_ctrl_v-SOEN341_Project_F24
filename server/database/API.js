@@ -1,5 +1,6 @@
 import pg from 'pg'
 import log from '../logger.js'
+import { queryAndReturnError } from './db.js';
 
 //Account creation validation
 const namePattern = /^[a-zA-Z'\-_]+$/v;
@@ -42,7 +43,7 @@ function verifyUser(userObject) {
 
 /**
  * 
- * @param {pg.Client} db the database to query
+ * @param {pg.Pool} db the database to query
  * @param userObject the object containing all the information about a user
  * @returns {Promise<Error|null>} an Error if any, null otherwise
 */
@@ -72,12 +73,10 @@ async function createUser(db, userObject) {
         ]
     }
 
-    try {
-        await db.query(query);
-    } catch (error) {
-        log.error("There was an error while querying the database");
-        log.error(error);
-        return error;
+    const result = await queryAndReturnError(db, query, "There was an error while creating a user");
+
+    if (result instanceof Error) {
+        return result;
     }
     return null;
 }

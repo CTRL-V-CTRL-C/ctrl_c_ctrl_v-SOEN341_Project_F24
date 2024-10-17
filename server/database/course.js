@@ -3,7 +3,7 @@ import log from '../logger.js'
 
 /**
  * creates a course entry in the database
- * @param {pg.Client} db the database
+ * @param {pg.Pool} db the database
  * @param {string} instructorID the id of the instructor
  * @param {string} courseName the name of the course
  * @returns {Promise<Error | string>}

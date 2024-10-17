@@ -1,7 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import sessionStore from 'connect-pg-simple';
-import { db, pool } from '../database/db.js';
+import { db } from '../database/db.js';
 import dotenv from 'dotenv';
 import log from '../logger.js';
 import argon2 from 'argon2';
@@ -12,7 +12,7 @@ const router = express.Router();
 //Make everything use the session
 router.use(session({
   store: new (sessionStore(session))({
-    pool: pool,
+    pool: db,
     createTableIfMissing: true,
   }),
   name: "authentication",

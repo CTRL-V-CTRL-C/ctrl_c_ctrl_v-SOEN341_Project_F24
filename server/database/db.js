@@ -53,30 +53,11 @@ if (process.env.PROD) {
     };
 }
 
-let pool = new pg.Pool(config);
-let client = new pg.Client(config);
-const mockedClient = {
-    query: async (query, params) => { log.info(`queried: ${JSON.stringify(query)} with paramas ${params}`) },
-    end: async () => { log.info("database client disconnected"); }
-};
-
-try {
-    await client.connect();
-} catch (error) {
-    log.warn(`There was an error while connecting to the database`);
-    log.warn(error);
-    if (process.env.PROD) {
-        log.error("The server was started in production and couldn't connect to the database, shutting down");
-        process.exit(1);
-    } else {
-        log.info("Using the mocked client")
-        client = mockedClient;
-    }
-}
+const pool = new pg.Pool(config);
 
 /**
  * queries the database and returns an error if any or the result
- * @param {pg.Client} db the database to query
+ * @param {pg.Pool} db the database to query
  * @param {pg.QueryConfig} query the query to send
  * @param {string?} message the error to be logged if any error occurred
  * @returns {Promise<pg.QueryResult<any> | Error>} an error if any occured or the result
@@ -95,4 +76,4 @@ async function queryAndReturnError(db, query, message) {
     }
 }
 
-export { client as db, pool, queryAndReturnError };
+export { pool as db, queryAndReturnError };

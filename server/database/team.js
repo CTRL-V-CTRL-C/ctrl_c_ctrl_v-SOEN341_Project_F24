@@ -19,7 +19,7 @@ function verifyMembers(members) {
 }
 
 /**
- * @param {pg.Client} db
+ * @param {pg.Pool} db
  * @param {string[]} emails the emails of the users
  */
 async function getUserIds(db, emails) {
@@ -39,7 +39,7 @@ async function getUserIds(db, emails) {
 }
 
 /**
- * @param {pg.Client} db the database to query
+ * @param {pg.Pool} db the database to query
  * @param {string[]} courseID the id of the course for which the team must be created
  * @param {string} teamName the name of the team
  * @param {string[]} emails the emails of the members of the team
@@ -72,7 +72,7 @@ async function createTeam(db, courseID, teamName, emails) {
 }
 
 /**
- * @param {pg.Client} db
+ * @param {pg.Pool} db
  * @param {string} teamId the id of the team
  * @param {string[]} members the emails of the member of
  * @returns {Promise<Error | null>} an error if the members could not be added to the team, null otherwise
@@ -117,7 +117,7 @@ async function addTeamMembers(db, teamId, members) {
 
 /**
  * deletes a team from the db
- * @param {pg.Client} db the db
+ * @param {pg.Pool} db the db
  * @param {string} teamID the id of the team to delete
  */
 async function deleteTeam(db, teamID) {
@@ -137,7 +137,7 @@ async function deleteTeam(db, teamID) {
 
 /**
  * checks if a teacher made a particular team
- * @param {pg.Client} db 
+ * @param {pg.Pool} db 
  * @param {number} teamID the id of the team
  * @param {number} teacherID the id of the teacher
  * @return {Promise<boolean>} if the teacher made the team, false otherwise

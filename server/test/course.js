@@ -2,7 +2,7 @@ import { suite, it, after, before } from 'node:test';
 import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
-import { db, pool } from '../database/db.js';
+import { db } from '../database/db.js';
 
 async function loginUser(email, password) {
   const response = await request(app)
@@ -23,12 +23,15 @@ async function logoutUser(cookies) {
 }
 
 //Tests based on populate scripts
-suite("GET courses and students as an instructor", () => {
+suite("GET courses and students as an instructor", async () => {
   let cookies;
 
-  // disconnect from the database after the tests
+  const test_db = await db.connect();
+
   after(async () => {
     await logoutUser(cookies);
+    // disconnect from the database after the tests
+    test_db.release();
   });
 
   before(async () => {
@@ -70,14 +73,14 @@ suite("GET courses and students as an instructor", () => {
 
 });
 
-suite("GET courses and students as a student", () => {
+suite("GET courses and students as a student", async () => {
   let cookies;
 
-  // disconnect from the database after the tests
+  const test_db = await db.connect();
+
   after(async () => {
     await logoutUser(cookies);
-    // await db.end();
-    // await pool.end();
+    test_db.release();
   });
 
   before(async () => {
@@ -104,5 +107,4 @@ suite("GET courses and students as a student", () => {
     assert.equal(response.status, 401);
     assert.match(response.headers["content-type"], /json/);
   });
-
 });
