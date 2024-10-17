@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import PageHolder from './Pages/PageHolder';
 import NavBar from './Pages/Components/NavBar';
@@ -18,11 +18,11 @@ function App() {
       if (!userLoggedIn) {
         const authResponse = await postData("/api/test-authentication", {});
         if (authResponse.status === 200) {
-          let authJSON = await authResponse.json()
+          let authJSON = await authResponse.json();
           setUserLoggedIn(true);
           setIsInstructor(authJSON.isInstructor);
         } else {
-          setUserLoggedIn(false)
+          setUserLoggedIn(false);
           setIsInstructor(false);
         }
       }
@@ -33,7 +33,6 @@ function App() {
   const fetchCourses = async () => {
     const coursesResponse = await fetchData("/api/course/get-courses");
     const courses = await coursesResponse.json();
-    console.log(courses)
     setSelectedCourse(courses[0].course_id);
   }
 

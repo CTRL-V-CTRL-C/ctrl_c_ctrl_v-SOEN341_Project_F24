@@ -11,11 +11,9 @@ function SideMenu() {
     const [userCourses, setUserCourses] = useState([]);
 
     useEffect(() => {
-        console.log("HERE")
         const fetchCourses = async () => {
             const coursesResponse = await fetchData("/api/course/get-courses");
             const courses = await coursesResponse.json();
-            console.log(courses)
             setUserCourses(courses);
         }
         fetchCourses();
@@ -23,11 +21,11 @@ function SideMenu() {
 
     useEffect(() => {
         auth.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
-    }, [auth.userLoggedIn])
+    }, [auth.userLoggedIn]);
 
     async function addCourse() {
         console.log("TODO display pop up to add course here");
-        setUserCourses(["Course A", "Course B", "Course C", "COURSE EXTRA"])
+        setUserCourses(["Course A", "Course B", "Course C", "COURSE EXTRA"]);
     }
 
     function selectCourse(course_id) {

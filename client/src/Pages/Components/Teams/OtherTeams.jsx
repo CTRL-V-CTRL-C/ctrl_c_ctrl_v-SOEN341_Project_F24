@@ -5,19 +5,17 @@ import { fetchData } from "../../../Controller/FetchModule";
 function OtherTeams() {
 
     const auth = useContext(UserContext);
-
     const [teams, setTeams] = useState([{ team_name: "", members: [{ f_name: "", l_name: "" }] }]);
 
     useEffect(() => {
         const fetchTeams = async () => {
-            console.log(auth.selectedCourse)
+            if (auth.selectedCourse === 0) return
             let response = await fetchData(`/api/team/get-teams/${auth.selectedCourse}`);
             let data = await response.json();
-            console.log(data)
-            setTeams(data)
+            setTeams(data);
         }
         fetchTeams();
-    }, [auth.selectedCourse])
+    }, [auth.selectedCourse]);
 
     return (
         <div className="my-team">
