@@ -16,7 +16,7 @@ function MyTeam() {
 
     useEffect(() => {
         const fetchTeams = async () => {
-            if (auth.selectedCourse.course_id === 0) return;
+            if (!auth.selectedCourse || auth.selectedCourse.course_id === 0) return;
             let response = await fetchData(`/api/team/get-my-team/${auth.selectedCourse.course_id}`);
             let data = await response.json();
             setTeam(data);
@@ -30,7 +30,7 @@ function MyTeam() {
 
     return (
         <>
-            <p className="course-title"> COURSE: {auth.selectedCourse.course_name} </p>
+            <p className="course-title"> COURSE: {auth.selectedCourse ? auth.selectedCourse.course_name : ""} </p>
             <div className="my-team">
                 <div className="my-team-info">
                     <div className="team-name"> {team.team_name} </div>
