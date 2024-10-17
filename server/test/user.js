@@ -9,8 +9,8 @@ suite("POST requests to create a user", () => {
 
     // disconnect from the database after the tests
     after(async () => {
-        await db.end();
-        await pool.end();
+        // await db.end();
+        // await pool.end();
     });
 
     it("should respond with 200 when creating a user with name and password", async (t) => {

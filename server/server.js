@@ -1,12 +1,10 @@
 import express from 'express';
 import { router as userRouter } from './API/user.js';
 import { router as authRouter } from './API/auth.js';
-import { router as teamsRouter } from './API/team.js';
-import { router as coursesRouter } from './API/course.js'
+import { router as courseRouter } from './API/course.js';
+import { router as teamRouter } from './API/team.js';
 
 const app = express()
-
-app.use("/api", authRouter);
 
 app.get("/", (req, res) => {
     res.send('Hello World!')
@@ -18,9 +16,10 @@ const jsonConfigs = {
 }
 apiRouter.use(express.json(jsonConfigs));
 
+apiRouter.use("/", authRouter);
 apiRouter.use("/user", userRouter)
-apiRouter.use("/teams", teamsRouter);
-apiRouter.use("/courses", coursesRouter)
+apiRouter.use("/team", teamRouter);
+apiRouter.use("/course", courseRouter)
 
 app.use("/api", apiRouter);
 

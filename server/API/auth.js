@@ -9,12 +9,6 @@ dotenv.config();
 
 const router = express.Router();
 
-const jsonConfigs = {
-  limit: 50 * 1000, // 50 kb max json limit
-};
-
-router.use(express.json(jsonConfigs));
-
 //Make everything use the session
 router.use(session({
   store: new (sessionStore(session))({
@@ -81,30 +75,36 @@ router.post("/login", requireNoAuth, async (req, res) => {
       return;
     }
 
-    let hash = hashQuery.rows[0].hash;
+    const hash = hashQuery.rows[0].hash;
     delete hashQuery.rows[0].hash;
-    hash = hash.toString();
 
-    const success = await argon2.verify(hash, password);
+    const success = await argon2.verify(hash.toString(), password);
 
     if (!success) {
       log.warn({}, `User ${email} Failed to log in`);
-      res.status(400).json({ msg: "Incorrect email or password" });
+      res.status(404).json({ msg: "Incorrect email or password" });
+      next();
       return;
     }
-
     log.info({}, `User ${email} Successfully logged in`);
-    req.session.user = hashQuery.rows[0];
-    req.session.user.isStudent = req.session.user.role === "STUD";
+    req.session.user = {
+      userId: hashQuery.rows[0].user_id,
+      fName: hashQuery.rows[0].f_name,
+      lName: hashQuery.rows[0].l_name,
+      email: hashQuery.rows[0].email,
+      schoolId: hashQuery.rows[0].school_id,
+      role: hashQuery.rows[0].role,
+      isInstructor: hashQuery.rows[0].role === "INST",
+    };
+
     res.status(200).json({
       msg: "Successfully logged in",
-      fName: req.session.user.f_name,
-      lName: req.session.user.l_name,
+      fName: req.session.user.fName,
+      lName: req.session.user.lName,
       email: req.session.user.email,
-      id: req.session.user.school_id,
-      isStudent: req.session.user.isStudent,
+      schoolId: req.session.user.schoolId,
+      isInstructor: req.session.user.isInstructor,
     });
-
 
   } catch (error) {
     log.error(error, `Something went wrong trying to log in for user ${email}`);
