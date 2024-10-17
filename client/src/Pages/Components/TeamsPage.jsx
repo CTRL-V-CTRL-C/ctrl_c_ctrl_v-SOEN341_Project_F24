@@ -13,7 +13,6 @@ function TeamsPage() {
 
     return (
         <div className="teams-page">
-            <p className="course-title"> COURSE : {} </p>
             {auth.isInstructor ?
                 <>
 
@@ -43,7 +42,6 @@ function TeamsPage() {
                 </>}
         </div >
     );
-
 }
 
 export default TeamsPage;

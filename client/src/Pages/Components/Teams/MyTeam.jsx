@@ -16,8 +16,8 @@ function MyTeam() {
 
     useEffect(() => {
         const fetchTeams = async () => {
-            if (auth.selectedCourse === 0) return
-            let response = await fetchData(`/api/team/get-my-team/${auth.selectedCourse}`);
+            if (auth.selectedCourse.course_id === 0) return;
+            let response = await fetchData(`/api/team/get-my-team/${auth.selectedCourse.course_id}`);
             let data = await response.json();
             setTeam(data);
         }
@@ -29,23 +29,26 @@ function MyTeam() {
     }
 
     return (
-        <div className="my-team">
-            <div className="my-team-info">
-                <div className="team-name"> {team.team_name} </div>
-                <div className="teammates-card">
-                    {team.members.map((member, i) =>
-                        <div className="teammate-card" key={i}>
-                            <div className="teammate-info">
-                                <p className="teammate-details"> {member.f_name} {member.l_name}</p>
-                                <p className="teammate-details"> <MdEmail className="email-icon" />{member.email} </p>
+        <>
+            <p className="course-title"> COURSE: {auth.selectedCourse.course_name} </p>
+            <div className="my-team">
+                <div className="my-team-info">
+                    <div className="team-name"> {team.team_name} </div>
+                    <div className="teammates-card">
+                        {team.members.map((member, i) =>
+                            <div className="teammate-card" key={i}>
+                                <div className="teammate-info">
+                                    <p className="teammate-details"> {member.f_name} {member.l_name}</p>
+                                    <p className="teammate-details"> <MdEmail className="email-icon" />{member.email} </p>
+                                </div>
+                                <div className="review-btn" onClick={() => reviewTeammate(i)}> <MdOutlineRateReview className="review-icon" /> Review </div>
                             </div>
-                            <div className="review-btn" onClick={() => reviewTeammate(i)}> <MdOutlineRateReview className="review-icon" /> Review </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
+                {Object.keys(evaluatingMember).length !== 0 ? <Evaluation teammate={evaluatingMember} /> : <></>}
             </div>
-            {Object.keys(evaluatingMember).length !== 0 ? <Evaluation teammate={evaluatingMember} /> : <></>}
-        </div>
+        </>
     )
 }
 

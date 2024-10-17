@@ -11,7 +11,7 @@ import SideMenu from './Pages/Components/SideMenu';
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(0);
+  const [selectedCourse, setSelectedCourse] = useState({ course_name: "", course_id: 0 });
 
   useEffect(() => {
     (async () => {
@@ -33,7 +33,7 @@ function App() {
   const fetchCourses = async () => {
     const coursesResponse = await fetchData("/api/course/get-courses");
     const courses = await coursesResponse.json();
-    setSelectedCourse(courses[0].course_id);
+    setSelectedCourse(courses[0]);
   }
 
   return (

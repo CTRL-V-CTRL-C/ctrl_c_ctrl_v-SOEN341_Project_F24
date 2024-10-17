@@ -28,8 +28,8 @@ function SideMenu() {
         setUserCourses(["Course A", "Course B", "Course C", "COURSE EXTRA"]);
     }
 
-    function selectCourse(course_id) {
-        auth.setSelectedCourse(course_id);
+    function selectCourse(course) {
+        auth.setSelectedCourse(course);
     }
 
     return (
@@ -40,7 +40,7 @@ function SideMenu() {
                     <h2>Welcome</h2>
                 </header>
                 <ul>
-                    {userCourses.map((course, i) => <li onClick={() => selectCourse(course.course_id)} key={i} tabIndex="0" className="icon-dashboard" > <span>{course.course_name}</span></li>)}
+                    {userCourses.map((course, i) => <li onClick={() => selectCourse(course)} key={i} tabIndex="0" className="icon-dashboard" > <span>{course.course_name}</span></li>)}
                     {auth.isInstructor ?
                         <li className="add-course-btn" onClick={async () => await addCourse()} ><IoMdAdd /> Add Course </li>
                         :
