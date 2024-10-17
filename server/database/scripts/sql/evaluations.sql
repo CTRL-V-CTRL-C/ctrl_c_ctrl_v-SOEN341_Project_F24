@@ -8,7 +8,7 @@ BEGIN
     END IF;
 END$$;
 
-CREATE OR REPLACE FUNCTION is_in_team (_user1_id INTEGER, _user2_id INTEGER, _team_id INTEGER) RETURNS BOOLEAN 
+CREATE OR REPLACE FUNCTION are_in_same_team (_user1_id INTEGER, _user2_id INTEGER, _team_id INTEGER) RETURNS BOOLEAN 
 LANGUAGE plpgsql
 AS
 $$
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS evaluations
   FOREIGN KEY(evaluatee_id) REFERENCES users(user_id)
       ON DELETE CASCADE,
   UNIQUE(team_id,evaluator_id,evaluatee_id),
-  CONSTRAINT is_in_team CHECK(is_in_team(evaluator_id,evaluatee_id,team_id)),
+  CONSTRAINT are_in_same_team CHECK(are_in_same_team(evaluator_id,evaluatee_id,team_id)),
   CONSTRAINT is_student CHECK(NOT(is_instructor(evaluator_id) OR is_instructor(evaluatee_id))),
   CONSTRAINT no_self_review CHECK(NOT(evaluator_id = evaluatee_id))
 );
