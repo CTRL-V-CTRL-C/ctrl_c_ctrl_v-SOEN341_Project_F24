@@ -6,22 +6,14 @@ function PopUp(props) {
 
 
     const [file, setFile] = useState(null);
-    const [error, setError] = useState(""); // State for error message
+    const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
 
     const handleFileChange = (file) => {
         if (file) {
-            const fileName = file.name;
-            const fileType = file.type;
-
-            // Check if the file is a CSV by extension or MIME type
-            if (fileType === "text/csv" || fileName.endsWith(".csv")) {
-                setFile(file);
-                setError(""); // Clear error message if file is valid
-            } else {
-                setFile(null);
-                setError("Please upload a valid CSV file."); // Set error message
-            }
+            
+            setError("");
+            setFile(file);
         }
     };
 
@@ -31,22 +23,28 @@ function PopUp(props) {
         props.setTrigger(false); // Close the popup
     };
 
-    // const handleUpload = async () => {
-    //     // We will fill this out later
-    //   };
+    const handleUpload = (e) => {
+        const fileName = file.name;
+        const fileType = file.type;
+
+        //file validation 
+        if (fileType === "text/csv" || fileName.endsWith(".csv")) {
+            setError("Correct File"); // Clear error message if file is valid
+        } else {
+            setError("Please upload a valid CSV file."); // Set error message
+        }
+    };
 
     return (props.trigger) ? (
         <div className="popup">
-            <div className="popup-inner">
+            <div className={`popup-inner ${highlighted ? "border-green" : "border-gray"}`}>
                 <div className={`dropZone ${highlighted ?
                     "border-green bg-green" : "border-gray"}`}
 
                     onDragEnter={() => {
-
                         setHighlighted(true);
                     }}
                     onDragLeave={() => {
-
                         setHighlighted(false);
                     }}
 
@@ -57,14 +55,8 @@ function PopUp(props) {
                     onDrop={(e) => {
                         e.preventDefault();
                         const droppedFiles = e.dataTransfer.files;
-                        console.log(droppedFiles);
-                        if (droppedFiles.length > 0) {
-                            handleFileChange(droppedFiles[0]);
-                        }
+                        handleFileChange(droppedFiles[0]);
                         setHighlighted(false);
-                        Array.from(droppedFiles).forEach((file) => {
-                            console.log(file);
-                        });
                     }}
                 >
                     <h3>Drag and Drop</h3>
@@ -87,9 +79,11 @@ function PopUp(props) {
             <div className="bu">
                 <button className="close-btn" onClick={handleClose} >Close</button>
                 {props.children}
-                <button className="upload">Upload</button>
+                <button className="upload" onClick={handleUpload}>Upload</button>
             </div>
         </div>
     ) : "";
 }
 export default PopUp;
+
+
