@@ -7,6 +7,7 @@ function PopUp(props) {
 
     const [file, setFile] = useState(null);
     const [error, setError] = useState(""); // State for error message
+    const [highlighted, setHighlighted] = useState(false);
 
     const handleFileChange = (file) => {
         if (file) {
@@ -37,41 +38,50 @@ function PopUp(props) {
     return (props.trigger) ? (
         <div className="popup">
             <div className="popup-inner">
-                <div className="dropZone"
-                
-                /*overide default method */
-                onDragOver = {(e) =>{
-                    e.preventDefault();  /*preventing the default of automatically downloading*/
-                }}
-                /*overide default method */
-                onDrop = {(e) => {
-                    e.preventDefault(); 
-                    const droppedFiles = e.dataTransfer.files;
-                    console.log(droppedFiles);
-                    if (droppedFiles.length > 0) {
-                        handleFileChange(droppedFiles[0]); // Pass the dropped file to the handler
-                    }
-                    
-                    
-                }}
+                <div className={`dropZone ${highlighted ?
+                    "border-green bg-green" : "border-gray"}`}
 
-                
+                    onDragEnter={() => {
+
+                        setHighlighted(true);
+                    }}
+                    onDragLeave={() => {
+
+                        setHighlighted(false);
+                    }}
+
+                    onDragOver={(e) => {
+                        e.preventDefault();  /*preventing the default of automatically downloading*/
+
+                    }}
+                    onDrop={(e) => {
+                        e.preventDefault();
+                        const droppedFiles = e.dataTransfer.files;
+                        console.log(droppedFiles);
+                        if (droppedFiles.length > 0) {
+                            handleFileChange(droppedFiles[0]);
+                        }
+                        setHighlighted(false);
+                        Array.from(droppedFiles).forEach((file) => {
+                            console.log(file);
+                        });
+                    }}
                 >
                     <h3>Drag and Drop</h3>
                     <input type="file" className="upload" onChange={(e) => handleFileChange(e.target.files[0])} />
-                 
-                        {file && (
-                              <div className="file-details">
-                                File details:
-                                <ul>
-                                    <li>Name: {file.name}</li>
-                                    <li>Type: {file.type}</li>
-                                    <li>Size: {file.size} bytes</li>
-                                </ul>
-                                </div>
-                        )}
+
+                    {file && (
+                        <div className="file-details">
+                            File details:
+                            <ul>
+                                <li>Name: {file.name}</li>
+                                <li>Type: {file.type}</li>
+                                <li>Size: {file.size} bytes</li>
+                            </ul>
+                        </div>
+                    )}
                     {error && <p className="error-message">{error}</p>} {/* Display error message */}
-                       
+
                 </div>
             </div>
             <div className="bu">
@@ -81,6 +91,5 @@ function PopUp(props) {
             </div>
         </div>
     ) : "";
-
 }
 export default PopUp;
