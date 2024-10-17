@@ -37,7 +37,7 @@ function SideMenu() {
                     <h2>Welcome</h2>
                 </header>
                 <ul>
-                    {userCourses.map((course, i) => <li key={i} tabIndex="0" className="icon-dashboard" > <span>{course}</span></li>)}
+                    {userCourses.map((course, i) => <li key={i} tabIndex="0" className="icon-dashboard" > <span>{course.course_name}</span></li>)}
                     {auth.isInstructor ?
                         <li className="add-course-btn" onClick={async () => await addCourse()} ><IoMdAdd /> Add Course </li>
                         :
