@@ -4,14 +4,14 @@ import './Styles/PopUp.css'
 
 function PopUp(props) {
 
-
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
+    const teams = [];
 
     const handleFileChange = (file) => {
         if (file) {
-            
+
             setError("");
             setFile(file);
         }
@@ -29,9 +29,67 @@ function PopUp(props) {
 
         //file validation 
         if (fileType === "text/csv" || fileName.endsWith(".csv")) {
-            setError("Correct File"); // Clear error message if file is valid
+            setError("Correct File"); // for test purposes, take this out later
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+
+                //check for Byte Order Mark and remove if it is present 
+                if (text.charCodeAt(0) === 0xFEFF) {
+                    text = text.slice(1); // Remove BOM
+                }
+                parseCSV(text);
+                console.log(teams); // testing purposes can remove later
+
+
+                //***add code to send teams array to API */
+
+
+            };
+            reader.readAsText(file, 'utf-8');
         } else {
             setError("Please upload a valid CSV file."); // Set error message
+        }
+    };
+    //function to parse the cvs file
+    const parseCSV = (data) => {
+        const lines = data.split("\n");
+    
+        for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header row
+            const line = lines[i].trim();
+    
+            // Skip empty lines
+            if (!line) continue;
+    
+            const [name, email, studentID, teamName] = line.split(",").map(item => item.trim());
+    
+            // Check for missing values
+            if (!name || !email || !studentID || !teamName) {
+                setError("Note: One or more rows are missing values. Teams might not have all memberes. Recheck the CVS file to insure all names, emails, student IDs and team names are provided");
+                continue; // Skip this row if it's malformed
+            }
+            
+            // Find the team object by teamName
+            let existingTeam = teams.find(team => team.name === teamName);
+            
+            if (existingTeam) {
+                // If the team exists, add the member to the members array
+                existingTeam.members.push({
+                    name, 
+                    email, 
+                    studentID
+                });
+            } else {
+                // If the team doesn't exist, create a new team object
+                teams.push({
+                    name: teamName,
+                    members: [{
+                        name,
+                        email,
+                        studentID
+                    }]
+                });
+            }
         }
     };
 
