@@ -24,8 +24,16 @@ function PopUp(props) {
     };
 
     const handleUpload = (e) => {
+
+          // Check if no file is selected
+          if (!file) {
+            setError("Please select a file before uploading.");
+            return;
+        }
+        
         const fileName = file.name;
         const fileType = file.type;
+       
 
         //file validation 
         if (fileType === "text/csv" || fileName.endsWith(".csv")) {
@@ -54,29 +62,29 @@ function PopUp(props) {
     //function to parse the cvs file
     const parseCSV = (data) => {
         const lines = data.split("\n");
-    
+
         for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header row
             const line = lines[i].trim();
-    
+
             // Skip empty lines
             if (!line) continue;
-    
-            const [name, email, studentID, teamName] = line.split(",").map(item => item.trim());
-    
+
+            const [name, studentID, email, teamName] = line.split(",").map(item => item.trim());
+
             // Check for missing values
             if (!name || !email || !studentID || !teamName) {
                 setError("Note: One or more rows are missing values. Teams might not have all memberes. Recheck the CVS file to insure all names, emails, student IDs and team names are provided");
                 continue; // Skip this row if it's malformed
             }
-            
+
             // Find the team object by teamName
             let existingTeam = teams.find(team => team.name === teamName);
-            
+
             if (existingTeam) {
                 // If the team exists, add the member to the members array
                 existingTeam.members.push({
-                    name, 
-                    email, 
+                    name,
+                    email,
                     studentID
                 });
             } else {
