@@ -8,12 +8,12 @@ import OtherTeams from "./Teams/OtherTeams";
 
 function TeamsPage() {
 
-    const auth = useContext(UserContext);
+    const userContext = useContext(UserContext);
     const [teamsView, setTeamsView] = useState(true);
 
     return (
         <div className="teams-page">
-            {auth.isInstructor ?
+            {userContext.isInstructor ?
                 <>
 
                     <label htmlFor="filter" className="switch" aria-label="Toggle Filter">

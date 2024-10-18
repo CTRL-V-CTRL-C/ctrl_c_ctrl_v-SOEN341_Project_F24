@@ -5,11 +5,11 @@ import { useContext } from "react";
 import { postData } from '../../Controller/FetchModule';
 
 function NavBar() {
-    const auth = useContext(UserContext);
+    const userContext = useContext(UserContext);
 
     async function handleLogout() {
         await postData("/api/logout", {});
-        auth.setUserLoggedIn(false);
+        userContext.setUserLoggedIn(false);
     }
 
     return (
@@ -17,7 +17,7 @@ function NavBar() {
             <div id="mainListDiv" className="main_list">
                 <ul className="navlinks">
                     <div className="spacer" />
-                    {auth.userLoggedIn ?
+                    {userContext.userLoggedIn ?
                         <>
                             <li><NavLink className="navlink" to="/teams">Teams</NavLink></li>
                             <li><NavLink onClick={(async () => { await handleLogout() })} className="navlink" to="/">Logout</NavLink></li>

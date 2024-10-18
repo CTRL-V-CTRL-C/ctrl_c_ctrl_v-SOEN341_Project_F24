@@ -6,7 +6,7 @@ import { fetchData } from "../../Controller/FetchModule";
 
 function SideMenu() {
 
-    const auth = useContext(UserContext);
+    const userContext = useContext(UserContext);
     const [styleClass, setStyleClass] = useState("");
     const [userCourses, setUserCourses] = useState([]);
 
@@ -16,26 +16,26 @@ function SideMenu() {
             const courses = await coursesResponse.json();
             setUserCourses(courses);
         }
-        if (auth.userLoggedIn) {
+        if (userContext.userLoggedIn) {
             fetchCourses();
         }
-    }, [auth.userLoggedIn]);
+    }, [userContext.userLoggedIn]);
 
     useEffect(() => {
-        auth.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
-    }, [auth.userLoggedIn]);
+        userContext.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
+    }, [userContext.userLoggedIn]);
 
     async function addCourse() {
-        console.log("TODO display pop up to add course here");
+        // TODO display pop up to add course here
         setUserCourses(["Course A", "Course B", "Course C", "COURSE EXTRA"]);
     }
 
     function selectCourse(course) {
-        auth.setSelectedCourse(course);
+        userContext.setSelectedCourse(course);
     }
 
     return (
-        auth.userLoggedIn ?
+        userContext.userLoggedIn ?
             <nav className={`menu ${styleClass}`} tabIndex="0">
                 <div className="smartphone-menu-trigger"></div>
                 <header className="avatar">
@@ -43,7 +43,7 @@ function SideMenu() {
                 </header>
                 <ul>
                     {userCourses.map((course, i) => <li onClick={() => selectCourse(course)} key={i} tabIndex="0" className="icon-dashboard" > <span>{course.course_name}</span></li>)}
-                    {auth.isInstructor ?
+                    {userContext.isInstructor ?
                         <li className="add-course-btn" onClick={async () => await addCourse()} ><IoMdAdd /> Add Course </li>
                         :
                         <></>}

@@ -16,9 +16,9 @@ function App() {
   useEffect(() => {
     (async () => {
       if (!userLoggedIn) {
-        const authResponse = await postData("/api/test-authentication", {});
-        if (authResponse.status === 200) {
-          let authJSON = await authResponse.json();
+        const response = await postData("/api/test-authentication", {});
+        if (response.status === 200) {
+          let authJSON = await response.json();
           setUserLoggedIn(true);
           setIsInstructor(authJSON.isInstructor);
         } else {

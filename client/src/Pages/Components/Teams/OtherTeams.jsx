@@ -4,22 +4,22 @@ import { fetchData } from "../../../Controller/FetchModule";
 
 function OtherTeams() {
 
-    const auth = useContext(UserContext);
+    const userContext = useContext(UserContext);
     const [teams, setTeams] = useState([{ team_name: "", members: [{ f_name: "", l_name: "" }] }]);
 
     useEffect(() => {
         const fetchTeams = async () => {
-            if (auth.selectedCourse.course_id === 0) return;
-            let response = await fetchData(`/api/team/get-teams/${auth.selectedCourse.course_id}`);
+            if (userContext.selectedCourse.course_id === 0) return;
+            let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
             let data = await response.json();
             setTeams(data);
         }
         fetchTeams();
-    }, [auth.selectedCourse]);
+    }, [userContext.selectedCourse]);
 
     return (
         <>
-            <p className="course-title"> COURSE: {auth.selectedCourse.course_name} </p>
+            <p className="course-title"> COURSE: {userContext.selectedCourse.course_name} </p>
             <div className="my-team">
                 {teams.map((team, i) =>
                     <div key={i} className="my-team-info">

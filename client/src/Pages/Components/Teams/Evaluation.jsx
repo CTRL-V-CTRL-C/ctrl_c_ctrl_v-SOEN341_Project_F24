@@ -64,7 +64,7 @@ function Evaluation(props) {
                 )}
             </div>
             <div onClick={submitEvaluation} className="container">
-                <a href="#" className="button type--C">
+                <a className="button type--C">
                     <div className="button__line"></div>
                     <div className="button__line"></div>
                     <span className="button__text">SUBMIT</span>

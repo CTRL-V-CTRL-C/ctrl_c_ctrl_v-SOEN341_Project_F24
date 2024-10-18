@@ -6,7 +6,7 @@ import UserContext from "../Context/UserContext";
 import './LoginPage.css';
 
 function LoginPage() {
-    const auth = useContext(UserContext);
+    const userContext = useContext(UserContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -25,8 +25,8 @@ function LoginPage() {
         const loginJSON = await loginResponse.json();
 
         if (loginResponse.status === 200) {
-            auth.setUserLoggedIn(true);
-            auth.setIsInstructor(loginJSON.isInstructor);
+            userContext.setUserLoggedIn(true);
+            userContext.setIsInstructor(loginJSON.isInstructor);
             setMessage(loginJSON.msg);
             navigate("/teams");
         } else {
