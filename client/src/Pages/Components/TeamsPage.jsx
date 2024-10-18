@@ -13,34 +13,21 @@ function TeamsPage() {
 
     return (
         <div className="teams-page">
-            {userContext.isInstructor ?
-                <>
-
-                    <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
-                        <input type="checkbox" id="filter" checked={!teamsView} onChange={() => setTeamsView(!teamsView)} />
-                        <span>Teams</span>
-                        <span>Members</span>
-                    </label>
-                    {teamsView ?
-                        <AllTeams />
-                        :
-                        <MembersPage />
-                    }
-                </>
-                :
-                <>
-                    <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
-                        <input type="checkbox" id="filter" checked={!teamsView} onChange={() => setTeamsView(!teamsView)} />
-                        <span>My Team</span>
-                        <span>Other Teams</span>
-                    </label>
-                    {teamsView ?
-                        <MyTeam />
-                        :
-                        <OtherTeams />
-                    }
-                </>}
-        </div >
+            <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
+                <input 
+                    type="checkbox" 
+                    id="filter" 
+                    checked={!teamsView} 
+                    onChange={() => setTeamsView(!teamsView)} 
+                />
+                <span>{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
+                <span>{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
+            </label>
+            {teamsView ? 
+                (userContext.isInstructor ? <AllTeams /> : <MyTeam />) : 
+                (userContext.isInstructor ? <MembersPage /> : <OtherTeams />)
+            }
+        </div>
     );
 }
 
