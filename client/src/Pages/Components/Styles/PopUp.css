@@ -10,17 +10,20 @@
     justify-content: center;
     align-items: center;
     gap:10px;
+    box-shadow: gray;
 }
 
 .popup-inner{
-    border-style: dotted;
+    border-style: solid;
     position: relative;
     padding: 50px;
     width: 100%;
     max-width: 640px;
-    background-color: #FFF;
+    background-color:hwb(0 98% 2%);
     justify-content: space-between;
     border-radius: 15px;
+    border-width: 3px;
+    
 }
 
 .bu{
@@ -38,13 +41,17 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    border-style: dotted;
+    border-style: dashed;
+    border-width: 3px;
     position: relative;
     border-radius: 15px;
 }
+.border-outer{
+    border-color:  #a6757c;
+}
 
-.border-gray {
-    border-color: rgb(113, 108, 108);
+.border-inner {
+    border-color: rgb(169, 163, 163);
 }
 
 .border-green {
@@ -52,7 +59,7 @@
 }
 
 .bg-green {
-    background-color: rgb(216, 217, 134);
+    background-color: #dddaa4;
 }
 
 .file-details {
@@ -63,4 +70,53 @@
     font-size: small;
     border-style: solid;
     border-color: rgb(113, 108, 108);
+}
+/* Modern looking upload button */
+.upload-button {
+    background-color:  #ba858c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 2px solid #a6757c;
+}
+
+.upload-button:hover {
+    background-color: #ddbabf;
+}
+
+.file-input {
+    display: none; /* Hide the default file input */
+}
+
+/* Styles for the file details */
+.file-details {
+    margin-top: 15px;
+}
+
+.file-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.file-details li {
+    margin: 5px 0;
+}
+.close-x {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.close-x:hover {
+    color: #a7a650; /* Red color when hovered */
 }

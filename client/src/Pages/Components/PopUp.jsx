@@ -103,9 +103,12 @@ function PopUp(props) {
 
     return (props.trigger) ? (
         <div className="popup">
-            <div className={`popup-inner ${highlighted ? "border-green" : "border-gray"}`}>
+            <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
+           {/* X button to close the popup */}
+        <button className="close-x" onClick={handleClose}>×</button>
+                <h2>Upload File</h2>
                 <div className={`dropZone ${highlighted ?
-                    "border-green bg-green" : "border-gray"}`}
+                    "border-green bg-green" : "border-inner"}`}
 
                     onDragEnter={() => {
                         setHighlighted(true);
@@ -125,8 +128,16 @@ function PopUp(props) {
                         setHighlighted(false);
                     }}
                 >
-                    <h3>Drag and Drop</h3>
-                    <input type="file" className="upload" onChange={(e) => handleFileChange(e.target.files[0])} />
+                    <h4>Drag file to upload</h4>
+                    <input
+                type="file"
+                className="file-input"
+                id="fileUpload"
+                onChange={(e) => handleFileChange(e.target.files[0])}
+            />
+                    <label htmlFor="fileUpload" className="upload-button">
+                Choose a file
+            </label>
 
                     {file && (
                         <div className="file-details">
@@ -143,7 +154,6 @@ function PopUp(props) {
                 </div>
             </div>
             <div className="bu">
-                <button className="close-btn" onClick={handleClose} >Close</button>
                 {props.children}
                 <button className="upload" onClick={handleUpload}>Upload</button>
             </div>
