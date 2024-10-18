@@ -16,8 +16,10 @@ function SideMenu() {
             const courses = await coursesResponse.json();
             setUserCourses(courses);
         }
-        fetchCourses();
-    }, []);
+        if (auth.userLoggedIn) {
+            fetchCourses();
+        }
+    }, [auth.userLoggedIn]);
 
     useEffect(() => {
         auth.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
