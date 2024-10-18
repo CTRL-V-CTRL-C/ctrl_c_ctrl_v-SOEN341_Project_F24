@@ -1,3 +1,7 @@
+CREATE TYPE role AS ENUM (
+  'INST', 'STUD'
+);
+
 CREATE TABLE IF NOT EXISTS users (
   user_id   SERIAL PRIMARY KEY,
   hash      BYTEA NOT NULL,
@@ -5,5 +9,5 @@ CREATE TABLE IF NOT EXISTS users (
   l_name    VARCHAR(20) NOT NULL,
   email     VARCHAR(30) UNIQUE NOT NULL,
   school_id CHAR(8) UNIQUE NOT NULL,
-  role      CHAR(4) NOT NULL
+  role      role NOT NULL
 );
