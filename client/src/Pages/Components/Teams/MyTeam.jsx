@@ -16,11 +16,11 @@ function MyTeam() {
 
     useEffect(() => {
         const fetchTeams = async () => {
-            if (!userContext.selectedCourse || userContext.selectedCourse.course_id === 0) return;
             let response = await fetchData(`/api/team/get-my-team/${userContext.selectedCourse.course_id}`);
             let data = await response.json();
             setTeam(data);
         }
+        if (!userContext.selectedCourse || userContext.selectedCourse.course_id === 0) return;
         fetchTeams();
     }, [userContext.selectedCourse]);
 
