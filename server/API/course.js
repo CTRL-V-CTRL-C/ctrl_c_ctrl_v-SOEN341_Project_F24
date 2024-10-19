@@ -3,6 +3,8 @@ import { createCourse } from '../database/course.js';
 import { db } from '../database/db.js';
 import { requireAuth, requireTeacher } from './auth.js';
 
+const courseNamePattern = /^[A-Z]{4,4} ?\d{3,3}$$/
+
 const router = express.Router();
 
 async function requireIsInCourse(req, res, next) {
@@ -29,16 +31,22 @@ async function requireIsInCourse(req, res, next) {
 
 // creating a course in the database
 router.post("/create", requireAuth, requireTeacher, async (req, res, next) => {
-  const courseName = req.body.courseName;
+  let courseName = req.body.courseName;
   const instructorID = req.session.user.userId;
-  if (!(courseName && instructorID)) {
-    res.status(400).json({ error: "The name of the course is not provided or you are not logged in" });
+  if (!courseName && typeof courseName !== 'string') {
+    res.status(400).json({ error: "The name of the course should be provided and should be a string" });
+    next();
+    return;
+  }
+  courseName = courseName.toUpperCase();
+  if (!courseNamePattern.test(courseName)) {
+    res.status(400).json({ error: "The name of the course should be in the forma: ABCD 123" });
     next();
     return;
   }
   const result = await createCourse(db, instructorID, courseName);
   if (result instanceof Error) {
-    res.status(400).json({ error });
+    res.status(500).json({ msg: result.message });
   } else {
     res.json({ courseID: result });
   }

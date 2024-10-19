@@ -26,7 +26,7 @@ router.post("/create", async (req, res, next) => {
     userObject.password_hash = await argon2.hash(userObject.password, argon2Options);
     const error = await createUser(db, userObject);
     if (error) {
-        res.status(400).json({ error });
+        res.status(400).json({ msg: error.message });
     } else {
         res.json({ created: true });
     }

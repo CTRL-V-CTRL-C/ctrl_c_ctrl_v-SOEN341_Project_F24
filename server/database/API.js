@@ -3,8 +3,8 @@ import log from '../logger.js'
 import { queryAndReturnError } from './db.js';
 
 //Account creation validation
-const namePattern = /^[a-zA-Z'\-_]+$/v;
-const emailPattern = /^[a-zA-Z0-9.]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/v;
+const namePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ\-]+$/v;
+const emailPattern = /^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$/v;
 const studentIDPattern = /^[Ss][Tt][Uu][Dd][0-9]{4,4}$/v;
 const instructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
 const rolePattern = /^(STUD|INST)$/v;
@@ -55,18 +55,12 @@ async function createUser(db, userObject) {
         return verifyUserError;
     }
     const table = "users"
-    let hash = undefined;
-    try {
-        hash = Buffer.from(userObject.password_hash)
-    } catch (error) {
-        return error;
-    }
     const query = {
         name: "register-user",
         text: `INSERT INTO ${table} (hash, f_name, l_name, email, school_id, role) 
         VALUES ($1, $2, $3, $4, $5, $6)`,
         values: [
-            hash,
+            userObject.password_hash,
             userObject.firstName,
             userObject.lastName, userObject.email,
             userObject.schoolID, userObject.role

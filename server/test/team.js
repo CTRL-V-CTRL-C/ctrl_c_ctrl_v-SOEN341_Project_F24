@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
 import { db } from '../database/db.js';
-import { connectDbIfDisconnected, randomLetters, randomNumber } from './utils.js'
+import { randomLetters, randomNumber } from './utils.js'
 
 
 async function loginUser(email, password) {
@@ -38,8 +38,7 @@ suite("GET teams as an instructor", async () => {
   });
 
   before(async () => {
-    cookies = await loginUser("joeparker13@gmail.com", "password");
-    await connectDbIfDisconnected(db);
+    cookies = await loginUser("joeparker@gmail.com", "password");
   });
 
   it("Should respond with 200 when getting teams in a course they teach", async (t) => {
@@ -87,7 +86,7 @@ suite("GET my team and other teams as a student", async () => {
   });
 
   before(async () => {
-    cookies = await loginUser("joeparker1@gmail.com", "password");
+    cookies = await loginUser("joeparker@gmail.com", "password");
   });
 
   it("Should respond with 200 when getting other teams in a course they are part of", async (t) => {
@@ -136,8 +135,8 @@ async function createUser(userRole) {
   const password = "password";
   const user = {
     password,
-    firstName: "test_user",
-    lastName: "test_user",
+    firstName: "test-user",
+    lastName: "test-user",
     email,
     schoolID: userRole + randomNumber(4),
     role: userRole

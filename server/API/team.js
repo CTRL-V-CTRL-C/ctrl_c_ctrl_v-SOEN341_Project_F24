@@ -63,7 +63,7 @@ router.post("/create", requireAuth, requireTeacher, async (req, res, next) => {
   const courseID = req.body.courseID;
   const result = await createTeam(db, courseID, teamName, members);
   if (result instanceof Error) {
-    res.status(400).json({ error: result });
+    res.status(400).json({ error: result.message });
   } else {
     res.json({ teamID: result });
   }

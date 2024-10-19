@@ -12,14 +12,4 @@ function randomNumber(length) {
     return Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
-/**
- * connects the database if it is disconnected
- * @param {pg.Pool} db 
- */
-async function connectDbIfDisconnected(db) {
-    if (db.ended) {
-        await db.connect();
-    }
-}
-
-export { randomLetters, randomNumber, connectDbIfDisconnected }
+export { randomLetters, randomNumber }
