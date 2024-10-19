@@ -10,34 +10,33 @@
     justify-content: center;
     align-items: center;
     gap:10px;
-    box-shadow: gray;
 }
 
 .popup-inner{
     border-style: solid;
     position: relative;
-    padding: 50px;
+    padding: 10px 50px 50px;
     width: 100%;
     max-width: 640px;
     background-color:hwb(0 98% 2%);
-    justify-content: space-between;
     border-radius: 15px;
     border-width: 3px;
+    box-shadow: 10px 10px 10px rgb(209, 179, 179);
     
 }
 
 .bu{
     display:flex;
     flex-direction: row;
-    justify-content: space-around;
     width: 100%;
+    justify-content: center;
+    gap: 10px;
 }
 
 .dropZone{
     width:100%;
     height: 350px;
     justify-content: center;
-    justify-content: space-around;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -55,11 +54,11 @@
 }
 
 .border-green {
-    border-color: rgb(197, 193, 86);
+    border-color: rgb(212, 196, 214);
 }
 
 .bg-green {
-    background-color: #dddaa4;
+    background-color: rgb(243, 233, 244);
 }
 
 .file-details {
@@ -82,6 +81,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     border: 2px solid #a6757c;
+
 }
 
 .upload-button:hover {
@@ -92,9 +92,17 @@
     display: none; /* Hide the default file input */
 }
 
+
 /* Styles for the file details */
+.file-outline{
+    display:flex;
+    justify-content: center;
+    width: 100%;
+}
 .file-details {
     margin-top: 15px;
+    border-radius: 20px;
+    border-color:  #a7a650;
 }
 
 .file-details ul {

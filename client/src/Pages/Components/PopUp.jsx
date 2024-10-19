@@ -8,6 +8,18 @@ function PopUp(props) {
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
     const teams = [];
+    
+        // Prevent the file from being opened/downloaded when file is dropped outside the popup
+        const handleDragOver = (e) => {
+            e.preventDefault();  
+        };
+        const handleDrop = (e) => {
+            e.preventDefault();  
+            e.stopPropagation(); 
+        };
+        document.addEventListener('dragover', handleDragOver);
+        document.addEventListener('drop', handleDrop);
+
 
     const handleFileChange = (file) => {
         if (file) {
@@ -25,19 +37,18 @@ function PopUp(props) {
 
     const handleUpload = (e) => {
 
-          // Check if no file is selected
-          if (!file) {
+        //Check to see if there is a file before uploading
+        if (!file) {
             setError("Please select a file before uploading.");
             return;
         }
-        
+
         const fileName = file.name;
         const fileType = file.type;
-       
 
         //file validation 
         if (fileType === "text/csv" || fileName.endsWith(".csv")) {
-            setError("Correct File"); // for test purposes, take this out later
+            setError("Correct File");            // ***for test purposes, take this out later***
             const reader = new FileReader();
             reader.onload = (e) => {
                 const text = e.target.result;
@@ -47,7 +58,7 @@ function PopUp(props) {
                     text = text.slice(1); // Remove BOM
                 }
                 parseCSV(text);
-                console.log(teams); // testing purposes can remove later
+                console.log(teams); // ***testing purposes can remove later***
 
 
                 //***add code to send teams array to API */
@@ -56,7 +67,7 @@ function PopUp(props) {
             };
             reader.readAsText(file, 'utf-8');
         } else {
-            setError("Please upload a valid CSV file."); // Set error message
+            setError("Please upload a valid CSV file."); 
         }
     };
     //function to parse the cvs file
@@ -69,11 +80,11 @@ function PopUp(props) {
             // Skip empty lines
             if (!line) continue;
 
-            const [name, studentID, email, teamName] = line.split(",").map(item => item.trim());
+            const [fname,lname, studentID, email, teamName] = line.split(",").map(item => item.trim().replace(/^["']|["']$/g, ""));
 
             // Check for missing values
-            if (!name || !email || !studentID || !teamName) {
-                setError("Note: One or more rows are missing values. Teams might not have all memberes. Recheck the CVS file to insure all names, emails, student IDs and team names are provided");
+            if (!fname || !lname || !email || !studentID || !teamName) {
+                setError("Note: One or more rows are missing values. Teams might not be complete. Recheck the CVS file to insure all names, emails, student IDs and team names are provided");
                 continue; // Skip this row if it's malformed
             }
 
@@ -83,7 +94,8 @@ function PopUp(props) {
             if (existingTeam) {
                 // If the team exists, add the member to the members array
                 existingTeam.members.push({
-                    name,
+                    fname,
+                    lname,
                     email,
                     studentID
                 });
@@ -92,7 +104,8 @@ function PopUp(props) {
                 teams.push({
                     name: teamName,
                     members: [{
-                        name,
+                        fname,
+                        lname,
                         email,
                         studentID
                     }]
@@ -104,9 +117,9 @@ function PopUp(props) {
     return (props.trigger) ? (
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
-           {/* X button to close the popup */}
-        <button className="close-x" onClick={handleClose}>×</button>
-                <h2>Upload File</h2>
+                {/* X button to close the popup */}
+                <button className="close-x" onClick={handleClose}>×</button>
+                <h2 style={{ color: 'black' }}>Upload File</h2>
                 <div className={`dropZone ${highlighted ?
                     "border-green bg-green" : "border-inner"}`}
 
@@ -128,34 +141,35 @@ function PopUp(props) {
                         setHighlighted(false);
                     }}
                 >
-                    <h4>Drag file to upload</h4>
-                    <input
-                type="file"
-                className="file-input"
-                id="fileUpload"
-                onChange={(e) => handleFileChange(e.target.files[0])}
-            />
-                    <label htmlFor="fileUpload" className="upload-button">
-                Choose a file
-            </label>
+                    <h4>Drag CVS file to upload</h4>
+                    <div className="bu">
+                        <input
+                            type="file"
+                            className="file-input"
+                            id="fileUpload"
+                            onChange={(e) => handleFileChange(e.target.files[0])}
+                        />
 
+                        <label htmlFor="fileUpload" className="upload-button">
+
+                            Choose a file
+                        </label>
+                        <button className="upload-button" onClick={handleUpload}>Upload</button>
+                    </div>
+                    <div className= "file-outline">
                     {file && (
                         <div className="file-details">
                             File details:
                             <ul>
                                 <li>Name: {file.name}</li>
-                                <li>Type: {file.type}</li>
                                 <li>Size: {file.size} bytes</li>
                             </ul>
                         </div>
                     )}
+                    </div>
                     {error && <p className="error-message">{error}</p>} {/* Display error message */}
 
                 </div>
-            </div>
-            <div className="bu">
-                {props.children}
-                <button className="upload" onClick={handleUpload}>Upload</button>
             </div>
         </div>
     ) : "";
