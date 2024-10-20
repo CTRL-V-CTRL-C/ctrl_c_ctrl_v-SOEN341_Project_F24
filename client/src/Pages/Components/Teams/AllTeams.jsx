@@ -1,6 +1,7 @@
-import PopUp from './Components/PopUp';
+import PopUp from '../PopUp';
 import { useState } from 'react';
-function CVSUpload() {
+
+function AllTeams() {
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -10,6 +11,7 @@ function CVSUpload() {
             <PopUp trigger ={buttonPopup}setTrigger= {setButtonPopup}>
             </PopUp>
         </div>
-    );
+    )
 }
-export default CVSUpload;
+
+export default AllTeams;

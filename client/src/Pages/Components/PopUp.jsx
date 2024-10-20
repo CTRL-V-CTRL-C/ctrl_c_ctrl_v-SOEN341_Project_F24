@@ -141,7 +141,7 @@ function PopUp(props) {
                         setHighlighted(false);
                     }}
                 >
-                    <h4>Drag CVS file to upload</h4>
+                    <h4 style={{ color: 'black' }}>Drag CVS file to upload</h4>
                     <div className="bu">
                         <input
                             type="file"

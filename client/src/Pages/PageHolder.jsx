@@ -1,17 +1,16 @@
 import { Routes, Route } from 'react-router-dom';
 import RegisterAccountPage from './RegisterAccountPage';
-import HomePage from './HomePage';
 import LoginPage from './LoginPage';
-import CVSUpload from './CVS_Upload';
+import TeamsPage from './Components/TeamsPage';
 
 function PageHolder() {
     return (
         <Routes>
-            <Route path="*" element={<HomePage />} />
-            <Route exact path="/" element={<HomePage />} />
+            <Route path="*" element={<LoginPage />} />
+            <Route exact path="/" element={<LoginPage />} />
+            <Route exact path="/teams" element={<TeamsPage />} />
             <Route exact path="/registerAccount" element={<RegisterAccountPage />} />
-            <Route exact path='/loginAccount' element={<LoginPage/>} /> 
-            <Route exact path='/CVSUpload' element={<CVSUpload/>} /> 
+            <Route exact path='/loginAccount' element={<LoginPage />} />
         </Routes>
     );
 }

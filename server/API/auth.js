@@ -120,7 +120,10 @@ router.post("/logout", requireAuth, async (req, res) => {
 
 //Test whether or not you are authenticated
 router.post("/test-authentication", requireAuth, (req, res) => {
-  res.status(200).json({ msg: "User is authenticated" });
+  res.status(200).json({
+    msg: "User is authenticated",
+    isInstructor: req.session.user.isInstructor,
+  });
 });
 
 export { router, requireAuth };
