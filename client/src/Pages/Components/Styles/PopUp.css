@@ -1,28 +1,30 @@
-.popup{
+.popup {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: calc(50% + 120px); /* Center considering the 240px navbar */
+    transform: translateX(-50%); /* Center the popup */
+    width: calc(100% - 240px); /* Full width minus the navbar */
     height: 100vh;
     background-color: rgba(216, 205, 205, 0.637);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap:10px;
+    gap: 10px;
+    padding: 10px; /* Optional: Add some padding */
 }
 
-.popup-inner{
+.popup-inner {
     border-style: solid;
     position: relative;
-    padding: 10px 50px 50px;
+    padding: 50px; /* Increase padding for better spacing */
     width: 100%;
-    max-width: 640px;
-    background-color:hwb(0 98% 2%);
+    max-width: 640px; /* Adjust as needed */
+    background-color: hwb(0 98% 2%);
     border-radius: 15px;
     border-width: 3px;
     box-shadow: 10px 10px 10px rgb(209, 179, 179);
-    
+    overflow: hidden; /* Ensure contents stay within bounds */
 }
 
 .bu{
@@ -130,11 +132,42 @@
     color: rgb(214, 106, 106); 
 }
 
+@media screen and (max-width: 900px) and (min-width: 480px) {
+    .popup {
+        left: calc(50% + 45px); /* Adjust for the smaller navbar */
+        width: calc(100% - 90px); /* Full width minus the new navbar */
+        padding: 20px; /* Add padding around the popup */
+        box-sizing: border-box; /* Ensure padding doesn't affect width calculation */
+    }
+
+    .popup-inner {
+        padding: 30px; /* Adjust padding for smaller screens */
+        width: 90%; /* Use more width on smaller screens */
+        max-width: none; /* Allow full width */
+        margin: 20px; /* Add margin for space around the popup */
+        box-shadow: 10px 10px 10px rgba(209, 179, 179, 0.5); /* Slightly lighter shadow */
+    }
+
+    .dropZone {
+        height: 250px; /* Reduce height for smaller screens */
+        max-height: 40vh; /* Limit height to 40% of viewport */
+    }
+
+    .upload-button {
+        font-size: 14px; /* Smaller font size for buttons */
+        padding: 8px 15px; /* Adjust padding */
+    }
+
+    .file-details {
+        font-size: 0.9em; /* Slightly smaller font for details */
+    }
+}
 /* SuccessPopup.css */
 .success-popup {
+    left: calc(50% + 120px); /* Center considering the 240px navbar */
+    transform: translateX(-50%); /* Center the popup */
     position: fixed;
     top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
     width: 350px;
     background-color: #ffffff;
@@ -183,6 +216,36 @@
 .success-popup .success-close-button:hover {
     background-color: #218838;
 }
-.warning-message p{
-    color:orange;
+
+.warning-message p {
+    color: orange;
+}
+
+/* Media Query for responsiveness */
+@media screen and (max-width: 900px) and (min-width: 480px) {
+    .success-popup {
+        left: calc(50% + 45px); /* Adjust for the smaller navbar */
+        width: calc(100% - 90px); /* Full width minus the new navbar */
+        margin: 20px; /* Add margin for space around the popup */
+        margin-left: 20px; /* Add space specifically for the left side */
+        margin-right: 20px; /* Add margin for the right side */
+        box-sizing: border-box; /* Ensure padding and margin are included in width calculation */
+    }
+
+    .success-popup-inner {
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+
+    .success-popup h2 {
+        font-size: 20px; /* Slightly smaller heading */
+    }
+
+    .success-popup p {
+        font-size: 14px; /* Slightly smaller text */
+    }
+
+    .success-popup .success-close-button {
+        padding: 8px 15px; /* Adjust button padding */
+        font-size: 14px; /* Smaller font size for button */
+    }
 }
