@@ -2,17 +2,16 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../Controller/FetchModule';
 import FormInput from './Components/Forms/FormInput';
-import AuthContext from "../Context/AuthContext";
+import UserContext from "../Context/UserContext";
 import './LoginPage.css';
 
 function LoginPage() {
-    const auth = useContext(AuthContext);
+    const userContext = useContext(UserContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
 
     async function loginAccount(event) {
         //Stops the form from submitting
@@ -26,13 +25,13 @@ function LoginPage() {
         const loginJSON = await loginResponse.json();
 
         if (loginResponse.status === 200) {
-            auth.setUserLoggedIn(true);
+            userContext.setUserLoggedIn(true);
+            userContext.setIsInstructor(loginJSON.isInstructor);
             setMessage(loginJSON.msg);
-            navigate("/");
+            navigate("/teams");
         } else {
             setMessage(loginJSON.msg);
         }
-
         setIsButtonDisabled(false);
     };
 

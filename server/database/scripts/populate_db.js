@@ -62,6 +62,18 @@ for (let course_id = 1; course_id <= numberOfCourses; course_id++) {
   }
 }
 
-console.log("populated the teams");
+console.log("Populated teams table");
+
+//Populate evaluations table
+const numberOfEvaluations = 3;
+const criteria = ['COOPERATION', 'CONCEPTUAL CONTRIBUTION', 'PRACTICAL CONTRIBUTION', 'WORK ETHIC'];
+for (let eval_id = 1; eval_id <= numberOfEvaluations; eval_id++) {
+  await db.query("INSERT INTO evaluations (team_id, evaluator_id, evaluatee_id) VALUES($1,$2,$3)", [1, 1, eval_id + 1]);
+  let j = 1;
+  for (const crit of criteria) {
+    await db.query("INSERT INTO evaluation_details VALUES($1,$2,$3,$4)", [eval_id, crit, j++, "Some review"]);
+  }
+}
+console.log("Populated evaluations table")
 
 db.end();

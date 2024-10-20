@@ -1,6 +1,10 @@
 import fs from 'node:fs'
 import { db } from "../db.js";
 
+// Drop Evaluations
+await db.query(fs.readFileSync(import.meta.dirname + "/sql/evaluations_drop.sql").toString());
+console.log("Dropped evaluations");
+
 // Drop teams
 await db.query(fs.readFileSync(import.meta.dirname + "/sql/teams_drop.sql").toString());
 console.log("Dropped teams");
