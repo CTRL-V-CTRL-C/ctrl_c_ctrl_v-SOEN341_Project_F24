@@ -28,17 +28,14 @@ async function logoutUser(cookies) {
 suite("GET teams as an instructor", async () => {
   let cookies;
 
-  const test_db = await db.connect();
-
 
   // disconnect from the database after the tests
   after(async () => {
     await logoutUser(cookies);
-    test_db.release();
   });
 
   before(async () => {
-    cookies = await loginUser("joeparker@gmail.com", "password");
+    cookies = await loginUser("joeparker13@gmail.com", "password");
   });
 
   it("Should respond with 200 when getting teams in a course they teach", async (t) => {
@@ -77,16 +74,13 @@ suite("GET teams as an instructor", async () => {
 suite("GET my team and other teams as a student", async () => {
   let cookies;
 
-  const test_db = await db.connect();
-
   // disconnect from the database after the tests
   after(async () => {
     await logoutUser(cookies);
-    test_db.release();
   });
 
   before(async () => {
-    cookies = await loginUser("joeparker@gmail.com", "password");
+    cookies = await loginUser("joeparker1@gmail.com", "password");
   });
 
   it("Should respond with 200 when getting other teams in a course they are part of", async (t) => {
@@ -152,7 +146,7 @@ async function createUser(userRole) {
 
 async function createCourse(loginCookie) {
   const course = {
-    courseName: `test_course_${randomLetters()}`,
+    courseName: `TEST ${randomNumber(3)}`,
   };
   const response = await request(app)
     .post("/api/course/create")
@@ -170,11 +164,6 @@ async function createCourse(loginCookie) {
 const testEmails = [];
 
 suite("POST requests to create a team", async () => {
-  const test_db = await db.connect();
-
-  after(async () => {
-    test_db.release();
-  });
 
   before(async () => {
     const teamSize = 3;
@@ -226,14 +215,6 @@ suite("POST requests to create a team", async () => {
 });
 
 suite("POST requests to delete teams", async () => {
-
-  const test_db = await db.connect();
-
-  // disconnect from the database after the tests
-  after(async () => {
-    test_db.release();
-  });
-
 
   it("should respond with 200 when deleting a team", async () => {
     const teacher = await createUser(UserRole.Instructor);

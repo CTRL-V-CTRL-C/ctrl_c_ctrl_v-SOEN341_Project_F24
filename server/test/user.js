@@ -1,18 +1,10 @@
-import { suite, it, after } from 'node:test'
+import { suite, it } from 'node:test'
 import assert from 'node:assert'
 import request from 'supertest'
 import { app } from '../server.js'
-import { db } from '../database/db.js'
 import { randomLetters, randomNumber } from './utils.js'
 
 suite("POST requests to create a user", async () => {
-
-    const test_db = await db.connect();
-
-    // disconnect from the database after the tests
-    after(async () => {
-        test_db.release();
-    });
 
     it("should respond with 200 when creating a user with name and password", async (t) => {
         const user = {

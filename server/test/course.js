@@ -26,12 +26,8 @@ async function logoutUser(cookies) {
 suite("GET courses and students as an instructor", async () => {
   let cookies;
 
-  const test_db = await db.connect();
-
   after(async () => {
     await logoutUser(cookies);
-    // disconnect from the database after the tests
-    test_db.release();
   });
 
   before(async () => {
@@ -76,11 +72,8 @@ suite("GET courses and students as an instructor", async () => {
 suite("GET courses and students as a student", async () => {
   let cookies;
 
-  const test_db = await db.connect();
-
   after(async () => {
     await logoutUser(cookies);
-    test_db.release();
   });
 
   before(async () => {
