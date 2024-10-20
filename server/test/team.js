@@ -212,6 +212,20 @@ suite("POST requests to create a team", async () => {
     assert.match(response.headers["content-type"], /json/);
     assert.ok(typeof response.body.teamID === 'number');
   });
+
+  it("should respond with 401 when trying to create a team with no login", async () => {
+    const team = {
+      teamName: "test_team",
+      courseID: 1,
+      members: testEmails,
+    }
+    const response = await request(app)
+      .post("/api/team/create")
+      .set("Accept", "application/json")
+      .send(team)
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(401, response.status);
+  });
 });
 
 suite("POST requests to delete teams", async () => {
@@ -246,4 +260,12 @@ suite("POST requests to delete teams", async () => {
 
     assert.match(response.headers["content-type"], /json/);
   });
+
+  it("should respond with 401 when trying to delete a team without login", async () => {
+    const response = await request(app)
+      .post("/api/team/delete")
+      .set("Accept", "application/json")
+      .send({ teamID: 1 });
+    assert.equal(401, response.status);
+  })
 });
