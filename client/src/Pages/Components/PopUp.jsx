@@ -1,15 +1,14 @@
 import React from 'react';
 import { useState } from 'react'
 import './Styles/PopUp.css'
-import SuccessPopup from './SuccessPopup'; 
 
 function PopUp(props) {
 
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
-    const [successPopupWarning, setSuccessPopupWarning] = useState(null);  // State for warning messages
     const [highlighted, setHighlighted] = useState(false);
     const teams = [];
+    const class_ID = "";
     
         // Prevent the file from being opened/downloaded when file is dropped outside the popup
         const handleDragOver = (e) => {
@@ -21,36 +20,33 @@ function PopUp(props) {
         };
         document.addEventListener('dragover', handleDragOver);
         document.addEventListener('drop', handleDrop);
-
-
+        
     const handleFileChange = (file) => {
         if (file) {
 
-            setError("");
-            setFile(file);
+            setError("");// Clear any error message
+            setFile(file);//set file state
         }
     };
 
     const handleClose = (e) => {
         setFile(null); // Reset the file state
-        setError(""); // Clear any error message
+        setError(""); 
         props.setTrigger(false); // Close the popup
     };
 
     const handleUpload = (e) => {
-
+        
         //Check to see if there is a file before uploading
         if (!file) {
             setError("Please select a file before uploading.");
             return;
         }
-
         const fileName = file.name;
         const fileType = file.type;
 
         //file validation 
         if (fileType === "text/csv" || fileName.endsWith(".csv")) {
-            setError("Correct File");            // ***for test purposes, take this out later***
             const reader = new FileReader();
             reader.onload = (e) => {
                 let text = e.target.result;
@@ -62,21 +58,15 @@ function PopUp(props) {
 
                 let warnings = [];
                 parseCSV(text, warnings); // Pass the warnings array
-
-                console.log(teams); // ***testing purposes can remove later***
-                console.log("Warning Message:", successPopupWarning);
+                handleClose(e);
 
                 if (warnings.length > 0) {
-                    setSuccessPopupWarning(warnings[0]); // Join warnings into a single string
+                    props.triggerSuccessPopup(warnings[0]); // Pass warnings to the success popup
+                } else {
+                    props.triggerSuccessPopup(null); 
                 }
-                else setSuccessPopupWarning(null);
-    
-                handleClose(e);
-                props.triggerSuccessPopup(successPopupWarning); // Show the success popup
 
-
-                //***add code to send teams array to API */
-
+                /********************************************add code to send teams array to API********************************** */
 
             };
             reader.readAsText(file, 'utf-8');
@@ -98,11 +88,10 @@ function PopUp(props) {
 
             // Check for missing values
             if (!fname || !lname || !email || !studentID || !teamName) {
-                warnings.push("Note: Teams might not be complete. One or more rows are missing values. Insure all information is provided for each student");
-                continue; // Skip this row if it's malformed
+                warnings.push("Note: Teams might not be complete. One or more rows may be missing values.");
+                continue; // Skip this row if it's malformed and send an error message
             }
 
-            // Find the team object by teamName
             let existingTeam = teams.find(team => team.name === teamName);
 
             if (existingTeam) {
@@ -146,7 +135,7 @@ function PopUp(props) {
                     }}
 
                     onDragOver={(e) => {
-                        e.preventDefault();  /*preventing the default of automatically downloading*/
+                        e.preventDefault(); 
 
                     }}
                     onDrop={(e) => {
@@ -164,11 +153,7 @@ function PopUp(props) {
                             id="fileUpload"
                             onChange={(e) => handleFileChange(e.target.files[0])}
                         />
-
-                        <label htmlFor="fileUpload" className="upload-button">
-
-                            Choose a file
-                        </label>
+                        <label htmlFor="fileUpload" className="upload-button">Choose a file</label>
                         <button className="upload-button" onClick={handleUpload}>Upload</button>
                     </div>
                     <div className= "file-outline">
@@ -186,12 +171,6 @@ function PopUp(props) {
                 </div>
             </div>
         </div>
-
-
-      
-
     ) : "";
 }
 export default PopUp;
-
-

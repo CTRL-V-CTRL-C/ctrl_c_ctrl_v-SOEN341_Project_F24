@@ -7,7 +7,7 @@ function AllTeams() {
     const [buttonPopup, setButtonPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [successPopupWarning, setSuccessPopupWarning] = useState("");
-
+    
     const triggerSuccessPopup = (warning) => {
         setSuccessPopupWarning(warning); // Set the warning message
         setShowSuccessPopup(true); // Show the success popup

@@ -70,7 +70,7 @@
     border-style: solid;
     border-color: rgb(113, 108, 108);
 }
-/* Modern looking upload button */
+
 .upload-button {
     background-color:  #ba858c;
     color: white;
@@ -127,7 +127,7 @@
 }
 
 .close-x:hover {
-    color: rgb(214, 106, 106); /* Red color when hovered */
+    color: rgb(214, 106, 106); 
 }
 
 /* SuccessPopup.css */
