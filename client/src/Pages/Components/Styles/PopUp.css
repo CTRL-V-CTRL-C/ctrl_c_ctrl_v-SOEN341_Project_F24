@@ -112,6 +112,7 @@
 
 .file-details li {
     margin: 5px 0;
+    color:black;
 }
 .close-x {
     position: absolute;
@@ -127,4 +128,61 @@
 
 .close-x:hover {
     color: rgb(214, 106, 106); /* Red color when hovered */
+}
+
+/* SuccessPopup.css */
+.success-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1001;
+}
+
+.success-popup-inner {
+    padding: 30px;
+}
+
+.success-popup .close-x {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.success-popup h2 {
+    font-size: 24px;
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
+.success-popup p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.success-popup .success-close-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.success-popup .success-close-button:hover {
+    background-color: #218838;
+}
+.warning-message p{
+    color:orange;
 }

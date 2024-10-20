@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState } from 'react'
 import './Styles/PopUp.css'
+import SuccessPopup from './SuccessPopup'; 
 
 function PopUp(props) {
 
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
+    const [successPopupWarning, setSuccessPopupWarning] = useState(null);  // State for warning messages
     const [highlighted, setHighlighted] = useState(false);
     const teams = [];
     
@@ -51,14 +53,26 @@ function PopUp(props) {
             setError("Correct File");            // ***for test purposes, take this out later***
             const reader = new FileReader();
             reader.onload = (e) => {
-                const text = e.target.result;
+                let text = e.target.result;
 
                 //check for Byte Order Mark and remove if it is present 
                 if (text.charCodeAt(0) === 0xFEFF) {
                     text = text.slice(1); // Remove BOM
                 }
-                parseCSV(text);
+
+                let warnings = [];
+                parseCSV(text, warnings); // Pass the warnings array
+
                 console.log(teams); // ***testing purposes can remove later***
+                console.log("Warning Message:", successPopupWarning);
+
+                if (warnings.length > 0) {
+                    setSuccessPopupWarning(warnings[0]); // Join warnings into a single string
+                }
+                else setSuccessPopupWarning(null);
+    
+                handleClose(e);
+                props.triggerSuccessPopup(successPopupWarning); // Show the success popup
 
 
                 //***add code to send teams array to API */
@@ -71,7 +85,7 @@ function PopUp(props) {
         }
     };
     //function to parse the cvs file
-    const parseCSV = (data) => {
+    const parseCSV = (data, warnings) => {
         const lines = data.split("\n");
 
         for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header row
@@ -84,7 +98,7 @@ function PopUp(props) {
 
             // Check for missing values
             if (!fname || !lname || !email || !studentID || !teamName) {
-                setError("Note: One or more rows are missing values. Teams might not be complete. Recheck the CVS file to insure all names, emails, student IDs and team names are provided");
+                warnings.push("Note: Teams might not be complete. One or more rows are missing values. Insure all information is provided for each student");
                 continue; // Skip this row if it's malformed
             }
 
@@ -115,6 +129,7 @@ function PopUp(props) {
     };
 
     return (props.trigger) ? (
+
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
                 {/* X button to close the popup */}
@@ -168,10 +183,13 @@ function PopUp(props) {
                     )}
                     </div>
                     {error && <p className="error-message">{error}</p>} {/* Display error message */}
-
                 </div>
             </div>
         </div>
+
+
+      
+
     ) : "";
 }
 export default PopUp;
