@@ -3,7 +3,7 @@ import { createCourse } from '../database/course.js';
 import { db } from '../database/db.js';
 import { requireAuth, requireTeacher } from './auth.js';
 
-const courseNamePattern = /^[A-Z]{4,4} ?\d{3,3}$$/
+const courseNamePattern = /^[A-Z]{4,4} ?\d{3,3}$/
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.post("/create", requireAuth, requireTeacher, async (req, res, next) => {
     next();
     return;
   }
-  courseName = courseName.toUpperCase();
+  courseName = courseName.toUpperCase().normalize("NFKC");
   if (!courseNamePattern.test(courseName)) {
     res.status(400).json({ error: "The name of the course should be in the forma: ABCD 123" });
     next();
