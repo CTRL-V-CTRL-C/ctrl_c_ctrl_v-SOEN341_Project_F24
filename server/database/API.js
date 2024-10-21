@@ -1,9 +1,10 @@
 import pg from 'pg'
 import log from '../logger.js'
+import { queryAndReturnError } from './db.js';
 
 //Account creation validation
-const namePattern = /^[a-zA-Z'\-]+$/v;
-const emailPattern = /^[a-zA-Z0-9.]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/v;
+const namePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ\-]+$/v;
+const emailPattern = /^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$/v;
 const studentIDPattern = /^[Ss][Tt][Uu][Dd][0-9]{4,4}$/v;
 const instructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
 const rolePattern = /^(STUD|INST)$/v;
@@ -18,62 +19,60 @@ const isInstructorPattern = /^INST$/v;
  * @param {string} userObject.email
  * @param {string} userObject.schoolID
  * @param {string} userObject.role
- * @returns {bool} true if the email and password are valid, false otherwise
+ * @returns {Error | null} an error if the user creation has failed. null otherwise
  */
 function verifyUser(userObject) {
-    for (const key of Object.values(userObject)) {
-        if (!key) {
-            return false;
+    for (const [key, value] of Object.entries(userObject)) {
+        if (!value) {
+            return new Error(`The key: ${key} is necessary for this request`);
         }
     }
-    let valid = namePattern.test(userObject.firstName) &&
-        namePattern.test(userObject.lastName) &&
-        emailPattern.test(userObject.email) &&
-        rolePattern.test(userObject.role) &&
-        isInstructorPattern.test(userObject.role) ? instructorIDPattern.test(userObject.schoolID) : studentIDPattern.test(userObject.schoolID);
-    // TODO: verification for the email and passwords (verify lengt, hash, etc.)
-    return valid;
+
+    const firstNameValid = namePattern.test(userObject.firstName);
+    const lastNameValid = namePattern.test(userObject.lastName);
+    const emailValid = emailPattern.test(userObject.email);
+    const roleValid = rolePattern.test(userObject.role);
+    const IDisValid = isInstructorPattern.test(userObject.role) ? instructorIDPattern.test(userObject.schoolID) : studentIDPattern.test(userObject.schoolID);
+    if (!(firstNameValid && lastNameValid && emailValid && roleValid && IDisValid)) {
+        const requiredFields = { firstNameValid, lastNameValid, emailValid, roleValid, IDisValid };
+        return new Error(`One or many of these fields were not valid: ${JSON.stringify(requiredFields)}`);
+    }
+
+    return null;
 }
 
 /**
  * 
- * @param {pg.Client} db the database to query
+ * @param {pg.Pool} db the database to query
  * @param userObject the object containing all the information about a user
- * @returns {bool} true if the user could be created, false otherwise
- */
+ * @returns {Promise<Error|null>} an Error if any, null otherwise
+*/
 async function createUser(db, userObject) {
-    if (!verifyUser(userObject)) {
+    const verifyUserError = verifyUser(userObject);
+    if (verifyUserError) {
         log.warn("user can't be created")
-        return false
+        log.warn(verifyUserError)
+        return verifyUserError;
     }
     const table = "users"
-    let hash = undefined;
-    try {
-        hash = Buffer.from(userObject.password_hash)
-    } catch (error) {
-        return false;
-    }
     const query = {
         name: "register-user",
         text: `INSERT INTO ${table} (hash, f_name, l_name, email, school_id, role) 
         VALUES ($1, $2, $3, $4, $5, $6)`,
         values: [
-            hash,
+            userObject.password_hash,
             userObject.firstName,
             userObject.lastName, userObject.email,
             userObject.schoolID, userObject.role
         ]
     }
 
-    try {
-        await db.query(query);
-    } catch (error) {
-        log.error("There was an error while querying the database");
-        log.error(error);
-        return false;
-    }
+    const result = await queryAndReturnError(db, query, "There was an error while creating a user");
 
-    return true
+    if (result instanceof Error) {
+        return result;
+    }
+    return null;
 }
 
-export { createUser }
+export { createUser };
