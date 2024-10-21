@@ -6,7 +6,7 @@
     --_switch-bg-clr: #dddaa4;
     --_switch-padding: 1px;
     /* padding around button*/
-    --_slider-bg-clr: rgba(104, 105, 1, 0.65);
+    --_slider-bg-clr:   rgba(104, 105, 1, 0.65);
     /* slider color unchecked */
     --_slider-bg-clr-on: rgba(138, 139, 35, 0.65);
     /* slider color checked */
