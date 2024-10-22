@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
 import { db } from '../database/db.js';
-import { randomLetters, randomNumber } from './utils.js'
+import { randomLetters, uniqueRandomNumber } from './utils.js'
 
 
 async function loginUser(email, password) {
@@ -132,7 +132,7 @@ async function createUser(userRole) {
     firstName: "test-user",
     lastName: "test-user",
     email,
-    schoolID: userRole + randomNumber(4),
+    schoolID: userRole + uniqueRandomNumber(4),
     role: userRole
   }
   await request(app)
@@ -146,7 +146,7 @@ async function createUser(userRole) {
 
 async function createCourse(loginCookie) {
   const course = {
-    courseName: `TEST ${randomNumber(3)}`,
+    courseName: `TEST ${uniqueRandomNumber(3)}`,
   };
   const response = await request(app)
     .post("/api/course/create")
