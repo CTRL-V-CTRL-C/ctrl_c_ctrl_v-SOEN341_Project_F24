@@ -1,16 +1,11 @@
 import express from 'express';
 import { db } from '../database/db.js';
-import { requireAuth } from './auth.js';
+import { requireAuth, requireTeacher } from './auth.js';
 import { requireIsInCourse } from './course.js';
+import { createTeam, teacherMadeTeam, deleteTeam } from '../database/team.js';
 import log from '../logger.js';
 
 const router = express.Router();
-
-const jsonConfigs = {
-  limit: 50 * 1000, // 50 kb max json limit
-};
-
-router.use(express.json(jsonConfigs));
 
 router.get("/get-teams/:courseId", requireAuth, requireIsInCourse, async (req, res) => {
   try {
@@ -62,4 +57,32 @@ router.get("/get-my-team/:courseId", requireAuth, requireIsInCourse, async (req,
   }
 });
 
-export { router };
+router.post("/create", requireAuth, requireTeacher, async (req, res, next) => {
+  const teamName = req.body.teamName;
+  const members = req.body.members;
+  const courseID = req.body.courseID;
+  const result = await createTeam(db, courseID, teamName, members);
+  if (result instanceof Error) {
+    res.status(400).json({ error: result.message });
+  } else {
+    res.json({ teamID: result });
+  }
+  next();
+});
+
+router.post("/delete", requireAuth, requireTeacher, async (req, res, next) => {
+  const teamID = req.body.teamID;
+  if (!(await teacherMadeTeam(db, teamID, req.session.user.userId))) {
+    res.status(403).json({ error: "You are not the teacher of that course" });
+    next();
+    return;
+  }
+  const result = await deleteTeam(db, teamID);
+  if (result instanceof Error) {
+    res.status(500).json({ error: "there was an error while deleting the team" });
+  } else {
+    res.status(200).json({ deleted: true });
+  }
+})
+
+export { router }
