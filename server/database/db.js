@@ -34,7 +34,7 @@ if (process.env.PROD) {
         application_name: "PROD: PeerCheck",
         ssl: {
             rejectUnauthorized: true,
-            ca: fs.readFileSync(certificate).toString(),
+            ca: certificate,
         },
     };
 } else {
@@ -48,7 +48,7 @@ if (process.env.PROD) {
         application_name: "DEV: PeerCheck",
         ssl: {
             rejectUnauthorized: true,
-            ca: fs.readFileSync(test_certificate).toString(),
+            ca: test_certificate,
         },
     };
 }
