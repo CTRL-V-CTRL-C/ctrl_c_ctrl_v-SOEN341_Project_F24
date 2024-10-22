@@ -34,4 +34,12 @@ jobs:
       run: cd server && npm ci
 
     - name: test the server
+      env:
+        test_db_user: ${{ secrets.test_db_user }}
+        test_db_password: ${{ secrets.test_db_password }}
+        test_db_host: ${{ secrets.test_db_host }}
+        test_db_port: ${{ secrets.test_db_port }}
+        test_db_database: ${{ secrets.test_db_database }}
+        test_db_certificate: ${{ secrets.test_db_certificate }}
+        SECRET: ${{ secrets.SECRET }}
       run: cd server && npm test
