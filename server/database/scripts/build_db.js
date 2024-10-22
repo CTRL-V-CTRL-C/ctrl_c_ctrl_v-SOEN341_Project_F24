@@ -13,4 +13,8 @@ console.log("Created courses table");
 await db.query(fs.readFileSync(import.meta.dirname + "/sql/teams.sql").toString());
 console.log("Created teams table");
 
+//Create Evaluations table
+await db.query(fs.readFileSync(import.meta.dirname + "/sql/evaluations.sql").toString());
+console.log("Created evaluations table");
+
 db.end();

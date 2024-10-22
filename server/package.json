@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "node main.js",
-    "test": "node --test",
+    "test": "node --test --test-force-exit",
     "db": "node database/scripts/drop_db.js && node database/scripts/build_db.js && node database/scripts/populate_db.js"
   },
   "repository": {

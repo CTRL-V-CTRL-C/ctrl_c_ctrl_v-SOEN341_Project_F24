@@ -2,6 +2,14 @@
     margin-left: 15rem;
 }
 
+.course-title {
+    font-size: 2.5rem;
+    margin-bottom: 0px;
+    margin-left: 2rem;
+    color: rgb(53, 4, 4);
+    font-weight: 600;
+}
+
 .switch {
     --_switch-bg-clr: #dddaa4;
     --_switch-padding: 1px;
@@ -13,10 +21,7 @@
     --_slider-txt-clr: #ffffff;
     --_label-padding: 1rem 2rem;
     /* padding around the labels -  this gives the switch it's global width and height */
-    --_switch-easing: cubic-bezier(0.47,
-            1.64,
-            0.41,
-            0.8);
+    --_switch-easing: cubic-bezier(0.47, 1.64, 0.41, 0.8);
     /* easing on toggle switch */
     color: white;
     width: auto;

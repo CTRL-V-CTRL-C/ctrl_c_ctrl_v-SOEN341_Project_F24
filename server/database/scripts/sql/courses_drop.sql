@@ -1,1 +1,2 @@
 DROP TABLE IF EXISTS courses;
+DROP FUNCTION IF EXISTS is_instructor;

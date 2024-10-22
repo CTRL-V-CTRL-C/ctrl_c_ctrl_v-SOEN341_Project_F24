@@ -1,2 +1,3 @@
 DROP TABLE IF EXISTS team_members;
 DROP TABLE IF EXISTS teams;
+DROP FUNCTION IF EXISTS is_not_in_course;

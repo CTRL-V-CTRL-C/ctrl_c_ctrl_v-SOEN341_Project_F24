@@ -1,37 +1,49 @@
 import { useContext, useEffect, useState } from "react";
-import AuthContext from "../../Context/AuthContext";
+import UserContext from "../../Context/UserContext";
 import { IoMdAdd } from "react-icons/io";
 import "./Styles/SideMenu.css";
+import { fetchData } from "../../Controller/FetchModule";
 
 function SideMenu() {
 
-    const auth = useContext(AuthContext);
+    const userContext = useContext(UserContext);
     const [styleClass, setStyleClass] = useState("");
-    const [courses, setCourses] = useState(["Course A", "Course B", "Course C"]);
+    const [userCourses, setUserCourses] = useState([]);
 
     useEffect(() => {
-
-    }, [auth.isInstructor])
+        const fetchCourses = async () => {
+            const coursesResponse = await fetchData("/api/course/get-courses");
+            const courses = await coursesResponse.json();
+            setUserCourses(courses);
+        }
+        if (userContext.userLoggedIn) {
+            fetchCourses();
+        }
+    }, [userContext.userLoggedIn]);
 
     useEffect(() => {
-        auth.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
-    }, [auth.userLoggedIn])
+        userContext.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
+    }, [userContext.userLoggedIn]);
 
     async function addCourse() {
-        console.log("TODO display pop up to add course here");
-        setCourses(["Course A", "Course B", "Course C", "COURSE EXTRA"])
+        // TODO display pop up to add course here
+        setUserCourses(["Course A", "Course B", "Course C", "COURSE EXTRA"]);
+    }
+
+    function selectCourse(course) {
+        userContext.setSelectedCourse(course);
     }
 
     return (
-        auth.userLoggedIn ?
+        userContext.userLoggedIn ?
             <nav className={`menu ${styleClass}`} tabIndex="0">
                 <div className="smartphone-menu-trigger"></div>
                 <header className="avatar">
                     <h2>Welcome</h2>
                 </header>
                 <ul>
-                    {courses.map((course, i) => <li key={i} tabIndex="0" className="icon-dashboard" > <span>{course}</span></li>)}
-                    {auth.isInstructor ?
+                    {userCourses.map((course, i) => <li onClick={() => selectCourse(course)} key={i} tabIndex="0" className="icon-dashboard" > <span>{course.course_name}</span></li>)}
+                    {userContext.isInstructor ?
                         <li className="add-course-btn" onClick={async () => await addCourse()} ><IoMdAdd /> Add Course </li>
                         :
                         <></>}
