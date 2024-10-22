@@ -13,44 +13,6 @@ function TeamsPage() {
 
     return (
         <div className="teams-page">
-<<<<<<< HEAD
-            {auth.isInstructor ?
-                <>
-
-                    <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
-                        <input type="checkbox" id="filter" checked={!teamsView} onChange={() => setTeamsView(!teamsView)} />
-                        <span>Teams</span>
-                        <span>Members</span>
-                    </label>
-                  
-                    {teamsView ? 
-                        <AllTeams />
-                        :
-                        <MembersPage />
-                    }
-
-                    
-                </>
-                :
-                <>
-                    <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
-                        <input type="checkbox" id="filter" checked={!teamsView} onChange={() => setTeamsView(!teamsView)} />
-                        <span>My Team</span>
-                        <span>Other Teams</span>
-                    </label>
-
-                    {teamsView ?
-                        <MyTeam />
-                        :
-                        <OtherTeams />
-                    }
-                </>}
-
-        </div >
-
-
-
-=======
             <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
                 <input 
                     type="checkbox" 
@@ -66,7 +28,6 @@ function TeamsPage() {
                 (userContext.isInstructor ? <MembersPage /> : <OtherTeams />)
             }
         </div>
->>>>>>> 8325e98b081faf56d42ea60f3938ddf1c3d4ff74
     );
 }
 
