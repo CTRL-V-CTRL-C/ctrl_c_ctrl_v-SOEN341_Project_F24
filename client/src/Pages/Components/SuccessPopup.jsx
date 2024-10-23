@@ -1,7 +1,16 @@
 import React from 'react';
 import './Styles/PopUp.css'; 
+import PropTypes from 'prop-types';
 
 function SuccessPopup({ trigger, onClose, warning }) {
+
+    //prop validation
+    SuccessPopup.propTypes = {
+        trigger: PropTypes.bool.isRequired,
+        onClose: PropTypes.func.isRequired,
+        warning: PropTypes.string,
+    };
+
     return (trigger) ? (
         <div className="success-popup">
             <div className="success-popup-inner">

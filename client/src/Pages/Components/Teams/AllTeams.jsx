@@ -9,8 +9,8 @@ function AllTeams() {
     const [successPopupWarning, setSuccessPopupWarning] = useState("");
     
     const triggerSuccessPopup = (warning) => {
-        setSuccessPopupWarning(warning); // Set the warning message
-        setShowSuccessPopup(true); // Show the success popup
+        setSuccessPopupWarning(warning); 
+        setShowSuccessPopup(true); 
     };
 
     return (
@@ -21,7 +21,7 @@ function AllTeams() {
                 trigger={buttonPopup}
                 setTrigger={setButtonPopup}
                 triggerSuccessPopup={triggerSuccessPopup}
-                setSuccessPopupWarning={setSuccessPopupWarning} // Optional: if needed in PopUp
+                setSuccessPopupWarning={setSuccessPopupWarning} 
             />
             {/* Success popup */}
             <SuccessPopup

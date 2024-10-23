@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 import './Styles/PopUp.css';
+import PropTypes from 'prop-types';
 
 function PopUp(props) {
+
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
-    const id = props.class_id; // Assuming you get the class ID from props
+    const id = "soen341" //***********************/ don't know where id comes from**********************
     const info = { teams: [], class_id: id }; // Define the info object
+
+    //prop validation
+    PopUp.propTypes = {
+        trigger: PropTypes.bool.isRequired, 
+        setTrigger: PropTypes.func.isRequired, 
+        triggerSuccessPopup: PropTypes.func.isRequired, 
+        class_id: PropTypes.string, // Assuming class_id is a string
+    };
 
     // Prevent the file from being opened/downloaded when file is dropped outside the popup
     const handleDragOver = (e) => {
@@ -42,36 +52,60 @@ function PopUp(props) {
         }
         const fileName = file.name;
         const fileType = file.type;
-
-        // File validation 
+    
+        // File validation
         if (fileType === "text/csv" || fileName.endsWith(".csv")) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 let text = e.target.result;
-
-                // Check for Byte Order Mark and remove if it is present 
+    
+                // Check for Byte Order Mark and remove if it is present
                 if (text.charCodeAt(0) === 0xFEFF) {
                     text = text.slice(1); // Remove BOM
                 }
-
+    
                 let warnings = [];
-                parseCSV(text, warnings); // Pass the warnings array
-                handleClose(e);
+                parseCSV(text, warnings); 
+    
+                // *********************************************tried sending each individual team to the API****************************
+                try {
+                    for (const team of info.teams) {
+                        const requestBody = {
+                            teamName: team.name, // The team's name
+                            members: team.members, // List of members for that team
+                            courseID: info.class_id // The course/class ID
+                        };
+    
+                        console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
 
-                if (warnings.length > 0) {
-                    props.triggerSuccessPopup(warnings[0]); // Pass warnings to the success popup
-                } else {
-                    props.triggerSuccessPopup(null);
+                        const response = await fetch("/create", {
+                            method: "POST",
+                            body: JSON.stringify(requestBody) // Send team data in the correct format
+                        });
+
+                        console.log("Raw Response:", response); // Log the raw response can delete after 
+                    }
+                 //***************************************************************************************************************************** */
+    
+                    // Handle success once all teams are created
+                    handleClose(e);
+    
+                    if (warnings.length > 0) {
+                        props.triggerSuccessPopup(warnings[0]); // Pass warnings to the success popup
+                    } else {
+                        props.triggerSuccessPopup(null);
+                    }
+                } catch (err) {
+                    console.error("Error caught:", err); // Log any error caught
+                    setError(`Error uploading data: ${err.message}`);
                 }
-
-                /********************************************add code to send info object to API********************************** */
-
             };
             reader.readAsText(file, 'utf-8');
         } else {
             setError("Please upload a valid CSV file.");
         }
     };
+    
 
     // Function to parse the CSV file
     const parseCSV = (data, warnings) => {
