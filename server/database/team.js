@@ -65,7 +65,7 @@ async function getUserIds(db, emails) {
 
 /**
  * @param {pg.Pool} db the database to query
- * @param {string[]} courseID the id of the course for which the team must be created
+ * @param {int} courseID the id of the course for which the team must be created
  * @param {string} teamName the name of the team
  * @param {string[]} emails the emails of the members of the team
  * @returns {Promise<Error | string>} an error if the team could not be created, a string containing the id of the team created otherwise
