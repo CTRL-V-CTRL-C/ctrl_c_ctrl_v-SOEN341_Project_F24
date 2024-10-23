@@ -16,7 +16,7 @@ const getEvaluationQuery = {
  * @param {int} evaluateeId the id of the student being evaluated
  * @param {int} teamId the name of the course
  * @param {array} evaluationDetails an array of evaluation details that contain a criteria and its rating
- * @returns {Promise<Error | string>}
+ * @returns {Promise<Error | int>}
  */
 async function createOrUpdateEvaluation(db, evaluatorId, evaluateeId, teamId, evaluationDetails) {
   const createEvaluationQuery = {
@@ -54,4 +54,49 @@ async function createOrUpdateEvaluation(db, evaluatorId, evaluateeId, teamId, ev
   }
 }
 
-export { createOrUpdateEvaluation }
+/**
+ * creates or updates an evaluation and all its details in the database
+ * @param {pg.Pool} db the database
+ * @param {int} evaluatorId the id of the student evaluating
+ * @param {int} evaluateeId the id of the student being evaluated
+ * @param {int} teamId the name of the course
+ * @returns {Promise<Error | Array<JSON>>}
+ */
+async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
+  const createEvaluationQuery = {
+    name: "get-evaluation-details",
+    text: "SELECT criteria, rating, comment FROM evaluation_details WHERE evaluation_id = $1;",
+    values: []
+  };
+
+  try {
+
+    getEvaluationQuery.values = [teamId, evaluatorId, evaluateeId];
+    let result = await db.query(getEvaluationQuery);
+
+    if (result.rows.length == 0) {
+      //If no evaluation is made, send back empty evaluation
+      return [
+        { criteria: "COOPERATION", rating: 0, comment: "" },
+        { criteria: "CONCEPTUAL CONTRIBUTION", rating: 0, comment: "" },
+        { criteria: "PRACTICAL CONTRIBUTION", rating: 0, comment: "" },
+        { criteria: "WORK ETHIC", rating: 0, comment: "" }
+      ]
+
+    }
+
+    let evaluationId = result.rows[0].evaluation_id;
+    createEvaluationQuery.values = [evaluationId];
+
+    result = await db.query(createEvaluationQuery);
+    return result.rows;
+
+    return evaluationId;
+  } catch (error) {
+    log.error(`There was an error while ${evaluatorId} was getting the evaluation for ${evaluateeId} in team ${teamId}`);
+    log.error(error);
+    return error;
+  }
+}
+
+export { createOrUpdateEvaluation, getEvaluation }

@@ -1,7 +1,7 @@
 import express from 'express';
 import { db } from '../database/db.js';
 import { requireAuth, requireStudent } from './auth.js';
-import { createOrUpdateEvaluation } from '../database/evaluation.js';
+import { createOrUpdateEvaluation, getEvaluation } from '../database/evaluation.js';
 import log from '../logger.js';
 
 const router = express.Router();
@@ -30,7 +30,7 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
       return;
     }
 
-    if (normalizedDetails[i].rating < 0 || normalizedDetails[i].rating > 5) {
+    if (normalizedDetails[i].rating < 1 || normalizedDetails[i].rating > 5) {
       log.warn(`Student ${req.session.user.userId} evaluated ${req.body.user_id} with an invalid rating: ${normalizedDetails[i].rating}`);
       res.status(400).json({ msg: `Invalid evaluation rating. Received: ${normalizedDetails[i].rating}` });
       next();
@@ -47,8 +47,22 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
   next();
 });
 
-router.get("/get-my-evaluation/:evaluateeId", requireAuth, requireStudent, async (req, res, next) => {
-
+/**
+ * Get the evaluation details for a given student in a team
+ * @param {express.Request} req the request
+ * @param {int} req.params.teamId The team id that both students are part of
+ * @param {int} req.params.eavluateeId The the id of the user being evaluated
+ * @param {express.Response} res the response
+ * @param {express.NextFunction} next the function to call the next middleware
+ */
+router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStudent, async (req, res, next) => {
+  const result = await getEvaluation(db, req.session.user.userId, req.params.evaluateeId, req.params.teamId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result);
+  }
+  next();
 });
 
 
