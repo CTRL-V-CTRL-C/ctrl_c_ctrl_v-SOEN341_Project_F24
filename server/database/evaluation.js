@@ -91,7 +91,6 @@ async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
     result = await db.query(createEvaluationQuery);
     return result.rows;
 
-    return evaluationId;
   } catch (error) {
     log.error(`There was an error while ${evaluatorId} was getting the evaluation for ${evaluateeId} in team ${teamId}`);
     log.error(error);
