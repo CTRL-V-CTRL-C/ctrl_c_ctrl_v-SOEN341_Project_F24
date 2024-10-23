@@ -1,4 +1,5 @@
 import express from 'express';
+import log from '../logger.js';
 import { createCourse } from '../database/course.js';
 import { db } from '../database/db.js';
 import { requireAuth, requireTeacher } from './auth.js';
