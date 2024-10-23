@@ -8,7 +8,7 @@ function MembersPage() {
     const [error, setError] = useState(null); // State to hold error messages
 
     // Function to fetch courses and set the course ID
-    const fetchCourses = async () => {
+    const fetchCourses = async () => { 
         try {
             const response = await fetch('/api/course/get-courses');
             if (!response.ok) {
