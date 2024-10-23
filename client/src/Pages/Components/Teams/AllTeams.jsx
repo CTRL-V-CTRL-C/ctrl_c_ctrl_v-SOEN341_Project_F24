@@ -4,24 +4,26 @@ import { useState } from 'react';
 
 function AllTeams() {
 
-    const [buttonPopup, setButtonPopup] = useState(false);
+    const [openUploadPopup, setButtonPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [successPopupWarning, setSuccessPopupWarning] = useState("");
-    
+
     const triggerSuccessPopup = (warning) => {
-        setSuccessPopupWarning(warning); 
-        setShowSuccessPopup(true); 
+        setSuccessPopupWarning(warning);
+        setShowSuccessPopup(true);
     };
 
     return (
         <div>
             <button onClick={() => setButtonPopup(true)}>Upload</button>
+            <div>your mom</div>
             {/* CSV Upload Popup */}
             <PopUp
-                trigger={buttonPopup}
+                trigger={openUploadPopup}
                 setTrigger={setButtonPopup}
+                class
                 triggerSuccessPopup={triggerSuccessPopup}
-                setSuccessPopupWarning={setSuccessPopupWarning} 
+                setSuccessPopupWarning={setSuccessPopupWarning}
             />
             {/* Success popup */}
             <SuccessPopup

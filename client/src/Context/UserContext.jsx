@@ -6,7 +6,7 @@ const UserContext = React.createContext(
         setUserLoggedIn: () => { },
         isInstructor: false,
         setIsInstructor: () => { },
-        selectedCourse: 0,
+        selectedCourse: { course_name: "", course_id: 0 },
         setSelectedCourse: () => { },
     }
 );

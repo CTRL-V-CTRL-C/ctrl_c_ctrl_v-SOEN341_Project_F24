@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import UserContext from '../../Context/UserContext';
+import { postData } from '../../Controller/FetchModule';
 import './Styles/PopUp.css';
 import PropTypes from 'prop-types';
 
@@ -7,15 +9,15 @@ function PopUp(props) {
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
-    const id = "soen341" //***********************/ don't know where id comes from**********************
-    const info = { teams: [], class_id: id }; // Define the info object
+    const [info, setInfo] = useState({ teams: [] });
+    const userContext = useContext(UserContext);
+
 
     //prop validation
     PopUp.propTypes = {
-        trigger: PropTypes.bool.isRequired, 
-        setTrigger: PropTypes.func.isRequired, 
-        triggerSuccessPopup: PropTypes.func.isRequired, 
-        class_id: PropTypes.string, // Assuming class_id is a string
+        trigger: PropTypes.bool.isRequired,
+        setTrigger: PropTypes.func.isRequired,
+        triggerSuccessPopup: PropTypes.func.isRequired,
     };
 
     // Prevent the file from being opened/downloaded when file is dropped outside the popup
@@ -28,14 +30,27 @@ function PopUp(props) {
         e.stopPropagation();
     };
 
-    document.addEventListener('dragover', handleDragOver);
-    document.addEventListener('drop', handleDrop);
+    useEffect(() => {
+        document.addEventListener('dragover', handleDragOver);
+        document.addEventListener('drop', handleDrop);
+    }, []);
 
+
+    /**
+     * @param {File} file the file to set the state
+     */
     const handleFileChange = (file) => {
-        if (file) {
-            setError(""); // Clear any error message
-            setFile(file); // Set file state
+        if (!file) {
+            return;
         }
+
+        setError(""); // Clear any error message
+        console.log(file.type);
+        if (!(file.type === "text/csv" && file.name.endsWith(".csv"))) {
+            setError("The file type must be csv");
+            return;
+        }
+        setFile(file); // Set file state
     };
 
     const handleClose = (e) => {
@@ -46,69 +61,66 @@ function PopUp(props) {
 
     const handleUpload = (e) => {
         // Check to see if there is a file before uploading
+        console.log("uploading")
         if (!file) {
             setError("Please select a file before uploading.");
             return;
         }
         const fileName = file.name;
         const fileType = file.type;
-    
+
         // File validation
-        if (fileType === "text/csv" || fileName.endsWith(".csv")) {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                let text = e.target.result;
-    
-                // Check for Byte Order Mark and remove if it is present
-                if (text.charCodeAt(0) === 0xFEFF) {
-                    text = text.slice(1); // Remove BOM
-                }
-    
-                let warnings = [];
-                parseCSV(text, warnings); 
-    
-                // *********************************************tried sending each individual team to the API****************************
-                try {
-                    for (const team of info.teams) {
-                        const requestBody = {
-                            teamName: team.name, // The team's name
-                            members: team.members, // List of members for that team
-                            courseID: info.class_id // The course/class ID
-                        };
-    
-                        console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
-
-                        const response = await fetch("/create", {
-                            method: "POST",
-                            body: JSON.stringify(requestBody) // Send team data in the correct format
-                        });
-
-                        console.log("Raw Response:", response); // Log the raw response can delete after 
-                    }
-                 //***************************************************************************************************************************** */
-    
-                    // Handle success once all teams are created
-                    handleClose(e);
-    
-                    if (warnings.length > 0) {
-                        props.triggerSuccessPopup(warnings[0]); // Pass warnings to the success popup
-                    } else {
-                        props.triggerSuccessPopup(null);
-                    }
-                } catch (err) {
-                    console.error("Error caught:", err); // Log any error caught
-                    setError(`Error uploading data: ${err.message}`);
-                }
-            };
-            reader.readAsText(file, 'utf-8');
-        } else {
+        if (!(fileType === "text/csv" && fileName.endsWith(".csv"))) {
             setError("Please upload a valid CSV file.");
+            return;
         }
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+            let text = e.target.result;
+
+            // Check for Byte Order Mark and remove if it is present
+            if (text.charCodeAt(0) === 0xFEFF) {
+                text = text.slice(1); // Remove BOM
+            }
+
+            parseCSV(text);
+
+            // *********************************************tried sending each individual team to the API****************************
+            try {
+                for (let team of info.teams) {
+                    const requestBody = {
+                        teamName: team.name, // The team's name
+                        members: team.members, // List of members for that team
+                        courseID: userContext.selectedCourse.course_id // The course/class ID
+                    };
+
+                    console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
+                    const response = await postData("/api/team/create", requestBody);
+                    if (response.status != 200) {
+                        const error = await response.json();
+                        throw new Error(error.msg);
+                    }
+                    console.log("Raw Response:", response); // Log the raw response can delete after 
+                }
+            } catch (err) {
+                console.error("Error caught:", err); // Log any error caught
+                setError(`Error uploading data: ${err.message}`);
+                return;
+            }
+            // Handle success once all teams are created
+            handleClose(e);
+            props.triggerSuccessPopup(null);
+        }
+        reader.readAsText(file, 'utf-8');
     };
-    
+
+
 
     // Function to parse the CSV file
-    const parseCSV = (data, warnings) => {
+    const parseCSV = (data) => {
+        const teamInfo = { teams: [] };
+        const warnings = [];
         const lines = data.split("\n");
 
         for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header row
@@ -125,7 +137,7 @@ function PopUp(props) {
                 continue; // Skip this row if it's malformed and send an error message
             }
 
-            let existingTeam = info.teams.find(team => team.name === teamName);
+            const existingTeam = teamInfo.teams.find(team => team.name === teamName);
 
             if (existingTeam) {
                 // If the team exists, add the member to the members array
@@ -137,7 +149,7 @@ function PopUp(props) {
                 });
             } else {
                 // If the team doesn't exist, create a new team object
-                info.teams.push({
+                teamInfo.teams.push({
                     name: teamName,
                     members: [{
                         fname,
@@ -148,8 +160,12 @@ function PopUp(props) {
                 });
             }
         }
+        if (warnings.length != 0) {
+            setError(`There is an error for uploading the data: ${JSON.stringify(warnings)}`);
+            return;
+        }
+        setInfo(teamInfo);
     };
-
     return (props.trigger) ? (
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
@@ -179,6 +195,7 @@ function PopUp(props) {
                             type="file"
                             className="file-input"
                             id="fileUpload"
+                            accept=".csv"
                             onChange={(e) => handleFileChange(e.target.files[0])}
                         />
                         <label htmlFor="fileUpload" className="upload-button">Choose a file</label>
