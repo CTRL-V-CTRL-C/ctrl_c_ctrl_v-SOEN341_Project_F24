@@ -19,6 +19,31 @@ function verifyMembers(members) {
 }
 
 /**
+ * Check whether two users are in the same team
+ * @param {pg.Pool} db 
+ * @param {int} teamId The ID of the team
+ * @param {int} userId1 The ID of the first user
+ * @param {int} userId2 The ID of the second user
+ * @returns {Promise<Error | boolean>} whether or not the two users are in the same team
+ */
+async function areInSameTeam(db, teamId, userId1, userId2) {
+    const query = {
+        name: "check-same-team",
+        text: "SELECT * FROM team_members WHERE team_id = $1 AND (user_id = $2 OR user_id = $3);",
+        values: [teamId, userId1, userId2]
+    };
+
+    try {
+        const result = await db.query(query);
+        return result.rows.length == 2;
+    } catch (error) {
+        log.error(`There was an error trying to check if ${userId1} and ${userId2} are in the same team`);
+        log.error(error);
+        return error;
+    }
+}
+
+/**
  * @param {pg.Pool} db
  * @param {string[]} emails the emails of the users
  */
@@ -40,7 +65,7 @@ async function getUserIds(db, emails) {
 
 /**
  * @param {pg.Pool} db the database to query
- * @param {string[]} courseID the id of the course for which the team must be created
+ * @param {int} courseID the id of the course for which the team must be created
  * @param {string} teamName the name of the team
  * @param {string[]} emails the emails of the members of the team
  * @returns {Promise<Error | string>} an error if the team could not be created, a string containing the id of the team created otherwise
@@ -157,4 +182,4 @@ async function teacherMadeTeam(db, teamID, teacherID) {
     return result.rows[0].result;
 }
 
-export { createTeam, deleteTeam, teacherMadeTeam };
+export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam };
