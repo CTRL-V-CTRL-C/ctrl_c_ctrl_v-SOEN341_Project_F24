@@ -1,0 +1,55 @@
+import express from 'express';
+import { db } from '../database/db.js';
+import { requireAuth, requireStudent } from './auth.js';
+import { createOrUpdateEvaluation } from '../database/evaluation.js';
+import log from '../logger.js';
+
+const router = express.Router();
+
+const criteriaPattern = /^(COOPERATION|CONCEPTUAL CONTRIBUTION|PRACTICAL CONTRIBUTION|WORK ETHIC)$/;
+
+/**
+ * Create a new evaluation or update an old evaluation for a given student in a team
+ * @param {express.Request} req the request
+ * @param {int} req.body.team_id The team id that both students are part of
+ * @param {int} req.body.user_id The the id of the user being evaluated
+ * @param {array} req.body.evaluation_details The array of evaluation details
+ * @param {express.Response} res the response
+ * @param {express.NextFunction} next the function to call the next middleware
+ */
+router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => {
+  const normalizedDetails = req.body.evaluation_details
+  for (let i = 0; i < normalizedDetails.length; i++) {
+    normalizedDetails[i].criteria = normalizedDetails[i].criteria.normalize("NFKC").toLocaleUpperCase();
+    normalizedDetails[i].comment ? normalizedDetails[i].comment.normalize("NFKC") : "";
+
+    if (!criteriaPattern.test(normalizedDetails[i].criteria)) {
+      log.warn(`Student ${req.session.user.userId} evaluated ${req.body.user_id} with an invalid criteria: ${normalizedDetails[i].criteria}`);
+      res.status(400).json({ msg: `Invalid evalution criteria. Received: ${normalizedDetails[i].criteria}` });
+      next();
+      return;
+    }
+
+    if (normalizedDetails[i].rating < 0 || normalizedDetails[i].rating > 5) {
+      log.warn(`Student ${req.session.user.userId} evaluated ${req.body.user_id} with an invalid rating: ${normalizedDetails[i].rating}`);
+      res.status(400).json({ msg: `Invalid evaluation rating. Received: ${normalizedDetails[i].rating}` });
+      next();
+      return;
+    }
+  }
+
+  const result = await createOrUpdateEvaluation(db, req.session.user.userId, req.body.user_id, req.body.team_id, req.body.evaluation_details);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json({ msg: `Evaluation was successful` });
+  }
+  next();
+});
+
+router.get("/get-my-evaluation/:evaluateeId", requireAuth, requireStudent, async (req, res, next) => {
+
+});
+
+
+export { router };
