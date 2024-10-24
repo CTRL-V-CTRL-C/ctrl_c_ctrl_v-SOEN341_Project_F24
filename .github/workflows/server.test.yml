@@ -4,7 +4,10 @@ on:
   pull_request:
     branches:
       - dev
+      - main
     types: 
+      - open
+      - closed
       - review_requested
 jobs:
   test:
@@ -13,7 +16,16 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
-    
+    - name: Run after merge
+      if: github.event.action == 'closed'
+      env:
+        not_merged: ${{ github.event.pull_request.merge == false }}
+      run: |
+        if [[$not_merged]]; then
+          echo "This pull request was closed but it wan't merged. The tests shouldn't run"
+          exit 1;
+        fi;
+
     - name: Use Node.js and cache global npm dependencies
       uses: actions/setup-node@v4
       with:
