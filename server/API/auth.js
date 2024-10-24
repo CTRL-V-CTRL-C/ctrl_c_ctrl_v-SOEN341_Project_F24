@@ -34,8 +34,24 @@ router.use(session({
  * @param {express.NextFunction} next the function to call the next middleware
  */
 function requireTeacher(req, res, next) {
-  if (req.session.user.isStudent) {
-    res.status(401).send(); // unauthorized
+  if (!req.session.user.isInstructor) {
+    log.warn({}, `Student ${req.session.user.userId} tried to access ${req.originalUrl}`);
+    res.status(401).json({ msg: "You must be an instructor to access this" }); // unauthorized
+    return;
+  }
+  next();
+}
+
+/**
+ * a middleware to make sure that the logged in user is a student
+ * @param {express.Request} req the request
+ * @param {express.Response} res the response
+ * @param {express.NextFunction} next the function to call the next middleware
+ */
+function requireStudent(req, res, next) {
+  if (req.session.user.isInstructor) {
+    log.warn({}, `Instructor ${req.session.user.userId} tried to access ${req.originalUrl}`);
+    res.status(401).json({ msg: "You must be a student to access this" }); // unauthorized
     return;
   }
   next();
@@ -135,4 +151,4 @@ router.post("/test-authentication", requireAuth, (req, res) => {
   });
 });
 
-export { router, requireAuth, requireTeacher };
+export { router, requireAuth, requireTeacher, requireStudent };

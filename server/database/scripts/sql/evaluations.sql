@@ -52,5 +52,5 @@ CREATE TABLE IF NOT EXISTS evaluation_details
   FOREIGN KEY(evaluation_id) REFERENCES evaluations(evaluation_id)
       ON DELETE CASCADE,
   PRIMARY KEY (evaluation_id, criteria),
-  CONSTRAINT five_start_rating CHECK(rating <= 5 AND rating >= 0)
+  CONSTRAINT five_start_rating CHECK(rating <= 5 AND rating >= 1)
 )
