@@ -26,6 +26,7 @@ function MembersPage() {
     // Function to fetch students based on course ID
     const fetchStudents = async () => {
         if (!courseId) return; // Ensure courseId is available before fetching students
+        setLoading(true)
         try {
             const response = await fetch(`/api/course/get-students/${courseId}`);
             if (!response.ok) {
