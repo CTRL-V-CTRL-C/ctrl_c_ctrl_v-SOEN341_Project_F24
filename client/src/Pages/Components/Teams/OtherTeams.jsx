@@ -28,7 +28,7 @@ function OtherTeams() {
                             {team.members.map((member, i) =>
                                 <div className="teammate-card" key={i}>
                                     <div className="teammate-info">
-                                        <p className="teammate-details"> {member.f_name} {member.l_name} </p>
+                                        <p className="teammate-details"> {member.f_name} {member.l_name} {userContext.isInstructor ? member.email : ""} {userContext.isInstructor ? member.school_id : ""}</p>
                                     </div>
                                 </div>
                             )}
