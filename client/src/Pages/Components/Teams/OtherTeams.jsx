@@ -2,24 +2,32 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
 import { fetchData } from "../../../Controller/FetchModule";
 
-function OtherTeams() {
+const emptyTeam = { team_name: "", members: [{ f_name: "", l_name: "", email: "" }] }
 
+function OtherTeams() {
     const userContext = useContext(UserContext);
-    const [teams, setTeams] = useState([{ team_name: "", members: [{ f_name: "", l_name: "" }] }]);
+    const [teams, setTeams] = useState([emptyTeam]);
+    const [courseName, setCourseName] = useState("");
 
     useEffect(() => {
         const fetchTeams = async () => {
             let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
-            let data = await response.json();
+            let data;
+            if (response.ok) {
+                data = await response.json();
+            } else {
+                data = [emptyTeam];
+            }
             setTeams(data);
+            if (userContext.selectedCourse.course_id === 0) return;
+            setCourseName(userContext.selectedCourse.course_name);
         }
-        if (userContext.selectedCourse.course_id === 0) return;
         fetchTeams();
     }, [userContext.selectedCourse]);
 
     return (
         <>
-            <p className="course-title"> COURSE: {userContext.selectedCourse.course_name} </p>
+            <p className="course-title"> COURSE: {courseName} </p>
             <div className="my-team">
                 {teams.map((team, i) =>
                     <div key={i} className="my-team-info">

@@ -2,24 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../../Context/UserContext";
 import { IoMdAdd } from "react-icons/io";
 import "./Styles/SideMenu.css";
-import { fetchData } from "../../Controller/FetchModule";
+import PropTypes from 'prop-types';
 
-function SideMenu() {
+function SideMenu({ courses }) {
+    SideMenu.propTypes = {
+        courses: PropTypes.array
+    }
 
     const userContext = useContext(UserContext);
     const [styleClass, setStyleClass] = useState("");
-    const [userCourses, setUserCourses] = useState([]);
+    const [userCourses, setUserCourses] = useState([{ course_name: "", course_id: 0 }]);
 
     useEffect(() => {
-        const fetchCourses = async () => {
-            const coursesResponse = await fetchData("/api/course/get-courses");
-            const courses = await coursesResponse.json();
-            setUserCourses(courses);
-        }
-        if (userContext.userLoggedIn) {
-            fetchCourses();
-        }
-    }, [userContext.userLoggedIn]);
+        setUserCourses(courses);
+    }, [courses])
 
     useEffect(() => {
         userContext.userLoggedIn ? setStyleClass("sidebar-on") : setStyleClass("");
