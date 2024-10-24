@@ -1,0 +1,57 @@
+name: Server Test CI
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+    types: 
+      - open
+      - closed
+      - review_requested
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v4
+    - name: Run after merge
+      if: github.event.action == 'closed'
+      env:
+        not_merged: ${{ github.event.pull_request.merge == false }}
+      run: |
+        if $not_merged; then
+          echo "This pull request was closed but it wan't merged. The tests shouldn't run"
+          exit 1;
+        fi;
+
+    - name: Use Node.js and cache global npm dependencies
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+        cache-dependency-path: server/package-lock.json
+    
+    - name: cache node modules
+      id: node-modules-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          server/node_modules
+        key: ${{ hashFiles('server/package-lock.json') }}
+
+    - name: download node_modules
+      if: steps.node-modules-cache.outputs.cache-hit != 'true'
+      run: cd server && npm ci
+
+    - name: test the server
+      env:
+        test_db_user: ${{ secrets.test_db_user }}
+        test_db_password: ${{ secrets.test_db_password }}
+        test_db_host: ${{ secrets.test_db_host }}
+        test_db_port: ${{ secrets.test_db_port }}
+        test_db_database: ${{ secrets.test_db_database }}
+        test_db_certificate: ${{ secrets.test_db_certificate }}
+        SECRET: ${{ secrets.SECRET }}
+      run: cd server && npm test

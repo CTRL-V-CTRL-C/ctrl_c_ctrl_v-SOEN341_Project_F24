@@ -2,7 +2,7 @@ import { suite, it } from 'node:test'
 import assert from 'node:assert'
 import request from 'supertest'
 import { app } from '../server.js'
-import { randomLetters, randomNumber } from './utils.js'
+import { randomLetters, uniqueRandomNumber } from './utils.js'
 
 suite("POST requests to create a user", async () => {
 
@@ -12,7 +12,7 @@ suite("POST requests to create a user", async () => {
             firstName: "John",
             lastName: "Smith",
             email: `test.${randomLetters()}@mail.com`,
-            schoolID: `INST${randomNumber(4)}`,
+            schoolID: `INST${uniqueRandomNumber(4)}`,
             role: "INST"
         }
         const response = await request(app)
