@@ -10,7 +10,7 @@ function MyTeam() {
     const userContext = useContext(UserContext);
     const [team, setTeam] = useState({
         team_name: "",
-        members: [{ email: "", f_name: "", l_name: "", team_id: 0, user_id: 0 }]
+        membres: [{ email: "", f_name: "", l_name: "", team_id: 0, user_id: 0 }]
     });
     const [evaluatingMember, setEvaluatingMember] = useState({});
 

@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from 'react';
+// MembersPage.js
+import React, { useContext, useEffect, useState } from 'react';
+import UserContext from "../../../Context/UserContext";
 import '../Styles/MembersPage.css';
 
 function MembersPage() {
+    const { selectedCourse, setSelectedCourse } = useContext(UserContext); // Access selectedCourse and courses from context
     const [students, setStudents] = useState([]); // State to hold student data
-    const [courseId, setCourseId] = useState(null); // State to hold course ID
     const [loading, setLoading] = useState(true); // State to manage loading state
     const [error, setError] = useState(null); // State to hold error messages
 
-    // Function to fetch courses and set the course ID
-    const fetchCourses = async () => { 
-        try {
-            const response = await fetch('/api/course/get-courses');
-            if (!response.ok) {
-                throw new Error('Failed to fetch courses');
-            }
-            const courses = await response.json();
-            if (courses.length > 0) {
-                setCourseId(courses[0].course_id); // Assuming you want the first course
-            }
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-    // Function to fetch students based on course ID
     const fetchStudents = async () => {
-        if (!courseId) return; // Ensure courseId is available before fetching students
-        setLoading(true)
+        if (!selectedCourse || selectedCourse.course_id === 0) return; // Ensure selectedCourse is valid
+        setLoading(true);
         try {
-            const response = await fetch(`/api/course/get-students/${courseId}`);
+            const response = await fetch(`/api/course/get-students/${selectedCourse.course_id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch students');
             }
@@ -41,23 +26,16 @@ function MembersPage() {
         }
     };
 
-    // Fetch courses when the component mounts
     useEffect(() => {
-        fetchCourses();
-    }, []);
+        fetchStudents(); // Fetch students when selectedCourse changes
+    }, [selectedCourse]);
 
-    // Fetch students when the course ID is set
-    useEffect(() => {
-        fetchStudents();
-    }, [courseId]);
-
-    // Display loading or error message
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
     return (
         <div id="whole">
-            <div id="TitlePosition"><p id="PageTitle">Student List</p></div>
+            <div id="TitlePosition"><p id="PageTitle">Student List for {selectedCourse.course_name}</p></div>
             <div>
                 <table id="TableStyle">
                     <thead>
