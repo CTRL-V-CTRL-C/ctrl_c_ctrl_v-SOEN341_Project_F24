@@ -4,12 +4,13 @@ import UserContext from "../../../Context/UserContext";
 import '../Styles/MembersPage.css';
 
 function MembersPage() {
-    const { selectedCourse, setSelectedCourse } = useContext(UserContext); // Access selectedCourse and courses from context
+    const { selectedCourse } = useContext(UserContext); // Access selectedCourse and courses from context
     const [students, setStudents] = useState([]); // State to hold student data
     const [loading, setLoading] = useState(true); // State to manage loading state
     const [error, setError] = useState(null); // State to hold error messages
 
     const fetchStudents = async () => {
+        
         if (!selectedCourse || selectedCourse.course_id === 0) return; // Ensure selectedCourse is valid
         setLoading(true);
         try {
@@ -27,6 +28,7 @@ function MembersPage() {
     };
 
     useEffect(() => {
+        console.log("Selected Course Changed:", selectedCourse);
         fetchStudents(); // Fetch students when selectedCourse changes
     }, [selectedCourse]);
 
