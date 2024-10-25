@@ -12,7 +12,6 @@ function PopUp(props) {
     const [info, setInfo] = useState({ teams: [] });
     const userContext = useContext(UserContext);
 
-
     //prop validation
     PopUp.propTypes = {
         trigger: PropTypes.bool.isRequired,
@@ -43,13 +42,6 @@ function PopUp(props) {
         if (!file) {
             return;
         }
-
-        setError(""); // Clear any error message
-        console.log(file.type);
-        if (!(file.type === "text/csv" && file.name.endsWith(".csv"))) {
-            setError("The file type must be csv");
-            return;
-        }
         setFile(file); // Set file state
     };
 
@@ -61,7 +53,6 @@ function PopUp(props) {
 
     const handleUpload = (e) => {
         // Check to see if there is a file before uploading
-        console.log("uploading")
         if (!file) {
             setError("Please select a file before uploading.");
             return;
@@ -71,7 +62,7 @@ function PopUp(props) {
 
         // File validation
         if (!(fileType === "text/csv" && fileName.endsWith(".csv"))) {
-            setError("Please upload a valid CSV file.");
+            setError("File type must be CVS.");
             return;
         }
         const reader = new FileReader();
@@ -84,7 +75,8 @@ function PopUp(props) {
                 text = text.slice(1); // Remove BOM
             }
 
-            parseCSV(text);
+            let warnings = [];
+            parseCSV(text, warnings);
 
             // *********************************************tried sending each individual team to the API****************************
             try {
@@ -108,19 +100,25 @@ function PopUp(props) {
                 setError(`Error uploading data: ${err.message}`);
                 return;
             }
-            // Handle success once all teams are created
+            // Reset the info state after the upload process
+            setInfo({ teams: [] }); // Reset info state
             handleClose(e);
-            props.triggerSuccessPopup(null);
+            if (warnings.length > 0) {
+                props.triggerSuccessPopup(warnings[0]);
+            }
+            else {
+                props.triggerSuccessPopup(null)
+            }
         }
+
         reader.readAsText(file, 'utf-8');
     };
 
 
 
     // Function to parse the CSV file
-    const parseCSV = (data) => {
+    const parseCSV = (data,warnings) => {
         const teamInfo = { teams: [] };
-        const warnings = [];
         const lines = data.split("\n");
 
         for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header row
@@ -160,12 +158,10 @@ function PopUp(props) {
                 });
             }
         }
-        if (warnings.length != 0) {
-            setError(`There is an error for uploading the data: ${JSON.stringify(warnings)}`);
-            return;
-        }
         setInfo(teamInfo);
     };
+
+
     return (props.trigger) ? (
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
