@@ -34,11 +34,12 @@ if (process.env.PROD) {
         application_name: "PROD: PeerCheck",
         ssl: {
             rejectUnauthorized: true,
-            ca: fs.readFileSync(certificate).toString(),
+            ca: certificate,
         },
     };
 } else {
     log.info("Using the test database");
+
     config = {
         user: test_user,
         password: test_password,
@@ -48,7 +49,7 @@ if (process.env.PROD) {
         application_name: "DEV: PeerCheck",
         ssl: {
             rejectUnauthorized: true,
-            ca: fs.readFileSync(test_certificate).toString(),
+            ca: test_certificate,
         },
     };
 }
