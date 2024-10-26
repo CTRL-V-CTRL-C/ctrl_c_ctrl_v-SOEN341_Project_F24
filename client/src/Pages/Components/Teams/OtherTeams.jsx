@@ -33,17 +33,34 @@ function OtherTeams() {
                     <div key={i} className="my-team-info">
                         <div className="team-name"> {team.team_name} </div>
                         <div className="teammates-card">
+                            <div className="teammate-card bold" key={i}>
+                                <p className="teammate-details"> Full Name</p>
+                                {userContext.isInstructor ?
+                                    <>
+                                        <p className="teammate-details"> Email</p>
+                                        <p className="teammate-details"> School ID</p>
+                                    </>
+                                    :
+                                    <></>
+                                }
+                            </div>
                             {team.members.map((member, i) =>
                                 <div className="teammate-card" key={i}>
-                                    <div className="teammate-info">
-                                        <p className="teammate-details"> {member.f_name} {member.l_name} {userContext.isInstructor ? member.email : ""} {userContext.isInstructor ? member.school_id : ""}</p>
-                                    </div>
+                                    <p className="teammate-details"> {member.f_name} {member.l_name}</p>
+                                    {userContext.isInstructor ?
+                                        <>
+                                            <p className="teammate-details"> {member.email} </p>
+                                            <p className="teammate-details"> {member.school_id}</p>
+                                        </>
+                                        :
+                                        <></>
+                                    }
                                 </div>
                             )}
                         </div>
                     </div>
                 )}
-            </div>
+            </div >
         </>
     )
 }
