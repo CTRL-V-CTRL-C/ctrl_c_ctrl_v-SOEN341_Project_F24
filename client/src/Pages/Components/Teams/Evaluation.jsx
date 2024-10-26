@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../Styles/MyTeam.css"
 import StarRating from "./StarRating";
 import PropTypes from 'prop-types';
+import { fetchData } from "../../../Controller/FetchModule";
 
 
 function Evaluation(props) {
@@ -18,7 +19,25 @@ function Evaluation(props) {
 
     Evaluation.propTypes = {
         teammate: PropTypes.object,
+        team_id: PropTypes.number
     }
+
+    useEffect(() => {
+        (async () => {
+            const fetchEvaluations = async () => {
+                const response = await fetchData(`/api/evaluation/get-my-evaluation/${props.team_id}/${props.teammate.user_id}`);
+                if (response.status === 200) {
+                    console.log("GOOD")
+                    const data = await response.json();
+                    setEvaluations(data);
+                } else {
+                    console.log("Error Occured when fetching the evaluations");
+                }
+            }
+
+            await fetchEvaluations();
+        })();
+    }, [props.team_id, props.teammate.user_id])
 
     async function submitEvaluation() {
         setErrormsg("");

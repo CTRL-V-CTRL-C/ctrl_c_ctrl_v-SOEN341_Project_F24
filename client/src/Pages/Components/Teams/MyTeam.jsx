@@ -9,6 +9,7 @@ function MyTeam() {
 
     const userContext = useContext(UserContext);
     const [team, setTeam] = useState({
+        team_id: 0,
         team_name: "",
         members: [{ email: "", f_name: "", l_name: "", team_id: 0, user_id: 0 }]
     });
@@ -18,6 +19,7 @@ function MyTeam() {
         const fetchTeams = async () => {
             let response = await fetchData(`/api/team/get-my-team/${userContext.selectedCourse.course_id}`);
             let data = await response.json();
+            console.log(data)
             setTeam(data);
         }
         if (!userContext.selectedCourse || userContext.selectedCourse.course_id === 0) return;
@@ -46,7 +48,7 @@ function MyTeam() {
                         )}
                     </div>
                 </div>
-                {Object.keys(evaluatingMember).length !== 0 ? <Evaluation teammate={evaluatingMember} /> : <></>}
+                {Object.keys(evaluatingMember).length !== 0 ? <Evaluation team_id={team.team_id} teammate={evaluatingMember} /> : <></>}
             </div>
         </>
     )
