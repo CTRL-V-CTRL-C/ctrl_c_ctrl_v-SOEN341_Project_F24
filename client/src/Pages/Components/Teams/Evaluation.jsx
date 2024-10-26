@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../Styles/MyTeam.css"
 import StarRating from "./StarRating";
 import PropTypes from 'prop-types';
-import { fetchData } from "../../../Controller/FetchModule";
+import { fetchData, postData } from "../../../Controller/FetchModule";
 
 
 function Evaluation(props) {
@@ -26,8 +26,7 @@ function Evaluation(props) {
         (async () => {
             const fetchEvaluations = async () => {
                 const response = await fetchData(`/api/evaluation/get-my-evaluation/${props.team_id}/${props.teammate.user_id}`);
-                if (response.status === 200) {
-                    console.log("GOOD")
+                if (response.ok) {
                     const data = await response.json();
                     setEvaluations(data);
                 } else {
@@ -48,13 +47,19 @@ function Evaluation(props) {
         })
 
         let submissionEval = {
-            evaluations: [...evaluations],
+            evaluation_details: [...evaluations],
             user_id: props.teammate.user_id,
-            team_id: props.teammate.team_id
+            team_id: props.team_id
         }
         if (errormsg === "") {
-            console.log("SUBMITTING")
-            console.log(submissionEval);
+            confirmEvaluation(submissionEval);
+        }
+    }
+
+    async function confirmEvaluation(submissionEval) {
+        const response = await postData("/api/evaluation/evaluate", submissionEval);
+        if (!response.ok) {
+            setErrormsg("An Error Occured when submitting the Evaluation");
         }
     }
 
