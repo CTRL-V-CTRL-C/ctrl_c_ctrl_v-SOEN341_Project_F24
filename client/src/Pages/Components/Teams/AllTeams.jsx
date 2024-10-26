@@ -16,7 +16,6 @@ function AllTeams() {
     return (
         <div>
             <button onClick={() => setButtonPopup(true)}>Upload</button>
-            <div>your mom</div>
             {/* CSV Upload Popup */}
             <PopUp
                 trigger={openUploadPopup}

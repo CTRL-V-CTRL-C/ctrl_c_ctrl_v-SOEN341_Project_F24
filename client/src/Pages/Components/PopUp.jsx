@@ -5,21 +5,18 @@ import './Styles/PopUp.css';
 import PropTypes from 'prop-types';
 
 function PopUp(props) {
-
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
-    const [info, setInfo] = useState({ teams: [] });
     const userContext = useContext(UserContext);
 
-    //prop validation
+    // Prop validation
     PopUp.propTypes = {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         triggerSuccessPopup: PropTypes.func.isRequired,
     };
 
-    // Prevent the file from being opened/downloaded when file is dropped outside the popup
     const handleDragOver = (e) => {
         e.preventDefault();
     };
@@ -32,120 +29,113 @@ function PopUp(props) {
     useEffect(() => {
         document.addEventListener('dragover', handleDragOver);
         document.addEventListener('drop', handleDrop);
+        return () => {
+            document.removeEventListener('dragover', handleDragOver);
+            document.removeEventListener('drop', handleDrop);
+        };
     }, []);
 
-
-    /**
-     * @param {File} file the file to set the state
-     */
     const handleFileChange = (file) => {
-        setFile(file); // Set file state
+        setFile(file);
     };
 
-    const handleClose = (e) => {
-        setFile(null); // Reset the file state
+    const handleClose = () => {
+        setFile(null);
         setError("");
-        props.setTrigger(false); // Close the popup
+        props.setTrigger(false);
     };
 
     const handleUpload = async (e) => {
         e.preventDefault();
-        
+
         if (!file) {
             setError("Please select a file before uploading.");
             return;
         }
-    
+
         const fileName = file.name;
         const fileType = file.type;
-    
+
         if (!(fileType === "text/csv" && fileName.endsWith(".csv"))) {
             setError("File type must be CSV.");
             return;
         }
-    
+
         const reader = new FileReader();
         reader.onload = async (event) => {
             let text = event.target.result;
-    
+
             if (text.charCodeAt(0) === 0xFEFF) {
-                text = text.slice(1); // Remove BOM if present
+                text = text.slice(1);
             }
-    
+
             let warnings = [];
-            
-            // Wait for parseCSV to complete and update info
-            await parseCSV(text, warnings);
-            
-            //if there are warnings from parsing( missing information)-send error to success popup
+            const teamInfo = parseCSV(text, warnings); // Get teamInfo from parsing
+
+            // Check for warnings
             if (warnings.length > 0) {
-                handleClose(e);
+                handleClose();
                 props.triggerSuccessPopup(warnings[0]);
             } else {
-                const success = await sendData(); // Only send the data if info is updated
+                // Call sendData with the current teamInfo
+                const success = await sendData(teamInfo); // Pass the current teamInfo directly
+
                 if (success) {
-                    handleClose(e);
-                    props.triggerSuccessPopup(null);//send no errors to Success Popup
-                } else {
-                    setError("Error occurred while sending data to the API. Please try again."); //don't close popup if info can't send
+                    handleClose();
+                    props.triggerSuccessPopup(null); // No errors to Success Popup
                 }
             }
         };
         reader.readAsText(file, 'utf-8');
     };
-    
-    // parseCSV returns a promise that resolves after info is updated
-    const parseCSV = (data, warnings) => {
-        return new Promise((resolve) => {
-            const teamInfo = { teams: [] };
-            const lines = data.split("\n");
-    
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
-    
-                const [fname, lname, studentID, email, teamName] = line.split(",").map(item => item.trim().replace(/^["']|["']$/g, ""));
-                if (!fname || !lname || !email || !studentID || !teamName) {
-                    warnings.push(`Note: Missing students information on line ${i}`);
-                    continue;
-                }
-    
-                const existingTeam = teamInfo.teams.find(team => team.name === teamName);
-                if (existingTeam) {
-                    existingTeam.members.push({ fname, lname, email, studentID });
-                } else {
-                    teamInfo.teams.push({ name: teamName, members: [{ fname, lname, email, studentID }] });
-                }
-            }
-            setInfo(teamInfo); // Update the state
 
-            // Use a timeout to wait for the state update, then resolve
-            setTimeout(() => resolve(), 0);
-        });
+    const parseCSV = (data, warnings) => {
+        const teamInfo = { teams: [] };
+        const lines = data.split("\n");
+
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            const [fname, lname, studentID, email, teamName] = line.split(",").map(item => item.trim().replace(/^["']|["']$/g, ""));
+            if (!fname || !lname || !email || !studentID || !teamName) {
+                warnings.push(`Note: Missing student information on line ${i}`);
+                continue;
+            }
+
+            const existingTeam = teamInfo.teams.find(team => team.name === teamName);
+            if (existingTeam) {
+                existingTeam.members.push({ fname, lname, email, studentID });
+            } else {
+                teamInfo.teams.push({ name: teamName, members: [{ fname, lname, email, studentID }] });
+            }
+        }
+
+        return teamInfo; // Return the constructed teamInfo directly
     };
-    
-    
-    //function to send the info to API
-    async function sendData() {
+
+    async function sendData(official_team) {
         try {
-            for (let team of info.teams) {
+            for (let team of official_team.teams) {
                 const requestBody = {
                     teamName: team.name, // The team's name
                     members: team.members, // List of members for that team
                     courseID: userContext.selectedCourse.course_id // The course/class ID
                 };
                 console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
+
                 const response = await postData("/api/team/create", requestBody);
-                if (response.status != 200) {
+                if (response.status !== 200) {
                     const error = await response.json();
                     throw new Error(error.msg);
                 }
                 console.log("Raw Response:", response); // Log the raw response can delete after 
             }
+            return true; // Return true if all teams are successfully sent
         } catch (err) {
             console.error("Error caught:", err); // Log any error caught
             setError(`Error uploading data: ${err.message}`);
-            return;
+            return false; // Return false on any error
         }
     }
 
