@@ -36,7 +36,9 @@ function PopUp(props) {
     }, []);
 
     const handleFileChange = (file) => {
+        setError("");
         setFile(file);
+
     };
 
     const handleClose = () => {
@@ -102,12 +104,12 @@ function PopUp(props) {
                 warnings.push(`Note: Missing student information on line ${i}`);
                 continue;
             }
-
+         
             const existingTeam = teamInfo.teams.find(team => team.name === teamName);
             if (existingTeam) {
-                existingTeam.members.push({ fname, lname, email, studentID });
+                existingTeam.members.push({ fname, lname, studentID, email });
             } else {
-                teamInfo.teams.push({ name: teamName, members: [{ fname, lname, email, studentID }] });
+                teamInfo.teams.push({ name: teamName, members: [{ fname, lname, studentID, email }] });
             }
         }
 
@@ -119,11 +121,17 @@ function PopUp(props) {
             for (let team of official_team.teams) {
                 const requestBody = {
                     teamName: team.name, // The team's name
-                    members: team.members, // List of members for that team
+                    members: team.members.map(member => ({
+                        fname: member.fname,
+                        lname: member.lname,
+                        studentID: String(member.studentID), // Ensure studentID is a string
+                        email: member.email, 
+                    })), 
                     courseID: userContext.selectedCourse.course_id // The course/class ID
                 };
+    
                 console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
-
+    
                 const response = await postData("/api/team/create", requestBody);
                 if (response.status !== 200) {
                     const error = await response.json();
@@ -138,6 +146,7 @@ function PopUp(props) {
             return false; // Return false on any error
         }
     }
+    
 
     return (props.trigger) ? (
         <div className="popup">
