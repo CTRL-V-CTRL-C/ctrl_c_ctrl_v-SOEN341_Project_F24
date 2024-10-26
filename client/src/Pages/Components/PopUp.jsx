@@ -39,9 +39,6 @@ function PopUp(props) {
      * @param {File} file the file to set the state
      */
     const handleFileChange = (file) => {
-        if (!file) {
-            return;
-        }
         setFile(file); // Set file state
     };
 
@@ -51,116 +48,106 @@ function PopUp(props) {
         props.setTrigger(false); // Close the popup
     };
 
-    const handleUpload = (e) => {
-        // Check to see if there is a file before uploading
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        
         if (!file) {
             setError("Please select a file before uploading.");
             return;
         }
+    
         const fileName = file.name;
         const fileType = file.type;
-
-        // File validation
+    
         if (!(fileType === "text/csv" && fileName.endsWith(".csv"))) {
-            setError("File type must be CVS.");
+            setError("File type must be CSV.");
             return;
         }
+    
         const reader = new FileReader();
-
-        reader.onload = async (e) => {
-            let text = e.target.result;
-
-            // Check for Byte Order Mark and remove if it is present
+        reader.onload = async (event) => {
+            let text = event.target.result;
+    
             if (text.charCodeAt(0) === 0xFEFF) {
-                text = text.slice(1); // Remove BOM
+                text = text.slice(1); // Remove BOM if present
             }
-
+    
             let warnings = [];
-            parseCSV(text, warnings);
-
-            // *********************************************tried sending each individual team to the API****************************
-            try {
-                for (let team of info.teams) {
-                    const requestBody = {
-                        teamName: team.name, // The team's name
-                        members: team.members, // List of members for that team
-                        courseID: userContext.selectedCourse.course_id // The course/class ID
-                    };
-
-                    console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
-                    const response = await postData("/api/team/create", requestBody);
-                    if (response.status != 200) {
-                        const error = await response.json();
-                        throw new Error(error.msg);
-                    }
-                    console.log("Raw Response:", response); // Log the raw response can delete after 
-                }
-            } catch (err) {
-                console.error("Error caught:", err); // Log any error caught
-                setError(`Error uploading data: ${err.message}`);
-                return;
-            }
-            // Reset the info state after the upload process
-            setInfo({ teams: [] }); // Reset info state
-            handleClose(e);
+            
+            // Wait for parseCSV to complete and update info
+            await parseCSV(text, warnings);
+            
+            //if there are warnings from parsing( missing information)-send error to success popup
             if (warnings.length > 0) {
+                handleClose(e);
                 props.triggerSuccessPopup(warnings[0]);
+            } else {
+                const success = await sendData(); // Only send the data if info is updated
+                if (success) {
+                    handleClose(e);
+                    props.triggerSuccessPopup(null);//send no errors to Success Popup
+                } else {
+                    setError("Error occurred while sending data to the API. Please try again."); //don't close popup if info can't send
+                }
             }
-            else {
-                props.triggerSuccessPopup(null)
-            }
-        }
-
+        };
         reader.readAsText(file, 'utf-8');
     };
-
-
-
-    // Function to parse the CSV file
-    const parseCSV = (data,warnings) => {
-        const teamInfo = { teams: [] };
-        const lines = data.split("\n");
-
-        for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header row
-            const line = lines[i].trim();
-
-            // Skip empty lines
-            if (!line) continue;
-
-            const [fname, lname, studentID, email, teamName] = line.split(",").map(item => item.trim().replace(/^["']|["']$/g, ""));
-
-            // Check for missing values
-            if (!fname || !lname || !email || !studentID || !teamName) {
-                warnings.push("Note: Teams might not be complete. One or more rows may be missing values.");
-                continue; // Skip this row if it's malformed and send an error message
+    
+    // parseCSV returns a promise that resolves after info is updated
+    const parseCSV = (data, warnings) => {
+        return new Promise((resolve) => {
+            const teamInfo = { teams: [] };
+            const lines = data.split("\n");
+    
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+    
+                const [fname, lname, studentID, email, teamName] = line.split(",").map(item => item.trim().replace(/^["']|["']$/g, ""));
+                if (!fname || !lname || !email || !studentID || !teamName) {
+                    warnings.push(`Note: Missing students information on line ${i}`);
+                    continue;
+                }
+    
+                const existingTeam = teamInfo.teams.find(team => team.name === teamName);
+                if (existingTeam) {
+                    existingTeam.members.push({ fname, lname, email, studentID });
+                } else {
+                    teamInfo.teams.push({ name: teamName, members: [{ fname, lname, email, studentID }] });
+                }
             }
+            setInfo(teamInfo); // Update the state
 
-            const existingTeam = teamInfo.teams.find(team => team.name === teamName);
-
-            if (existingTeam) {
-                // If the team exists, add the member to the members array
-                existingTeam.members.push({
-                    fname,
-                    lname,
-                    email,
-                    studentID
-                });
-            } else {
-                // If the team doesn't exist, create a new team object
-                teamInfo.teams.push({
-                    name: teamName,
-                    members: [{
-                        fname,
-                        lname,
-                        email,
-                        studentID
-                    }]
-                });
-            }
-        }
-        setInfo(teamInfo);
+            // Use a timeout to wait for the state update, then resolve
+            setTimeout(() => resolve(), 0);
+        });
     };
-
+    
+    
+    //function to send the info to API
+    async function sendData() {
+        try {
+            for (let team of info.teams) {
+                const requestBody = {
+                    teamName: team.name, // The team's name
+                    members: team.members, // List of members for that team
+                    courseID: userContext.selectedCourse.course_id // The course/class ID
+                };
+                console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
+                const response = await postData("/api/team/create", requestBody);
+                if (response.status != 200) {
+                    const error = await response.json();
+                    throw new Error(error.msg);
+                }
+                console.log("Raw Response:", response); // Log the raw response can delete after 
+            }
+        } catch (err) {
+            console.error("Error caught:", err); // Log any error caught
+            setError(`Error uploading data: ${err.message}`);
+            return;
+        }
+    }
 
     return (props.trigger) ? (
         <div className="popup">
