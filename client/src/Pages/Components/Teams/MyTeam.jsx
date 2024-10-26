@@ -6,7 +6,6 @@ import Evaluation from "./Evaluation";
 import { fetchData } from "../../../Controller/FetchModule";
 
 function MyTeam() {
-
     const userContext = useContext(UserContext);
     const [team, setTeam] = useState({
         team_id: 0,
@@ -14,6 +13,7 @@ function MyTeam() {
         members: [{ email: "", f_name: "", l_name: "", team_id: 0, user_id: 0 }]
     });
     const [evaluatingMember, setEvaluatingMember] = useState({});
+    const [courseName, setCourseName] = useState("");
 
     useEffect(() => {
         const fetchTeams = async () => {
@@ -26,13 +26,17 @@ function MyTeam() {
         fetchTeams();
     }, [userContext.selectedCourse]);
 
+    useEffect(() => {
+        setCourseName(userContext.selectedCourse.course_name);
+    }, [userContext.selectedCourse]);
+
     function reviewTeammate(i) {
         setEvaluatingMember(team.members[i]);
     }
 
     return (
         <>
-            <p className="course-title"> COURSE: {userContext.selectedCourse ? userContext.selectedCourse.course_name : ""} </p>
+            <p className="course-title"> COURSE: {courseName} </p>
             <div className="my-team">
                 <div className="my-team-info">
                     <div className="team-name"> {team.team_name} </div>

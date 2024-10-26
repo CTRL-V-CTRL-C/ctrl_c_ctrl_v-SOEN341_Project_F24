@@ -12,6 +12,7 @@ function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState({ course_name: "", course_id: 0 });
+  const [courseList, setCourseList] = useState([{ course_name: "", course_id: 0 }])
 
   useEffect(() => {
     (async () => {
@@ -25,14 +26,16 @@ function App() {
           setUserLoggedIn(false);
           setIsInstructor(false);
         }
+      } else {
+        await fetchCourses();
       }
-      fetchCourses();
     })();
   }, [userLoggedIn]);
 
   const fetchCourses = async () => {
     const coursesResponse = await fetchData("/api/course/get-courses");
     const courses = await coursesResponse.json();
+    setCourseList(courses);
     setSelectedCourse(courses[0]);
   }
 
@@ -48,7 +51,7 @@ function App() {
 
       <Router>
         <NavBar />
-        <SideMenu />
+        <SideMenu fetchCourses={fetchCourses} courses={courseList} />
         <PageHolder />
       </Router>
     </UserContext.Provider>

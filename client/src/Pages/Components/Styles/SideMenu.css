@@ -7,7 +7,7 @@ body:has(nav.sidebar-on) {
 
 .menu {
     height: 100vh;
-    width: 240px;
+    width: 12%;
     position: fixed;
     display: inline-block;
     top: 0;
@@ -20,15 +20,6 @@ body:has(nav.sidebar-on) {
         background: rgba(0, 0, 0, 0.1);
         padding: 2em 0.5em;
         text-align: center;
-
-        img {
-            width: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid #ffea92;
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-        }
-
         h2 {
             font-weight: normal;
             margin-bottom: 0;
@@ -41,9 +32,7 @@ body:has(nav.sidebar-on) {
         margin: 0;
         display: inline-block;
 
-
         li {
-            padding: 0.5em 4em 0.5em 4em;
             margin: 1em 0em 1em 0em;
             font-size: 0.95em;
             font-weight: regular;
@@ -51,6 +40,11 @@ body:has(nav.sidebar-on) {
             background-size: auto 20px;
             transition: all 0.15s linear;
             cursor: pointer;
+            width: 11vw;
+            height: 6vh;
+            text-wrap-mode: nowrap;
+            align-content:space-evenly;
+
 
             &.icon-settings {
                 background-image: url(@icon-url-settings);
@@ -210,4 +204,125 @@ body:has(nav.sidebar-on) {
             }
         }
     }
+}
+/* ADD COURSE BUTTON */
+.input-wrapper {
+    width: 62%;
+    height: 45px;
+    border-radius: 20px;
+    padding: 5px;
+    box-sizing: content-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff77;
+}
+
+.icon {
+    width: 20px;
+    fill: white;
+    margin-left: 5px;
+    margin-right: 6px;
+    transition: all 0.3s;
+}
+
+.icon:hover {
+    cursor: pointer;
+}
+
+.course-input {
+    max-width: 33%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color: #ffffff00;
+    color: #501e24ee;
+    font-size: 1em;
+}
+
+.input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #3d0f183e inset;
+    -webkit-text-fill-color: #ffffff;
+}
+
+.Subscribe-btn:hover {
+    background-color: #501e24ee;
+}
+
+.Subscribe-btn {
+    height: 100%;
+    width: 50%;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    background-color: #501e24b9;
+    font-weight: 500;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s;
+    padding-right:15px;
+    margin-left:6px;
+}
+
+.error {
+    text-align:left;
+    padding-left:1rem;
+}
+
+.arrow {
+    position: absolute;
+    margin-right: 150px;
+    transition: all 0.3s;
+}
+
+.input-wrapper:active .icon {
+    transform: scale(1.3);
+}
+
+.Subscribe-btn:hover {
+    color: white;
+}
+
+.Subscribe-btn:hover .arrow {
+    margin-right: 0;
+    animation: jello-vertical 0.9s both;
+    transform-origin: right;
+}
+
+@keyframes jello-vertical {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+
+    30% {
+        transform: scale3d(0.75, 1.25, 1);
+    }
+
+    40% {
+        transform: scale3d(1.25, 0.75, 1);
+    }
+
+    50% {
+        transform: scale3d(0.85, 1.15, 1);
+    }
+
+    65% {
+        transform: scale3d(1.05, 0.95, 1);
+    }
+
+    75% {
+        transform: scale3d(0.95, 1.05, 1);
+    }
+
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+.Subscribe-btn:active {
+    transform: scale(0.9);
 }
