@@ -124,26 +124,27 @@ function PopUp(props) {
                     members: team.members.map(member => ({
                         fname: member.fname,
                         lname: member.lname,
-                        studentID: String(member.studentID), // Ensure studentID is a string
+                        studentID: member.studentID, // Ensure studentID is a string
                         email: member.email, 
                     })), 
                     courseID: userContext.selectedCourse.course_id // The course/class ID
                 };
-    
                 console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
     
                 const response = await postData("/api/team/create", requestBody);
                 if (response.status !== 200) {
-                    const error = await response.json();
-                    throw new Error(error.msg);
+                    // const error = await response.json();
+                    // throw new Error(error.msg);
+                    continue;
                 }
-                console.log("Raw Response:", response); // Log the raw response can delete after 
+                //console.log("Raw Response:", response); // Log the raw response can delete after 
             }
             return true; // Return true if all teams are successfully sent
         } catch (err) {
-            console.error("Error caught:", err); // Log any error caught
-            setError(`Error uploading data: ${err.message}`);
-            return false; // Return false on any error
+            //console.error("Error caught:", err); // Log any error caught
+            console.log("Team was not added");
+            //setError(`Error uploading data: ${err.message}`);
+            //return false; // Return false on any error
         }
     }
     
