@@ -14,6 +14,7 @@ function MyTeam() {
     });
     const [evaluatingMember, setEvaluatingMember] = useState({});
     const [courseName, setCourseName] = useState("");
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
         const fetchTeams = async () => {
@@ -30,7 +31,9 @@ function MyTeam() {
     }, [userContext.selectedCourse]);
 
     function reviewTeammate(i) {
-        setEvaluatingMember(team.members[i]);
+        if (!showConfirmation) {
+            setEvaluatingMember(team.members[i]);
+        }
     }
 
     return (
@@ -55,7 +58,7 @@ function MyTeam() {
                         )}
                     </div>
                 </div>
-                {Object.keys(evaluatingMember).length !== 0 ? <Evaluation team_id={team.team_id} teammate={evaluatingMember} /> : <></>}
+                {Object.keys(evaluatingMember).length !== 0 ? <Evaluation showConfirmation={showConfirmation} setShowConfirmation={setShowConfirmation} team_id={team.team_id} teammate={evaluatingMember} /> : <></>}
             </div>
         </>
     )

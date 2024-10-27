@@ -12,7 +12,6 @@ function Evaluation(props) {
         { criteria: "PRACTICAL CONTRIBUTION", rating: 0, comment: "" },
         { criteria: "WORK ETHIC", rating: 0, comment: "" }
     ]);
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const [errormsg, setErrormsg] = useState("");
     const criteriaDescriptions = {
         "COOPERATION": "Did they show cooperation through active listening, constructive feedback, and willingness to support team tasks?",
@@ -23,7 +22,9 @@ function Evaluation(props) {
 
     Evaluation.propTypes = {
         teammate: PropTypes.object,
-        team_id: PropTypes.number
+        team_id: PropTypes.number,
+        showConfirmation: PropTypes.bool,
+        setShowConfirmation: PropTypes.func
     };
 
     useEffect(() => {
@@ -48,12 +49,12 @@ function Evaluation(props) {
         if (incomplete) {
             setErrormsg("Evaluate all criteria before submitting.");
         } else {
-            setShowConfirmation(true);
+            props.setShowConfirmation(true);
         }
     };
 
     const confirmEvaluation = async () => {
-        setShowConfirmation(false);
+        props.setShowConfirmation(false);
         const submissionEval = {
             evaluation_details: [...evaluations],
             user_id: props.teammate.user_id,
@@ -76,11 +77,11 @@ function Evaluation(props) {
 
     return (
         <div className="teammate-evaluation my-team-info">
-            {showConfirmation ?
+            {props.showConfirmation ?
                 <ConfirmEvaluation
                     evaluations={evaluations}
                     onConfirm={confirmEvaluation}
-                    onCancel={() => setShowConfirmation(false)}
+                    onCancel={() => props.setShowConfirmation(false)}
                 />
                 :
                 <>
