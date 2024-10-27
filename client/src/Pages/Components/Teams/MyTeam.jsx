@@ -19,7 +19,6 @@ function MyTeam() {
         const fetchTeams = async () => {
             let response = await fetchData(`/api/team/get-my-team/${userContext.selectedCourse.course_id}`);
             let data = await response.json();
-            console.log(data)
             setTeam(data);
         }
         if (!userContext.selectedCourse || userContext.selectedCourse.course_id === 0) return;
@@ -47,7 +46,11 @@ function MyTeam() {
                                     <p className="teammate-details"> {member.f_name} {member.l_name}</p>
                                     <p className="teammate-details"> <MdEmail className="email-icon" />{member.email} </p>
                                 </div>
-                                <div className="review-btn" onClick={() => reviewTeammate(i)}> <MdOutlineRateReview className="review-icon" /> Review </div>
+                                {userContext.userID == member.user_id ?
+                                    <></>
+                                    :
+                                    <div className="review-btn" onClick={() => reviewTeammate(i)}> <MdOutlineRateReview className="review-icon" /> Review </div>
+                                }
                             </div>
                         )}
                     </div>

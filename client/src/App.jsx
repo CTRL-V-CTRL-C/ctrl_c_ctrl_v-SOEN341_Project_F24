@@ -10,6 +10,7 @@ import SideMenu from './Pages/Components/SideMenu';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [userID, setUserID] = useState(0);
   const [isInstructor, setIsInstructor] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState({ course_name: "", course_id: 0 });
   const [courseList, setCourseList] = useState([{ course_name: "", course_id: 0 }])
@@ -21,6 +22,7 @@ function App() {
         if (response.status === 200) {
           let authJSON = await response.json();
           setUserLoggedIn(true);
+          setUserID(authJSON.userId);
           setIsInstructor(authJSON.isInstructor);
         } else {
           setUserLoggedIn(false);
@@ -43,6 +45,8 @@ function App() {
     <UserContext.Provider value={{
       userLoggedIn,
       setUserLoggedIn,
+      userID,
+      setUserID,
       isInstructor,
       setIsInstructor,
       selectedCourse,

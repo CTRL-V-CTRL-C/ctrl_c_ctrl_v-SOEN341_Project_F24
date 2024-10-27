@@ -26,6 +26,7 @@ function LoginPage() {
 
         if (loginResponse.status === 200) {
             userContext.setUserLoggedIn(true);
+            userContext.setUserID(loginJSON.userId);
             userContext.setIsInstructor(loginJSON.isInstructor);
             setMessage(loginJSON.msg);
             navigate("/teams");

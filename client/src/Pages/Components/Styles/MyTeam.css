@@ -275,3 +275,18 @@
 .button:not(:last-child) {
   margin-bottom: 64px;
 }
+
+/* CONFIRMATION PAGE */
+.confirmation-actions {
+    margin-top: 3.5rem;
+}
+
+.evaluation-description {
+    padding-left: 2.5rem;
+    margin-right: 2.5rem;
+    text-align: left;
+}
+
+.criteria-name { 
+    font-weight: bold;
+}
