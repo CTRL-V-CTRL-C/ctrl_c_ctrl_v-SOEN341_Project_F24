@@ -28,7 +28,6 @@ function MembersPage() {
     };
 
     useEffect(() => {
-        console.log("Selected Course Changed:", selectedCourse);
         fetchStudents(); // Fetch students when selectedCourse changes
     }, [selectedCourse]);
 
