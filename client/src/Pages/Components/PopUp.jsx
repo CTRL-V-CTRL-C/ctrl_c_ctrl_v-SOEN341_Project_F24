@@ -135,6 +135,7 @@ function PopUp(props) {
                 if (response.status !== 200) {
                     // const error = await response.json();
                     // throw new Error(error.msg);
+                    console.log("Team was not added");
                     continue;
                 }
                 //console.log("Raw Response:", response); // Log the raw response can delete after 
