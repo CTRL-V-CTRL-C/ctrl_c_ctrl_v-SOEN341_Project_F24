@@ -10,8 +10,10 @@ import SideMenu from './Pages/Components/SideMenu';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [userID, setUserID] = useState(0);
   const [isInstructor, setIsInstructor] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState({ course_name: "", course_id: 0 });
+  const [courseList, setCourseList] = useState([{ course_name: "", course_id: 0 }])
 
   useEffect(() => {
     (async () => {
@@ -20,19 +22,22 @@ function App() {
         if (response.status === 200) {
           let authJSON = await response.json();
           setUserLoggedIn(true);
+          setUserID(authJSON.userId);
           setIsInstructor(authJSON.isInstructor);
         } else {
           setUserLoggedIn(false);
           setIsInstructor(false);
         }
+      } else {
+        await fetchCourses();
       }
-      fetchCourses();
     })();
   }, [userLoggedIn]);
 
   const fetchCourses = async () => {
     const coursesResponse = await fetchData("/api/course/get-courses");
     const courses = await coursesResponse.json();
+    setCourseList(courses);
     setSelectedCourse(courses[0]);
   }
 
@@ -40,6 +45,8 @@ function App() {
     <UserContext.Provider value={{
       userLoggedIn,
       setUserLoggedIn,
+      userID,
+      setUserID,
       isInstructor,
       setIsInstructor,
       selectedCourse,
@@ -48,7 +55,7 @@ function App() {
 
       <Router>
         <NavBar />
-        <SideMenu />
+        <SideMenu fetchCourses={fetchCourses} courses={courseList} />
         <PageHolder />
       </Router>
     </UserContext.Provider>

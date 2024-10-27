@@ -31,13 +31,15 @@
     border-radius: 2rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column
 }
 
 .teammate-card {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     text-align: left;
     padding:0rem 2rem 0rem 2rem ;
 }
@@ -91,6 +93,10 @@
     height: 100%;
     max-width: 85%;
     max-height: 10vh;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 /* SUBMIT BUTTON */
@@ -268,4 +274,19 @@
 
 .button:not(:last-child) {
   margin-bottom: 64px;
+}
+
+/* CONFIRMATION PAGE */
+.confirmation-actions {
+    margin-top: 3.5rem;
+}
+
+.evaluation-description {
+    padding-left: 2.5rem;
+    margin-right: 2.5rem;
+    text-align: left;
+}
+
+.criteria-name { 
+    font-weight: bold;
 }

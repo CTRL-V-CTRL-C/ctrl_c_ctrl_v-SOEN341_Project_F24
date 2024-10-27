@@ -19,10 +19,10 @@ jobs:
     - name: Run after merge
       if: github.event.action == 'closed'
       env:
-        not_merged: ${{ github.event.pull_request.merge == false }}
+        not_merged: ${{ github.event.pull_request.merged == false }}
       run: |
         if $not_merged; then
-          echo "This pull request was closed but it wan't merged. The tests shouldn't run"
+          echo "This pull request was closed but it wasn't merged. The tests shouldn't run"
           exit 1;
         fi;
 
