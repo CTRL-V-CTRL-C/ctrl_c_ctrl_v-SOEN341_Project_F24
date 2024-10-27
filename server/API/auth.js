@@ -120,6 +120,7 @@ router.post("/login", requireNoAuth, async (req, res) => {
       email: req.session.user.email,
       schoolId: req.session.user.schoolId,
       isInstructor: req.session.user.isInstructor,
+      userId: req.session.user.userId
     });
 
   } catch (error) {
@@ -148,6 +149,7 @@ router.post("/test-authentication", requireAuth, (req, res) => {
   res.status(200).json({
     msg: "User is authenticated",
     isInstructor: req.session.user.isInstructor,
+    userId: req.session.user.userId
   });
 });
 
