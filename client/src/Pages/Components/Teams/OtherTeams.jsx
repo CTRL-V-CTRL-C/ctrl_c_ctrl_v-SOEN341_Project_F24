@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
 import { fetchData } from "../../../Controller/FetchModule";
+import SuccessPopup from '../SuccessPopup';
+import PopUp from '../PopUp'
 
 const emptyTeam = { team_name: "", members: [{ f_name: "", l_name: "", email: "" }] }
 
@@ -8,6 +10,15 @@ function OtherTeams() {
     const userContext = useContext(UserContext);
     const [teams, setTeams] = useState([emptyTeam]);
     const [courseName, setCourseName] = useState("");
+
+    const [openUploadPopup, setButtonPopup] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [successPopupWarning, setSuccessPopupWarning] = useState("");
+
+    const triggerSuccessPopup = (warning) => {
+        setSuccessPopupWarning(warning);
+        setShowSuccessPopup(true);
+    };
 
     useEffect(() => {
         const fetchTeams = async () => {
@@ -27,6 +38,21 @@ function OtherTeams() {
 
     return (
         <>
+        <button onClick={() => setButtonPopup(true)}>Upload</button>
+         {/* CSV Upload Popup */}
+         <PopUp
+                trigger={openUploadPopup}
+                setTrigger={setButtonPopup}
+                class
+                triggerSuccessPopup={triggerSuccessPopup}
+                setSuccessPopupWarning={setSuccessPopupWarning}
+            />
+            {/* Success popup */}
+            <SuccessPopup
+                trigger={showSuccessPopup}
+                onClose={() => setShowSuccessPopup(false)}
+                warning={successPopupWarning} // Pass the warning message to SuccessPopup
+            />
             <p className="course-title"> COURSE: {courseName} </p>
             <div className="my-team">
                 {teams.map((team, i) =>

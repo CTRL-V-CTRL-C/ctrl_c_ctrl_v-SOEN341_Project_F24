@@ -1,9 +1,9 @@
 .popup {
     position: fixed;
     top: 0;
-    left: calc(50% + 120px); /* Center considering the 240px navbar */
+    left: calc(50% + 70px); /* Center considering the 240px navbar */
     transform: translateX(-50%); /* Center the popup */
-    width: calc(100% - 240px); /* Full width minus the navbar */
+    width: 100%; /* Full width minus the navbar */
     height: 100vh;
     background-color: rgba(216, 205, 205, 0.637);
     display: flex;
