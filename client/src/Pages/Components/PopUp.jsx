@@ -146,8 +146,7 @@ function PopUp(props) {
             return false; //Return false on any error
         }
     }
-
-
+    
     return (props.trigger) ? (
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
