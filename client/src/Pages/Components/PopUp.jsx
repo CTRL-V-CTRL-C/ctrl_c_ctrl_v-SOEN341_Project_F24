@@ -121,12 +121,13 @@ function PopUp(props) {
             for (let team of official_team.teams) {
                 const requestBody = {
                     teamName: team.name, // The team's name
-                    members: team.members.map(member => ({
-                        fname: member.fname,
-                        lname: member.lname,
-                        studentID: member.studentID, // Ensure studentID is a string
-                        email: member.email, 
-                    })), 
+                    //other info will be needed later
+                    members: team.members.map(member => 
+                        //fname: member.fname,
+                        //lname: member.lname,
+                        //studentID: member.studentID, // Ensure studentID is a string
+                        member.email, 
+                    ), 
                     courseID: userContext.selectedCourse.course_id // The course/class ID
                 };
                 console.log("Sending data to API:", requestBody); // Debug the request body can delete after 

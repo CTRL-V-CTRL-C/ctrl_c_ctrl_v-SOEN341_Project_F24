@@ -12,14 +12,14 @@ function SuccessPopup({ trigger, onClose, warning }) {
         warning: PropTypes.string,
     };
     if(warning  == null){
-        warning = "All teams already exist, Please upload a new file to create new teams";
+        warning = "Teams were succefully added";
     }
 
     return (trigger) ? (
         <div className="success-popup">
             <div className="success-popup-inner">
                 <button className="close-x" onClick={onClose}>×</button>
-                <h2 style={{ color: 'black' }}>{warning =="All teams already exist, Please upload a new file to create new teams"? "File Upload Successful": "Error"}</h2>
+                <h2 style={{ color: 'black' }}>{warning =="Teams were succefully added"? "File Upload Successful": "Error"}</h2>
                 {warning && <p className="error-message">{warning}</p>}
                 <button className="success-close-button" onClick={onClose}>OK</button>
             </div>
