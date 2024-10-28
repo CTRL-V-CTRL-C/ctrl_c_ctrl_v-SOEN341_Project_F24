@@ -33,10 +33,10 @@ function OtherTeams() {
         setCourseName(userContext.selectedCourse.course_name);
     }
 
-    const triggerFetchTeams = () => fetchTeams();
+    //const triggerFetchTeams = () => fetchTeams();
 
     useEffect(() => {
-        triggerFetchTeams(); // Fetch teams on component mount or when selectedCourse changes
+        fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
     }, [userContext.selectedCourse]);
 
     return (
@@ -49,7 +49,7 @@ function OtherTeams() {
                 class
                 triggerSuccessPopup={triggerSuccessPopup}
                 setSuccessPopupWarning={setSuccessPopupWarning}
-                fetchTeams={triggerFetchTeams} // Pass triggerFetchTeams to PopUp
+                fetchTeams={fetchTeams} // Pass triggerFetchTeams to PopUp
             />
             {/* Success popup */}
             <SuccessPopup
