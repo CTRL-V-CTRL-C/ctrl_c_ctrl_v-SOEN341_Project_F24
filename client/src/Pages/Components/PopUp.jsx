@@ -72,7 +72,7 @@ function PopUp(props) {
             }
 
             let warnings = [];
-            const teamInfo = parseCSV(text, warnings); // Get teamInfo from parsing
+            const teamInfo = parseCSV(text, warnings); //Get teamInfo from parsing
 
             // Check for warnings
             if (warnings.length > 0) {
@@ -80,12 +80,12 @@ function PopUp(props) {
                 props.triggerSuccessPopup(warnings[0]);
             } else {
                 // Call sendData with the current teamInfo
-                const success = await sendData(teamInfo); // Pass the current teamInfo directly
+                const success = await sendData(teamInfo); //Pass the current teamInfo directly
 
                 if (success) {
                     handleClose();
-                    props.triggerSuccessPopup(null); // No errors to Success Popup
-                    await props.fetchTeams(); // Call fetchTeams to refresh data
+                    props.triggerSuccessPopup(null); //No errors to Success Popup
+                    await props.fetchTeams(); //Call fetchTeams to refresh data
                 }
             }
         };
@@ -114,7 +114,7 @@ function PopUp(props) {
             }
         }
 
-        return teamInfo; // Return the constructed teamInfo directly
+        return teamInfo; //Return the constructed teamInfo directly
     };
 
     async function sendData(official_team) {
@@ -126,28 +126,24 @@ function PopUp(props) {
                     members: team.members.map(member =>
                         //fname: member.fname,
                         //lname: member.lname,
-                        //studentID: member.studentID, // Ensure studentID is a string
+                        //studentID: member.studentID, 
                         member.email,
                     ),
-                    courseID: userContext.selectedCourse.course_id // The course/class ID
+                    courseID: userContext.selectedCourse.course_id //get class ID from API
                 };
-                console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
+                console.log("Sending data to API:", requestBody); //Debug the request body can delete after 
 
                 const response = await postData("/api/team/create", requestBody);
                 if (response.status !== 200) {
-                    // const error = await response.json();
-                    // throw new Error(error.msg);
-                    console.log("Team was not added");
+                    //const error = await response.json();
+                    //throw new Error(error.msg);
                     continue;
                 }
-                //console.log("Raw Response:", response); // Log the raw response can delete after 
             }
-            return true; // Return true if all teams are successfully sent
+            return true; //Return true if all teams are successfully sent
         } catch (err) {
-            //console.error("Error caught:", err); // Log any error caught
-            console.log("Team was not added");
-            //setError(`Error uploading data: ${err.message}`);
-            //return false; // Return false on any error
+            setError(`Error uploading data: ${err.message}`);
+            return false; //Return false on any error
         }
     }
 
