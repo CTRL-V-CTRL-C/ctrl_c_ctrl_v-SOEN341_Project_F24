@@ -20,7 +20,7 @@ function OtherTeams() {
         setShowSuccessPopup(true);
     };
 
-    useEffect(() => {
+  
         const fetchTeams = async () => {
             let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
             let data;
@@ -33,7 +33,13 @@ function OtherTeams() {
             if (userContext.selectedCourse.course_id === 0) return;
             setCourseName(userContext.selectedCourse.course_name);
         }
-        fetchTeams();
+      
+  
+
+    const triggerFetchTeams = () => fetchTeams();
+
+    useEffect(() => {
+        triggerFetchTeams(); // Fetch teams on component mount or when selectedCourse changes
     }, [userContext.selectedCourse]);
 
     return (
@@ -46,6 +52,7 @@ function OtherTeams() {
                 class
                 triggerSuccessPopup={triggerSuccessPopup}
                 setSuccessPopupWarning={setSuccessPopupWarning}
+                fetchTeams={triggerFetchTeams} // Pass triggerFetchTeams to PopUp
             />
             {/* Success popup */}
             <SuccessPopup

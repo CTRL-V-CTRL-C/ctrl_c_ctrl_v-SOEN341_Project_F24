@@ -7,6 +7,7 @@ function AllTeams() {
     const [openUploadPopup, setButtonPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [successPopupWarning, setSuccessPopupWarning] = useState("");
+    const fetchTeamsRef = useRef();
 
     const triggerSuccessPopup = (warning) => {
         setSuccessPopupWarning(warning);
