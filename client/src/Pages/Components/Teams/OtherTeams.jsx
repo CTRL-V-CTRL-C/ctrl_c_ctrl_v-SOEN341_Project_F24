@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
 import { fetchData } from "../../../Controller/FetchModule";
 import SuccessPopup from '../SuccessPopup';
@@ -20,7 +20,7 @@ function OtherTeams() {
         setShowSuccessPopup(true);
     };
 
-    const fetchTeams = async () => {
+    const fetchTeams =useCallback(async () => {
         let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
         let data;
         if (response.ok) {
@@ -31,12 +31,15 @@ function OtherTeams() {
         setTeams(data);
         if (userContext.selectedCourse.course_id === 0) return;
         setCourseName(userContext.selectedCourse.course_name);
-    }
+    })
 
     //const triggerFetchTeams = () => fetchTeams();
 
     useEffect(() => {
+        try{
         fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
+        }catch{
+            console.log(error)};
     }, [userContext.selectedCourse]);
 
     return (

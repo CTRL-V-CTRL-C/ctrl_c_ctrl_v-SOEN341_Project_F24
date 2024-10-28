@@ -85,7 +85,7 @@ function PopUp(props) {
                 if (success) {
                     handleClose();
                     props.triggerSuccessPopup(null); // No errors to Success Popup
-                    props.fetchTeams(); // Call fetchTeams to refresh data
+                    await props.fetchTeams(); // Call fetchTeams to refresh data
                 }
             }
         };
