@@ -31,7 +31,7 @@ function OtherTeams() {
         setTeams(data);
         if (userContext.selectedCourse.course_id === 0) return;
         setCourseName(userContext.selectedCourse.course_name);
-    }, [])
+    },[userContext.selectedCourse])
 
     useEffect(() => {
         fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
