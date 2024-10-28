@@ -1,5 +1,5 @@
 import React from 'react';
-import './Styles/PopUp.css'; 
+import './Styles/PopUp.css';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -11,7 +11,7 @@ function SuccessPopup({ trigger, onClose, warning }) {
         onClose: PropTypes.func.isRequired,
         warning: PropTypes.string,
     };
-    if(warning  == null){
+    if (warning == null) {
         warning = "Teams were succefully added";
     }
 
@@ -19,7 +19,7 @@ function SuccessPopup({ trigger, onClose, warning }) {
         <div className="success-popup">
             <div className="success-popup-inner">
                 <button className="close-x" onClick={onClose}>×</button>
-                <h2 style={{ color: 'black' }}>{warning =="Teams were succefully added"? "File Upload Successful": "Error"}</h2>
+                <h2 style={{ color: 'black' }}>{warning == "Teams were succefully added" ? "File Upload Successful" : "Error"}</h2>
                 {warning && <p className="error-message">{warning}</p>}
                 <button className="success-close-button" onClick={onClose}>OK</button>
             </div>

@@ -105,7 +105,7 @@ function PopUp(props) {
                 warnings.push(`Note: Missing student information on line ${i}`);
                 continue;
             }
-         
+
             const existingTeam = teamInfo.teams.find(team => team.name === teamName);
             if (existingTeam) {
                 existingTeam.members.push({ fname, lname, studentID, email });
@@ -123,16 +123,16 @@ function PopUp(props) {
                 const requestBody = {
                     teamName: team.name, // The team's name
                     //other info will be needed later
-                    members: team.members.map(member => 
+                    members: team.members.map(member =>
                         //fname: member.fname,
                         //lname: member.lname,
                         //studentID: member.studentID, // Ensure studentID is a string
-                        member.email, 
-                    ), 
+                        member.email,
+                    ),
                     courseID: userContext.selectedCourse.course_id // The course/class ID
                 };
                 console.log("Sending data to API:", requestBody); // Debug the request body can delete after 
-    
+
                 const response = await postData("/api/team/create", requestBody);
                 if (response.status !== 200) {
                     // const error = await response.json();
@@ -150,7 +150,7 @@ function PopUp(props) {
             //return false; // Return false on any error
         }
     }
-    
+
 
     return (props.trigger) ? (
         <div className="popup">

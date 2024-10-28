@@ -20,21 +20,18 @@ function OtherTeams() {
         setShowSuccessPopup(true);
     };
 
-  
-        const fetchTeams = async () => {
-            let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
-            let data;
-            if (response.ok) {
-                data = await response.json();
-            } else {
-                data = [emptyTeam];
-            }
-            setTeams(data);
-            if (userContext.selectedCourse.course_id === 0) return;
-            setCourseName(userContext.selectedCourse.course_name);
+    const fetchTeams = async () => {
+        let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
+        let data;
+        if (response.ok) {
+            data = await response.json();
+        } else {
+            data = [emptyTeam];
         }
-      
-  
+        setTeams(data);
+        if (userContext.selectedCourse.course_id === 0) return;
+        setCourseName(userContext.selectedCourse.course_name);
+    }
 
     const triggerFetchTeams = () => fetchTeams();
 
@@ -44,9 +41,9 @@ function OtherTeams() {
 
     return (
         <>
-        <button onClick={() => setButtonPopup(true)}>Upload</button>
-         {/* CSV Upload Popup */}
-         <PopUp
+            <button onClick={() => setButtonPopup(true)}>Upload</button>
+            {/* CSV Upload Popup */}
+            <PopUp
                 trigger={openUploadPopup}
                 setTrigger={setButtonPopup}
                 class
