@@ -9,8 +9,10 @@ const UserContext = React.createContext(
         setUserID: () => { },
         isInstructor: false,
         setIsInstructor: () => { },
-        selectedCourse: { course_name:"" , course_id: 0},
+        selectedCourse: { course_name: "", course_id: 0 },
         setSelectedCourse: () => { },
+        hasCourses: false,
+        setHasCourses: () => { }
     }
 );
 
