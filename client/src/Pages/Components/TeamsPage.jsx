@@ -22,9 +22,11 @@ function TeamsPage() {
                 <span>{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
                 <span>{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
             </label>
-            {teamsView ?
-                (userContext.isInstructor ? <OtherTeams /> : <MyTeam />) :
-                (userContext.isInstructor ? <MembersPage /> : <OtherTeams />)
+            {userContext.hasCourses ?
+                (teamsView ?
+                    (userContext.isInstructor ? <OtherTeams /> : <MyTeam />) :
+                    (userContext.isInstructor ? <MembersPage /> : <OtherTeams />)) :
+                <span>You are not part of any courses</span>
             }
         </div>
     );

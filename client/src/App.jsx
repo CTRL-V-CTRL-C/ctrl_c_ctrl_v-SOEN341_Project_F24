@@ -13,7 +13,8 @@ function App() {
   const [userID, setUserID] = useState(0);
   const [isInstructor, setIsInstructor] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState({ course_name: "", course_id: 0 });
-  const [courseList, setCourseList] = useState([{ course_name: "", course_id: 0 }])
+  const [courseList, setCourseList] = useState([{ course_name: "", course_id: 0 }]);
+  const [hasCourses, setHasCourses] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -38,6 +39,7 @@ function App() {
     const coursesResponse = await fetchData("/api/course/get-courses");
     const courses = await coursesResponse.json();
     setCourseList(courses);
+    setHasCourses(courses.length > 0);
     setSelectedCourse(courses[0]);
   }
 
@@ -50,7 +52,9 @@ function App() {
       isInstructor,
       setIsInstructor,
       selectedCourse,
-      setSelectedCourse
+      setSelectedCourse,
+      hasCourses,
+      setHasCourses
     }}>
 
       <Router>
