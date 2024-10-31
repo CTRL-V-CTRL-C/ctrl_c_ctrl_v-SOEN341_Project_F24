@@ -38,7 +38,10 @@ function OtherTeams() {
     }, [userContext.selectedCourse]);
 
     return (
+
         <>
+         {userContext.isInstructor && (
+            <>
             <button onClick={() => setButtonPopup(true)}>Upload</button>
             {/* CSV Upload Popup */}
             <PopUp
@@ -55,6 +58,8 @@ function OtherTeams() {
                 onClose={() => setShowSuccessPopup(false)}
                 warning={successPopupWarning} // Pass the warning message to SuccessPopup
             />
+            </>
+         )}
             <p className="course-title"> COURSE: {courseName} </p>
             <div className="my-team">
                 {teams.map((team, i) =>
