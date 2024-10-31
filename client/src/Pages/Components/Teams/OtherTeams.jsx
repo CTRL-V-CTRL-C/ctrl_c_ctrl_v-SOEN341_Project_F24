@@ -31,7 +31,7 @@ function OtherTeams() {
         setTeams(data);
         if (userContext.selectedCourse.course_id === 0) return;
         setCourseName(userContext.selectedCourse.course_name);
-    },[userContext.selectedCourse])
+    }, [userContext.selectedCourse])
 
     useEffect(() => {
         fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
@@ -40,27 +40,27 @@ function OtherTeams() {
     return (
 
         <>
-         {userContext.isInstructor && (
-            <>
-            <button onClick={() => setButtonPopup(true)}>Upload</button>
-            {/* CSV Upload Popup */}
-            <PopUp
-                trigger={openUploadPopup}
-                setTrigger={setButtonPopup}
-                class
-                triggerSuccessPopup={triggerSuccessPopup}
-                setSuccessPopupWarning={setSuccessPopupWarning}
-                fetchTeams={fetchTeams} // Pass triggerFetchTeams to PopUp
-            />
-            {/* Success popup */}
-            <SuccessPopup
-                trigger={showSuccessPopup}
-                onClose={() => setShowSuccessPopup(false)}
-                warning={successPopupWarning} // Pass the warning message to SuccessPopup
-            />
-            </>
-         )}
-            <p className="course-title"> COURSE: {courseName} </p>
+            {userContext.isInstructor && (
+                <>
+                    <button onClick={() => setButtonPopup(true)}>Upload</button>
+                    {/* CSV Upload Popup */}
+                    <PopUp
+                        trigger={openUploadPopup}
+                        setTrigger={setButtonPopup}
+                        class
+                        triggerSuccessPopup={triggerSuccessPopup}
+                        setSuccessPopupWarning={setSuccessPopupWarning}
+                        fetchTeams={fetchTeams} // Pass triggerFetchTeams to PopUp
+                    />
+                    {/* Success popup */}
+                    <SuccessPopup
+                        trigger={showSuccessPopup}
+                        onClose={() => setShowSuccessPopup(false)}
+                        warning={successPopupWarning} // Pass the warning message to SuccessPopup
+                    />
+                </>
+            )}
+            <p className="course-title"> {courseName} </p>
             <div className="my-team">
                 {teams.map((team, i) =>
                     <div key={i} className="my-team-info">
