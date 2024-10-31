@@ -20,10 +20,6 @@ function SideMenu({ courses, fetchCourses }) {
     const [courseName, setCourseName] = useState("");
 
     useEffect(() => {
-
-    }, [userContext.selectedCourse])
-
-    useEffect(() => {
         setUserCourses(courses);
     }, [courses])
 
