@@ -28,6 +28,7 @@ function LoginPage() {
             userContext.setUserLoggedIn(true);
             userContext.setUserID(loginJSON.userId);
             userContext.setIsInstructor(loginJSON.isInstructor);
+            userContext.setHasCourses(false);
             setMessage(loginJSON.msg);
             navigate("/teams");
         } else {
