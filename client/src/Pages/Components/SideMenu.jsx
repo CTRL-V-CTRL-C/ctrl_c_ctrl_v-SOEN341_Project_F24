@@ -63,7 +63,6 @@ function SideMenu({ courses, fetchCourses }) {
     return (
         userContext.userLoggedIn ?
             <nav className={`menu ${styleClass}`} tabIndex="0">
-                <div className="smartphone-menu-trigger"></div>
                 <header className="avatar">
                     <h2>Welcome</h2>
                 </header>

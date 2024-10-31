@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../Controller/FetchModule';
 import FormInput from './Components/Forms/FormInput';
@@ -12,6 +12,10 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+    useEffect(() => {
+        navigate(userContext.userLoggedIn ? "/teams" : "/loginAccount");
+    }, [userContext.userLoggedIn, navigate]);
 
     async function loginAccount(event) {
         //Stops the form from submitting

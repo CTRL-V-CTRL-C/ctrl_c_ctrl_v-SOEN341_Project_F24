@@ -4,12 +4,15 @@ body:has(nav.sidebar-on) {
     color: #fff;
 }
 
+.menu:has(.input-wrapper) {
+    width: fit-content;
+}
+
 
 .menu {
     height: 100vh;
-    width: fit-content;
+    width: 11vw;
     position: fixed;
-    display: inline-block;
     top: 0;
     left: 0;
     z-index: 5;
@@ -30,7 +33,10 @@ body:has(nav.sidebar-on) {
         list-style: none;
         padding: 0.5em 0;
         margin: 0;
-        display: inline-block;
+
+        .add-course-btn {
+            width: 11vw;
+        }
 
         li {
             margin: 1em 0em 1em 0em;
@@ -40,7 +46,6 @@ body:has(nav.sidebar-on) {
             background-size: auto 20px;
             transition: all 0.15s linear;
             cursor: pointer;
-            width: 11vw;
             height: 6vh;
             text-wrap-mode: nowrap;
             align-content:space-evenly;
@@ -70,141 +75,6 @@ body:has(nav.sidebar-on) {
     box-shadow: 5px 3px 15px 0px rgba(82, 52, 52, 0.92);
 }
 
-@media screen and (max-width:900px) and (min-width:400px) {
-    /* body {
-        padding-left: 90px;
-    } */
-
-    .menu {
-        width: fit-content;
-
-        .avatar {
-            padding: 0.5em;
-            position: relative;
-
-            img {
-                width: 60px;
-            }
-
-            h2 {
-                opacity: 0;
-                position: absolute;
-                top: 50%;
-                left: 100px;
-                margin: 0;
-                min-width: 200px;
-                border-radius: 4px;
-                background: rgba(0, 0, 0, 0.4);
-                transform: translate3d(-20px, -50%, 0);
-                transition: all 0.15s ease-in-out;
-            }
-
-            &:hover {
-                h2 {
-                    opacity: 1;
-                    transform: translate3d(0px, -50%, 0);
-                }
-            }
-        }
-
-        ul {
-            li {
-                height: 90/1.5;
-                background-position: center center;
-                background-size: 30px auto;
-                position: relative;
-
-                span {
-                    /* display:none; */
-                    opacity: 0;
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.5);
-                    padding: 0.2em 0.5em;
-                    border-radius: 4px;
-                    top: 50%;
-                    left: 80px;
-                    transform: translate3d(-15px, -50%, 0);
-                    transition: all 0.15s ease-in-out;
-
-                    &:before {
-                        content: '';
-                        width: 0;
-                        height: 0;
-                        position: absolute;
-                        top: 50%;
-                        left: -5px;
-                        border-top: 5px solid transparent;
-                        border-bottom: 5px solid transparent;
-                        border-right: 5px solid rgba(0, 0, 0, 0.5);
-                        transform: translateY(-50%);
-                    }
-                }
-
-                &:hover {
-                    span {
-                        opacity: 1;
-                        transform: translate3d(0px, -50%, 0);
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media screen and (max-width:400px) {
-    /* body {
-        padding-left: 0;
-    } */
-
-    .menu {
-        width: fit-content;
-        box-shadow: 0 0 0 100em rgba(0, 0, 0, 0);
-        transform: translate3d(230px, 0, 0);
-        transition: all 0.3s ease-in-out;
-
-        .smartphone-menu-trigger {
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            left: 100%;
-
-            &:before,
-            &:after {
-                content: '';
-                width: 50%;
-                height: 2px;
-                background: #fff;
-                border-radius: 10px;
-                position: absolute;
-                top: 45%;
-                left: 50%;
-                transform: translate3d(-50%, -50%, 0);
-            }
-
-            &:after {
-                top: 55%;
-                transform: translate3d(-50%, -50%, 0);
-            }
-        }
-
-        ul {
-
-            li {
-                padding: 1em 1em 1em 3em;
-                font-size: 1.2em;
-            }
-        }
-
-        &:focus {
-            transform: translate3d(0, 0, 0);
-            box-shadow: 0 0 0 100em rgba(0, 0, 0, 0.6);
-
-            .smartphone-menu-trigger {
-                pointer-events: none;
-            }
-        }
-    }
-}
 /* ADD COURSE BUTTON */
 .input-wrapper {
     width: fit-content;
@@ -331,6 +201,6 @@ body:has(nav.sidebar-on) {
     background-color: rgba(255, 255, 255, 0.326);
 }
 
-.course-menu-elem {
+/* .course-menu-elem {
     width:auto !important;
-}
+} */
