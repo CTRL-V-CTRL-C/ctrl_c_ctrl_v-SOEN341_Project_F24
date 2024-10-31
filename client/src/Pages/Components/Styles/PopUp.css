@@ -1,0 +1,251 @@
+.popup {
+    position: fixed;
+    top: 0;
+    left: calc(50% + 70px); /* Center considering the 240px navbar */
+    transform: translateX(-50%); /* Center the popup */
+    width: 100%; /* Full width minus the navbar */
+    height: 100vh;
+    background-color: rgba(216, 205, 205, 0.637);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px; /* Optional: Add some padding */
+}
+
+.popup-inner {
+    border-style: solid;
+    position: relative;
+    padding: 50px; /* Increase padding for better spacing */
+    width: 100%;
+    max-width: 640px; /* Adjust as needed */
+    background-color: hwb(0 98% 2%);
+    border-radius: 15px;
+    border-width: 3px;
+    box-shadow: 10px 10px 10px rgb(209, 179, 179);
+    overflow: hidden; /* Ensure contents stay within bounds */
+}
+
+.bu{
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+}
+
+.dropZone{
+    width:100%;
+    height: 350px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border-style: dashed;
+    border-width: 3px;
+    position: relative;
+    border-radius: 15px;
+}
+.border-outer{
+    border-color:  #a6757c;
+}
+
+.border-inner {
+    border-color: rgb(169, 163, 163);
+}
+
+.border-green {
+    border-color: rgb(212, 196, 214);
+}
+
+.bg-green {
+    background-color: rgb(243, 233, 244);
+}
+
+.file-details {
+    position: relative;
+    width:50%;
+    bottom: 0px;
+    text-align: center;
+    font-size: small;
+    border-style: solid;
+    border-color: rgb(113, 108, 108);
+}
+
+.upload-button {
+    background-color:  #ba858c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 2px solid #a6757c;
+
+}
+
+.upload-button:hover {
+    background-color: #ddbabf;
+}
+
+.file-input {
+    display: none; /* Hide the default file input */
+}
+
+
+/* Styles for the file details */
+.file-outline{
+    display:flex;
+    justify-content: center;
+    width: 100%;
+}
+.file-details {
+    margin-top: 15px;
+    border-radius: 20px;
+    border-color:  #a7a650;
+}
+
+.file-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.file-details li {
+    margin: 5px 0;
+    color:black;
+}
+.close-x {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.close-x:hover {
+    color: rgb(214, 106, 106); 
+}
+
+@media screen and (max-width: 900px) and (min-width: 480px) {
+    .popup {
+        left: calc(50% + 45px); /* Adjust for the smaller navbar */
+        width: calc(100% - 90px); /* Full width minus the new navbar */
+        padding: 20px; /* Add padding around the popup */
+        box-sizing: border-box; /* Ensure padding doesn't affect width calculation */
+    }
+
+    .popup-inner {
+        padding: 30px; /* Adjust padding for smaller screens */
+        width: 90%; /* Use more width on smaller screens */
+        max-width: none; /* Allow full width */
+        margin: 20px; /* Add margin for space around the popup */
+        box-shadow: 10px 10px 10px rgba(209, 179, 179, 0.5); /* Slightly lighter shadow */
+    }
+
+    .dropZone {
+        height: 250px; /* Reduce height for smaller screens */
+        max-height: 40vh; /* Limit height to 40% of viewport */
+    }
+
+    .upload-button {
+        font-size: 14px; /* Smaller font size for buttons */
+        padding: 8px 15px; /* Adjust padding */
+    }
+
+    .file-details {
+        font-size: 0.9em; /* Slightly smaller font for details */
+    }
+}
+/* SuccessPopup.css */
+.success-popup {
+    left: calc(50% + 120px); /* Center considering the 240px navbar */
+    transform: translateX(-50%); /* Center the popup */
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1001;
+}
+
+.success-popup-inner {
+    padding: 30px;
+}
+
+.success-popup .close-x {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.success-popup h2 {
+    font-size: 24px;
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
+.success-popup p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.success-popup .success-close-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.success-popup .success-close-button:hover {
+    background-color: #218838;
+}
+
+.warning-message p {
+    color: orange;
+}
+
+/* Media Query for responsiveness */
+@media screen and (max-width: 900px) and (min-width: 480px) {
+    .success-popup {
+        left: calc(50% + 45px); /* Adjust for the smaller navbar */
+        width: calc(100% - 90px); /* Full width minus the new navbar */
+        margin: 20px; /* Add margin for space around the popup */
+        margin-left: 20px; /* Add space specifically for the left side */
+        margin-right: 20px; /* Add margin for the right side */
+        box-sizing: border-box; /* Ensure padding and margin are included in width calculation */
+    }
+
+    .success-popup-inner {
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+
+    .success-popup h2 {
+        font-size: 20px; /* Slightly smaller heading */
+    }
+
+    .success-popup p {
+        font-size: 14px; /* Slightly smaller text */
+    }
+
+    .success-popup .success-close-button {
+        padding: 8px 15px; /* Adjust button padding */
+        font-size: 14px; /* Smaller font size for button */
+    }
+}

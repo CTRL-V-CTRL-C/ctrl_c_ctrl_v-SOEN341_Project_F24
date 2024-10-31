@@ -55,7 +55,6 @@ async function getUserIds(db, emails) {
     }
     values = values.substring(0, values.length - 1);
     const query = {
-        name: 'get-users',
         text: `SELECT (user_id) FROM users WHERE email IN (${values})`,
         values: emails,
     };
@@ -118,7 +117,10 @@ async function addTeamMembers(db, teamId, members) {
     }
 
     const values = userIds.flatMap((member) => [teamId, member]);
-
+    if (values.length ==0){
+        log.info('None of the team members exist')
+        return null; //there are no users that exist
+    }
     let preparedValues = "";
     for (let index = 1; index <= values.length; index += 2) {
         preparedValues += `($${index}, $${index + 1}),`

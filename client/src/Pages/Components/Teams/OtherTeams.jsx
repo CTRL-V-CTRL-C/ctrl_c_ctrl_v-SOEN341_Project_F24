@@ -1,6 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
 import { fetchData } from "../../../Controller/FetchModule";
+import SuccessPopup from '../SuccessPopup';
+import PopUp from '../PopUp'
 
 const emptyTeam = { team_name: "", members: [{ f_name: "", l_name: "", email: "" }] }
 
@@ -9,24 +11,55 @@ function OtherTeams() {
     const [teams, setTeams] = useState([emptyTeam]);
     const [courseName, setCourseName] = useState("");
 
-    useEffect(() => {
-        const fetchTeams = async () => {
-            let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
-            let data;
-            if (response.ok) {
-                data = await response.json();
-            } else {
-                data = [emptyTeam];
-            }
-            setTeams(data);
-            if (userContext.selectedCourse.course_id === 0) return;
-            setCourseName(userContext.selectedCourse.course_name);
+    const [openUploadPopup, setButtonPopup] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [successPopupWarning, setSuccessPopupWarning] = useState("");
+
+    const triggerSuccessPopup = (warning) => {
+        setSuccessPopupWarning(warning);
+        setShowSuccessPopup(true);
+    };
+
+    const fetchTeams = useCallback(async () => {
+        let response = await fetchData(`/api/team/get-teams/${userContext.selectedCourse.course_id}`);
+        let data;
+        if (response.ok) {
+            data = await response.json();
+        } else {
+            data = [emptyTeam];
         }
-        fetchTeams();
+        setTeams(data);
+        if (userContext.selectedCourse.course_id === 0) return;
+        setCourseName(userContext.selectedCourse.course_name);
+    },[userContext.selectedCourse])
+
+    useEffect(() => {
+        fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
     }, [userContext.selectedCourse]);
 
     return (
+
         <>
+         {userContext.isInstructor && (
+            <>
+            <button onClick={() => setButtonPopup(true)}>Upload</button>
+            {/* CSV Upload Popup */}
+            <PopUp
+                trigger={openUploadPopup}
+                setTrigger={setButtonPopup}
+                class
+                triggerSuccessPopup={triggerSuccessPopup}
+                setSuccessPopupWarning={setSuccessPopupWarning}
+                fetchTeams={fetchTeams} // Pass triggerFetchTeams to PopUp
+            />
+            {/* Success popup */}
+            <SuccessPopup
+                trigger={showSuccessPopup}
+                onClose={() => setShowSuccessPopup(false)}
+                warning={successPopupWarning} // Pass the warning message to SuccessPopup
+            />
+            </>
+         )}
             <p className="course-title"> COURSE: {courseName} </p>
             <div className="my-team">
                 {teams.map((team, i) =>
