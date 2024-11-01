@@ -6,7 +6,7 @@
         margin-top: 35px;
     }
 }
-*{
+*:not(path){
     color:black;
 }
 #whole{
@@ -16,8 +16,6 @@
 }
 #TitlePosition{
     width: fit-content;
-  
- 
 }
 #PageTitle{
     color:black;
