@@ -63,7 +63,7 @@ function SideMenu({ courses, fetchCourses }) {
                     <h2>Welcome</h2>
                 </header>
                 <ul>
-                    {userCourses.map((course, i) => <li onClick={() => selectCourse(course)} key={i} tabIndex="0" className={userContext.selectedCourse.course_id == course.course_id ? "selected course-menu-elem" : "course-menu-elem"} > <span>{course.course_name}</span></li>)}
+                    {userContext.hasCourses ? userCourses.map((course, i) => <li onClick={() => selectCourse(course)} key={i} tabIndex="0" className={userContext.selectedCourse.course_id == course.course_id ? "selected course-menu-elem" : "course-menu-elem"} > <span>{course.course_name}</span></li>) : <></>}
                     {userContext.isInstructor ?
                         addingCourse ?
                             <>
