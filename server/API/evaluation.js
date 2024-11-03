@@ -1,8 +1,8 @@
 import express from 'express';
 import { db } from '../database/db.js';
-import { requireAuth, requireStudent } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation } from '../database/evaluation.js';
-import { areInSameTeam } from '../database/team.js';
+import { requireAuth, requireStudent, requireTeacher } from './auth.js';
+import { createOrUpdateEvaluation, getEvaluation, getEvaluationSummary } from '../database/evaluation.js';
+import { areInSameTeam, teachesTeam } from '../database/team.js';
 import log from '../logger.js';
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
 
   let goodUsers = await areInSameTeam(db, req.body.team_id, req.body.user_id, req.session.user.userId);
   if (goodUsers instanceof Error) {
-    res.status(500).json({ msg: result.message });
+    res.status(500).json({ msg: goodUsers.message });
     next();
     return;
   } else if (!goodUsers) {
@@ -71,7 +71,7 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
 router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStudent, async (req, res, next) => {
   let goodUsers = await areInSameTeam(db, req.params.teamId, req.params.evaluateeId, req.session.user.userId);
   if (goodUsers instanceof Error) {
-    res.status(500).json({ msg: result.message });
+    res.status(500).json({ msg: goodUsers.message });
     next();
     return;
   } else if (!goodUsers) {
@@ -80,6 +80,28 @@ router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStuden
     return;
   }
   const result = await getEvaluation(db, req.session.user.userId, req.params.evaluateeId, req.params.teamId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result);
+  }
+  next();
+});
+
+router.get("/get-summary/:teamId", requireAuth, requireTeacher, async (req, res, next) => {
+  const goodInstructor = await teachesTeam(db, req.params.teamId, req.session.user.userId);
+
+  if (goodInstructor instanceof Error) {
+    res.status(500).json({ msg: goodInstructor.message });
+    next();
+    return;
+  } else if (!goodInstructor) {
+    res.status(400).json({ msg: `You must teach the team you are trying to get the evaluations of` });
+    next();
+    return;
+  }
+
+  const result = await getEvaluationSummary(db, req.params.teamId);
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });
   } else {
