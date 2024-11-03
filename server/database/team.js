@@ -44,6 +44,30 @@ async function areInSameTeam(db, teamId, userId1, userId2) {
 }
 
 /**
+ * Check whether an instructor teaches the course that the team is part of
+ * @param {pg.Pool} db 
+ * @param {int} teamId The ID of the team
+ * @param {int} instructorId The ID of the instructor user
+ * @returns {Promise<Error | boolean>} whether or not the instructor is in charge of the team
+ */
+async function teachesTeam(db, teamId, instructorId) {
+    const query = {
+        name: "check-teaches-team",
+        text: "SELECT * FROM courses c JOIN teams t ON c.course_id = t.course_id WHERE team_id = $1 AND c.instructor_id = $2;",
+        values: [teamId, instructorId]
+    };
+
+    try {
+        const result = await db.query(query);
+        return result.rows.length == 1;
+    } catch (error) {
+        log.error(`There was an error trying to check if ${instructorId} teaches team ${teamId}`);
+        log.error(error);
+        return error;
+    }
+}
+
+/**
  * @param {pg.Pool} db
  * @param {string[]} emails the emails of the users
  */
@@ -117,7 +141,7 @@ async function addTeamMembers(db, teamId, members) {
     }
 
     const values = userIds.flatMap((member) => [teamId, member]);
-    if (values.length ==0){
+    if (values.length == 0) {
         log.info('None of the team members exist')
         return null; //there are no users that exist
     }
@@ -184,4 +208,4 @@ async function teacherMadeTeam(db, teamID, teacherID) {
     return result.rows[0].result;
 }
 
-export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam };
+export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam, teachesTeam };
