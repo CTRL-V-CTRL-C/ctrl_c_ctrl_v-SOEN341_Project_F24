@@ -114,7 +114,27 @@ suite("POST and GET evaluations as a student", async () => {
     assert.equal(response.status, 400);
   });
 
-  //TODO Add test for incomplete evaluation
+  it("Should respond with 400 when evaluating a student with an invalid evaluation (missing criteria)", async (t) => {
+    const response = await request(app)
+      .post("/api/evaluation/evaluate")
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 2, comment: "" }] })
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.match(response.headers["content-type"], /json/);
+    assert.equal(response.status, 400);
+  });
+
+  it("Should respond with 400 when evaluating a student with an invalid evaluation (duplicate criteria)", async (t) => {
+    const response = await request(app)
+      .post("/api/evaluation/evaluate")
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 2, comment: "" }, { criteria: "COOPERATION", rating: 2, comment: "Hey" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "WORK ETHIC", rating: 1, comment: "" }] })
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.match(response.headers["content-type"], /json/);
+    assert.equal(response.status, 400);
+  });
 
   it("Should respond with 200 when getting an evaluation for a student in the same team", async (t) => {
     const response = await request(app)

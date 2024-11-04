@@ -19,7 +19,12 @@ const criteriaPattern = /^(COOPERATION|CONCEPTUAL CONTRIBUTION|PRACTICAL CONTRIB
  * @param {express.NextFunction} next the function to call the next middleware
  */
 router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => {
-  const normalizedDetails = req.body.evaluation_details
+  const normalizedDetails = req.body.evaluation_details;
+  const goodEvaluation = new Map();
+  goodEvaluation.set("COOPERATION", 0);
+  goodEvaluation.set("CONCEPTUAL CONTRIBUTION", 0);
+  goodEvaluation.set("PRACTICAL CONTRIBUTION", 0);
+  goodEvaluation.set("WORK ETHIC", 0);
 
   let goodUsers = await areInSameTeam(db, req.body.team_id, req.body.user_id, req.session.user.userId);
   if (goodUsers instanceof Error) {
@@ -46,6 +51,17 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
     if (normalizedDetails[i].rating < 1 || normalizedDetails[i].rating > 5) {
       log.warn(`Student ${req.session.user.userId} evaluated ${req.body.user_id} with an invalid rating: ${normalizedDetails[i].rating}`);
       res.status(400).json({ msg: `Invalid evaluation rating. Received: ${normalizedDetails[i].rating}` });
+      next();
+      return;
+    }
+
+    goodEvaluation.set(normalizedDetails[i].criteria, goodEvaluation.get(normalizedDetails[i].criteria) + 1);
+  }
+
+  for (const element of goodEvaluation.values()) {
+    if (element != 1) {
+      log.warn(`Student ${req.session.user.userId} evaluated ${req.body.user_id} with an invalid evaluation: duplicate or missing criteria`);
+      res.status(400).json({ msg: `Invalid evaluation. Duplicate or missing criteria.` });
       next();
       return;
     }
