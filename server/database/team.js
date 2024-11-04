@@ -28,7 +28,7 @@ function verifyMembers(members) {
  */
 async function areInSameTeam(db, teamId, userId1, userId2) {
     const query = {
-        name: "check-same-team",
+        name: `check-same-team ${teamId} ${userId1} ${userId2}`,
         text: "SELECT * FROM team_members WHERE team_id = $1 AND (user_id = $2 OR user_id = $3);",
         values: [teamId, userId1, userId2]
     };
@@ -52,7 +52,7 @@ async function areInSameTeam(db, teamId, userId1, userId2) {
  */
 async function teachesTeam(db, teamId, instructorId) {
     const query = {
-        name: "check-teaches-team",
+        name: `check-teaches-team ${teamId} ${instructorId}`,
         text: "SELECT * FROM courses c JOIN teams t ON c.course_id = t.course_id WHERE team_id = $1 AND c.instructor_id = $2;",
         values: [teamId, instructorId]
     };
@@ -95,7 +95,7 @@ async function getUserIds(db, emails) {
  */
 async function createTeam(db, courseID, teamName, emails) {
     const query = {
-        name: 'create-team',
+        name: `create-team ${courseID} ${teamName} `,
         text: "INSERT INTO teams (team_name, course_id) VALUES ($1, $2) RETURNING team_id;",
         values: [teamName, courseID]
     }
@@ -152,7 +152,7 @@ async function addTeamMembers(db, teamId, members) {
     preparedValues = preparedValues.substring(0, preparedValues.length - 1);
     const sqlQuery = `INSERT INTO team_members (team_id, user_id) VALUES ${preparedValues};`
     const query = {
-        name: "add-team-members",
+        name: `add-team-members ${teamId}`,
         text: sqlQuery,
         values: values
     }
@@ -173,7 +173,7 @@ async function addTeamMembers(db, teamId, members) {
  */
 async function deleteTeam(db, teamID) {
     const query = {
-        name: "delete-team-members",
+        name: `delete-team-members ${teamID}`,
         text: "DELETE FROM teams WHERE team_id = $1",
         values: [teamID]
     }
@@ -195,7 +195,7 @@ async function deleteTeam(db, teamID) {
  */
 async function teacherMadeTeam(db, teamID, teacherID) {
     const query = {
-        name: "teacher-made-team",
+        name: `teacher-made-team ${teamID} ${teacherID}`,
         text:
             `SELECT COUNT(*) = 1 AS result FROM teams t 
             JOIN courses c

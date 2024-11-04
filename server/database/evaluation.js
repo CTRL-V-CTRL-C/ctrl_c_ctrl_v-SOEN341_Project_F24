@@ -20,13 +20,13 @@ const getEvaluationQuery = {
  */
 async function createOrUpdateEvaluation(db, evaluatorId, evaluateeId, teamId, evaluationDetails) {
   const createEvaluationQuery = {
-    name: "create-evaluation",
+    name: `create-evaluation ${evaluatorId} ${evaluateeId}`,
     text: "INSERT INTO evaluations (team_id, evaluator_id, evaluatee_id) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING RETURNING evaluation_id;",
     values: [teamId, evaluatorId, evaluateeId]
   };
 
   const createOrUpdateEvaluationDetails = {
-    name: "create-or-update-evalutation-details",
+    name: `create-or-update-evalutation-details ${evaluatorId} ${evaluateeId}`,
     text: "INSERT INTO evaluation_details (evaluation_id, criteria, rating, comment) VALUES ($1, $2, $3, $4) ON CONFLICT (evaluation_id, criteria) DO UPDATE SET rating = excluded.rating, comment = excluded.comment;",
     values: []
   };
@@ -36,6 +36,7 @@ async function createOrUpdateEvaluation(db, evaluatorId, evaluateeId, teamId, ev
     let result = await db.query(createEvaluationQuery);
     let evaluationId;
     if (!result.rows[0] || !result.rows[0].evaluation_id) {
+      getEvaluationQuery.name = `get-evaluation ${evaluatorId} ${evaluateeId}`;
       getEvaluationQuery.values = [teamId, evaluatorId, evaluateeId];
       result = await db.query(getEvaluationQuery);
     }
@@ -64,7 +65,7 @@ async function createOrUpdateEvaluation(db, evaluatorId, evaluateeId, teamId, ev
  */
 async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
   const createEvaluationQuery = {
-    name: "get-evaluation-details",
+    name: `get-evaluation-details ${evaluatorId} ${evaluateeId}`,
     text: "SELECT criteria, rating, comment FROM evaluation_details WHERE evaluation_id = $1;",
     values: []
   };
@@ -106,7 +107,7 @@ async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
  */
 async function getEvaluationSummary(db, teamId) {
   const getEvaluationSummaryQuery = {
-    name: "get-evaluation-summary",
+    name: `get-evaluation-summary ${teamId}`,
     text: "WITH avg_ratings AS (SELECT u.school_id, u.f_name, u.l_name, t.team_name, ed.criteria, AVG(ed.rating), COUNT(ed.criteria) FROM users u JOIN team_members tm ON tm.user_id = u.user_id JOIN teams t ON t.team_id = tm.team_id FULL JOIN evaluations e ON e.evaluatee_id = u.user_id FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id WHERE t.team_id = $1 GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria ORDER BY u.school_id) SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, ar.count FROM avg_ratings ar GROUP BY ar.school_id, ar.f_name, ar.l_name, ar.team_name, ar.count ORDER BY ar.school_id;",
     values: [teamId]
   };
