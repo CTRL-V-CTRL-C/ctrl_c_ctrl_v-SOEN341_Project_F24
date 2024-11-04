@@ -1,8 +1,8 @@
 import express from 'express';
 import { db } from '../database/db.js';
-import { requireAuth, requireStudent } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation } from '../database/evaluation.js';
-import { areInSameTeam } from '../database/team.js';
+import { requireAuth, requireStudent, requireTeacher } from './auth.js';
+import { createOrUpdateEvaluation, getEvaluation, getEvaluationSummary } from '../database/evaluation.js';
+import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
 import log from '../logger.js';
 
 const router = express.Router();
@@ -19,11 +19,16 @@ const criteriaPattern = /^(COOPERATION|CONCEPTUAL CONTRIBUTION|PRACTICAL CONTRIB
  * @param {express.NextFunction} next the function to call the next middleware
  */
 router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => {
-  const normalizedDetails = req.body.evaluation_details
+  const normalizedDetails = req.body.evaluation_details;
+  const goodEvaluation = new Map();
+  goodEvaluation.set("COOPERATION", 0);
+  goodEvaluation.set("CONCEPTUAL CONTRIBUTION", 0);
+  goodEvaluation.set("PRACTICAL CONTRIBUTION", 0);
+  goodEvaluation.set("WORK ETHIC", 0);
 
   let goodUsers = await areInSameTeam(db, req.body.team_id, req.body.user_id, req.session.user.userId);
   if (goodUsers instanceof Error) {
-    res.status(500).json({ msg: result.message });
+    res.status(500).json({ msg: goodUsers.message });
     next();
     return;
   } else if (!goodUsers) {
@@ -49,6 +54,17 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
       next();
       return;
     }
+
+    goodEvaluation.set(normalizedDetails[i].criteria, goodEvaluation.get(normalizedDetails[i].criteria) + 1);
+  }
+
+  for (const element of goodEvaluation.values()) {
+    if (element != 1) {
+      log.warn(`Student ${req.session.user.userId} evaluated ${req.body.user_id} with an invalid evaluation: duplicate or missing criteria`);
+      res.status(400).json({ msg: `Invalid evaluation. Duplicate or missing criteria.` });
+      next();
+      return;
+    }
   }
 
   const result = await createOrUpdateEvaluation(db, req.session.user.userId, req.body.user_id, req.body.team_id, req.body.evaluation_details);
@@ -71,7 +87,7 @@ router.post("/evaluate", requireAuth, requireStudent, async (req, res, next) => 
 router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStudent, async (req, res, next) => {
   let goodUsers = await areInSameTeam(db, req.params.teamId, req.params.evaluateeId, req.session.user.userId);
   if (goodUsers instanceof Error) {
-    res.status(500).json({ msg: result.message });
+    res.status(500).json({ msg: goodUsers.message });
     next();
     return;
   } else if (!goodUsers) {
@@ -80,6 +96,30 @@ router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStuden
     return;
   }
   const result = await getEvaluation(db, req.session.user.userId, req.params.evaluateeId, req.params.teamId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result);
+  }
+  next();
+});
+
+router.get("/get-summary/:teamId", requireAuth, requireTeacher, async (req, res, next) => {
+  const goodInstructor = await teacherMadeTeam(db, req.params.teamId, req.session.user.userId);
+
+  if (goodInstructor instanceof Error) {
+    res.status(500).json({ msg: goodInstructor.message });
+    next();
+    return;
+  }
+
+  if (!goodInstructor) {
+    res.status(400).json({ msg: `You must teach the team you are trying to get the evaluations of` });
+    next();
+    return;
+  }
+
+  const result = await getEvaluationSummary(db, req.params.teamId);
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });
   } else {
