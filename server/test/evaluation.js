@@ -123,6 +123,7 @@ suite("POST and GET evaluations as a student", async () => {
       .timeout(1000); // timesout after 1 second in case the app crashes
     assert.match(response.headers["content-type"], /json/);
     assert.equal(response.status, 400);
+    assert.match(response._body.msg, /[Mm]issing/);
   });
 
   it("Should respond with 400 when evaluating a student with an invalid evaluation (duplicate criteria)", async (t) => {
@@ -134,6 +135,7 @@ suite("POST and GET evaluations as a student", async () => {
       .timeout(1000); // timesout after 1 second in case the app crashes
     assert.match(response.headers["content-type"], /json/);
     assert.equal(response.status, 400);
+    assert.match(response._body.msg, /[Dd]uplicate/);
   });
 
   it("Should respond with 200 when getting an evaluation for a student in the same team", async (t) => {
@@ -170,8 +172,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
   let studentId2;
   let studentId3;
 
-
-  before(async () => {
+  async function createTestUsers() {
     const user = {
       password: "password",
       firstName: "John",
@@ -181,20 +182,35 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
       role: "INST"
     }
     await request(app).post("/api/user/create").set("Accept", "application/json").send(user).expect(200).timeout(1000);
+
     user.role = "STUD"; user.schoolID = "STUD2004"; user.email = "test.student4@mail.com";
     await request(app).post("/api/user/create").set("Accept", "application/json").send(user).expect(200).timeout(1000);
+
     user.schoolID = "STUD2005"; user.email = "test.student5@mail.com";
     await request(app).post("/api/user/create").set("Accept", "application/json").send(user).expect(200).timeout(1000);
+
     user.schoolID = "STUD2006"; user.email = "test.student6@mail.com";
     await request(app).post("/api/user/create").set("Accept", "application/json").send(user).expect(200).timeout(1000);
+  }
+
+  async function setUserIds() {
     instructorId = (await db.query("SELECT user_id FROM users WHERE school_id = 'INST2002'")).rows[0].user_id;
     studentId1 = (await db.query("SELECT user_id FROM users WHERE school_id = 'STUD2004'")).rows[0].user_id;
     studentId2 = (await db.query("SELECT user_id FROM users WHERE school_id = 'STUD2005'")).rows[0].user_id;
     studentId3 = (await db.query("SELECT user_id FROM users WHERE school_id = 'STUD2006'")).rows[0].user_id;
+  }
+
+  async function createTestScenario() {
     courseId = await createCourse(db, instructorId, "The test course 2");
     teamId = await createTeam(db, courseId, "The test team", ["test.student4@mail.com", "test.student5@mail.com", "test.student6@mail.com"]);
     await createOrUpdateEvaluation(db, studentId1, studentId2, teamId, [{ criteria: "COOPERATION", rating: 1, comment: "" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "WORK ETHIC", rating: 1, comment: "" }]);
     await createOrUpdateEvaluation(db, studentId3, studentId2, teamId, [{ criteria: "COOPERATION", rating: 2, comment: "" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: 4, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: 5, comment: "" }, { criteria: "WORK ETHIC", rating: 1, comment: "" }]);
+  }
+
+  before(async () => {
+    await createTestUsers();
+    await setUserIds();
+    await createTestScenario();
     cookies = await loginUser("test.instructor2@mail.com", "password");
   });
 
@@ -214,6 +230,62 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
   });
 
   it("Should respond with the correct average and count for the summary of evaluations", async (t) => {
+    const summary = [
+      {
+        school_id: "STUD2004",
+        team_name: "The test team",
+        count: 0,
+        f_name: "john",
+        l_name: "smith",
+        average: null,
+        ratings: [
+          {
+            criteria: null,
+            average_rating: null,
+          }
+        ]
+      },
+      {
+        school_id: "STUD2005",
+        team_name: "The test team",
+        count: 2,
+        f_name: "john",
+        l_name: "smith",
+        average: 2,
+        ratings: [
+          {
+            criteria: "COOPERATION",
+            average_rating: 1.5,
+          },
+          {
+            criteria: "CONCEPTUAL CONTRIBUTION",
+            average_rating: 2.5,
+          },
+          {
+            criteria: "PRACTICAL CONTRIBUTION",
+            average_rating: 3,
+          },
+          {
+            criteria: "WORK ETHIC",
+            average_rating: 1,
+          },
+        ]
+      },
+      {
+        school_id: "STUD2006",
+        team_name: "The test team",
+        count: 0,
+        f_name: "john",
+        l_name: "smith",
+        average: null,
+        ratings: [
+          {
+            criteria: null,
+            average_rating: null,
+          }
+        ]
+      },
+    ]
     const response = await request(app)
       .get(`/api/evaluation/get-summary/${teamId}`)
       .set("Accept", "application/json")
@@ -221,41 +293,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
       .timeout(1000); // timesout after 1 second in case the app crashes
     assert.match(response.headers["content-type"], /json/);
     assert.equal(response.status, 200);
-    assert.equal(response._body[0].school_id, "STUD2004");
-    assert.equal(response._body[0].team_name, "The test team");
-    assert.equal(response._body[0].count, 0);
-    assert.equal(response._body[0].f_name, "john");
-    assert.equal(response._body[0].l_name, "smith");
-    assert.equal(response._body[0].average, null);
-    assert.equal(response._body[0].ratings.length, 1);
-    assert.equal(response._body[0].ratings[0].criteria, null);
-    assert.equal(response._body[0].ratings[0].average_rating, null);
-
-    assert.equal(response._body[1].school_id, "STUD2005");
-    assert.equal(response._body[1].team_name, "The test team");
-    assert.equal(response._body[1].count, 2);
-    assert.equal(response._body[1].f_name, "john");
-    assert.equal(response._body[1].l_name, "smith");
-    assert.equal(response._body[1].average, 2);
-    assert.equal(response._body[1].ratings.length, 4);
-    assert.equal(response._body[1].ratings[0].criteria, "COOPERATION");
-    assert.equal(response._body[1].ratings[0].average_rating, 1.5);
-    assert.equal(response._body[1].ratings[1].criteria, "CONCEPTUAL CONTRIBUTION");
-    assert.equal(response._body[1].ratings[1].average_rating, 2.5);
-    assert.equal(response._body[1].ratings[2].criteria, "PRACTICAL CONTRIBUTION");
-    assert.equal(response._body[1].ratings[2].average_rating, 3);
-    assert.equal(response._body[1].ratings[3].criteria, "WORK ETHIC");
-    assert.equal(response._body[1].ratings[3].average_rating, 1);
-
-    assert.equal(response._body[2].school_id, "STUD2006");
-    assert.equal(response._body[2].team_name, "The test team");
-    assert.equal(response._body[2].count, 0);
-    assert.equal(response._body[2].f_name, "john");
-    assert.equal(response._body[2].l_name, "smith");
-    assert.equal(response._body[2].average, null);
-    assert.equal(response._body[2].ratings.length, 1);
-    assert.equal(response._body[2].ratings[0].criteria, null);
-    assert.equal(response._body[2].ratings[0].average_rating, null);
+    assert.deepEqual(response._body, summary);
 
   });
 

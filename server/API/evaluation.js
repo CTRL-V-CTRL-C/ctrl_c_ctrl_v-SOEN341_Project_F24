@@ -2,7 +2,7 @@ import express from 'express';
 import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher } from './auth.js';
 import { createOrUpdateEvaluation, getEvaluation, getEvaluationSummary } from '../database/evaluation.js';
-import { areInSameTeam, teachesTeam } from '../database/team.js';
+import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
 import log from '../logger.js';
 
 const router = express.Router();
@@ -105,13 +105,15 @@ router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStuden
 });
 
 router.get("/get-summary/:teamId", requireAuth, requireTeacher, async (req, res, next) => {
-  const goodInstructor = await teachesTeam(db, req.params.teamId, req.session.user.userId);
+  const goodInstructor = await teacherMadeTeam(db, req.params.teamId, req.session.user.userId);
 
   if (goodInstructor instanceof Error) {
     res.status(500).json({ msg: goodInstructor.message });
     next();
     return;
-  } else if (!goodInstructor) {
+  }
+
+  if (!goodInstructor) {
     res.status(400).json({ msg: `You must teach the team you are trying to get the evaluations of` });
     next();
     return;
