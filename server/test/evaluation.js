@@ -226,6 +226,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     assert.equal(response._body[0].count, 0);
     assert.equal(response._body[0].f_name, "john");
     assert.equal(response._body[0].l_name, "smith");
+    assert.equal(response._body[0].average, null);
     assert.equal(response._body[0].ratings.length, 1);
     assert.equal(response._body[0].ratings[0].criteria, null);
     assert.equal(response._body[0].ratings[0].average_rating, null);
@@ -235,6 +236,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     assert.equal(response._body[1].count, 2);
     assert.equal(response._body[1].f_name, "john");
     assert.equal(response._body[1].l_name, "smith");
+    assert.equal(response._body[1].average, 2);
     assert.equal(response._body[1].ratings.length, 4);
     assert.equal(response._body[1].ratings[0].criteria, "COOPERATION");
     assert.equal(response._body[1].ratings[0].average_rating, 1.5);
@@ -250,6 +252,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     assert.equal(response._body[2].count, 0);
     assert.equal(response._body[2].f_name, "john");
     assert.equal(response._body[2].l_name, "smith");
+    assert.equal(response._body[2].average, null);
     assert.equal(response._body[2].ratings.length, 1);
     assert.equal(response._body[2].ratings[0].criteria, null);
     assert.equal(response._body[2].ratings[0].average_rating, null);

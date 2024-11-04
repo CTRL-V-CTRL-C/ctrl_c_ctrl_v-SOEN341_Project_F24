@@ -108,7 +108,20 @@ async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
 async function getEvaluationSummary(db, teamId) {
   const getEvaluationSummaryQuery = {
     name: `get-evaluation-summary ${teamId}`,
-    text: "WITH avg_ratings AS (SELECT u.school_id, u.f_name, u.l_name, t.team_name, ed.criteria, AVG(ed.rating), COUNT(ed.criteria) FROM users u JOIN team_members tm ON tm.user_id = u.user_id JOIN teams t ON t.team_id = tm.team_id FULL JOIN evaluations e ON e.evaluatee_id = u.user_id FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id WHERE t.team_id = $1 GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria ORDER BY u.school_id) SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, ar.count FROM avg_ratings ar GROUP BY ar.school_id, ar.f_name, ar.l_name, ar.team_name, ar.count ORDER BY ar.school_id;",
+    text: `WITH avg_ratings AS (
+        SELECT u.school_id, u.f_name, u.l_name, t.team_name, ed.criteria, AVG(ed.rating), COUNT(ed.criteria) 
+        FROM users u 
+        JOIN team_members tm ON tm.user_id = u.user_id 
+        JOIN teams t ON t.team_id = tm.team_id 
+        FULL JOIN evaluations e ON e.evaluatee_id = u.user_id --Not every student has an evaluation
+        FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id --Need to keep the students with no evaluations
+        WHERE t.team_id = $1 
+        GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria
+      ) 
+      SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, avg(ar.avg) average, ar.count 
+      FROM avg_ratings ar 
+      GROUP BY ar.school_id, ar.f_name, ar.l_name, ar.team_name, ar.count 
+      ORDER BY ar.school_id;`,
     values: [teamId]
   };
 
