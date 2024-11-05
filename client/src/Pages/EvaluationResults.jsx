@@ -20,19 +20,7 @@ function EvaluationResults(props) {
         ratings: [
             {
                 "average_rating": 0,
-                "criteria": "WORK ETHIC"
-            },
-            {
-                "average_rating": 0,
-                "criteria": "COOPERATION"
-            },
-            {
-                "average_rating": 0,
-                "criteria": "CONCEPTUAL CONTRIBUTION"
-            },
-            {
-                "average_rating": 0,
-                "criteria": "PRACTICAL CONTRIBUTION"
+                "criteria": ""
             }
         ]
     }]);
@@ -68,9 +56,10 @@ function EvaluationResults(props) {
                             <th>Lastname</th>
                             <th>FirstName</th>
                             <th>Team</th>
-                            {evaluationData[0].ratings.map((rating, i) => (
-                                <th key={`th${i}`}> {rating.criteria}</th>
-                            ))}
+                            <th> Work Ethic </th>
+                            <th> Cooperation </th>
+                            <th> Conceptual Contribution </th>
+                            <th> Practical Contribution </th>
                             <th>Average</th>
                             <th># responses</th>
                             <th>Detailed Result</th>
@@ -83,11 +72,12 @@ function EvaluationResults(props) {
                                 <td> {student.l_name} </td>
                                 <td> {student.f_name} </td>
                                 <td> {props.selectedTeam.team_name} </td>
-                                {student.ratings.map((rating, i) => (
-                                    <td key={`crit${i}`}> {rating.average_rating} </td>
-                                ))}
-                                <td>{Number(student.average).toPrecision(2)}</td>
-                                <td> {student.count} </td>
+                                <td> {student.ratings[0]?.average_rating || "N/A"} </td>
+                                <td> {student.ratings[1]?.average_rating || "N/A"} </td>
+                                <td> {student.ratings[2]?.average_rating || "N/A"} </td>
+                                <td> {student.ratings[3]?.average_rating || "N/A"} </td>
+                                <td>{Number(student.average).toPrecision(2) == 0.0 ? "N/A" : Number(student.average).toPrecision(2)}</td>
+                                <td> {student.count == 0 ? "N/A" : student.count} </td>
                                 <td className="view-result-btn">View</td>
                             </tr>
                         ))}
