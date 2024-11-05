@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { IoMdArrowBack } from "react-icons/io";
 import "./Components/Styles/EvaluationResults.css";
 import { fetchData } from '../Controller/FetchModule';
 import { useCallback, useEffect, useState } from 'react';
@@ -45,11 +46,14 @@ function EvaluationResults(props) {
     }, [getResults]);
 
     return (
-        <div>
+        <div className="eval-summary-container">
             <div>Evaluation results of {evaluationData[0].team_name}</div>
-            <div onClick={returnToTeams}> Close </div>
+            <div onClick={returnToTeams} className="eval-close-btn">
+                <IoMdArrowBack />
+                <p> Go Back to Teams</p>
+            </div>
             <div>
-                <table className="TableStyle">
+                <table className="EvalTableStyle">
                     <thead>
                         <tr>
                             <th>Student ID</th>

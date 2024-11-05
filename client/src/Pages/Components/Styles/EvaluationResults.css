@@ -1,4 +1,4 @@
-.TableStyle {
+.EvalTableStyle {
     background-color:white;
     margin: 1rem;
     text-wrap: wrap;
@@ -13,4 +13,31 @@
 
 .view-result-btn:hover {
     cursor: pointer;
+}
+
+.eval-summary-container {
+    padding: 0rem 15rem 0rem 15rem;
+}
+
+.eval-close-btn {
+    text-align: left;
+    border: 1px solid black;
+    border-radius: 1rem;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(137, 139, 35, 0.432);
+}
+
+.eval-close-btn:hover {
+    cursor: pointer;
+    background-color: rgba(138, 139, 35, 0.65);
+}
+
+.EvalTableStyle:has(th) {
+    text-wrap: nowrap;
 }
