@@ -35,7 +35,7 @@ function OtherTeams() {
 
     useEffect(() => {
         fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
-    }, [userContext.selectedCourse]);
+    }, [userContext.selectedCourse, fetchTeams]);
 
     return (
 
@@ -90,6 +90,13 @@ function OtherTeams() {
                                     }
                                 </div>
                             )}
+                            {userContext.isInstructor ?
+                                <div className="view-results-btn">
+                                    View Results
+                                </div>
+                                :
+                                <></>
+                            }
                         </div>
                     </div>
                 )}
