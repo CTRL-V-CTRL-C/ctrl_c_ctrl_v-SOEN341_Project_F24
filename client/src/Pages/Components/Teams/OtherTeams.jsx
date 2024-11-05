@@ -39,6 +39,7 @@ function OtherTeams() {
 
     useEffect(() => {
         fetchTeams(); // Fetch teams on component mount or when selectedCourse changes
+        setShowingResults(false);
     }, [userContext.selectedCourse, fetchTeams]);
 
     function viewResults(team) {

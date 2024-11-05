@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import "./Components/Styles/EvaluationResults.css";
 import { fetchData } from '../Controller/FetchModule';
 import { useCallback, useEffect, useState } from 'react';
-import { useContext } from 'react';
-import UserContext from '../Context/UserContext';
 
 function EvaluationResults(props) {
 
@@ -12,7 +10,6 @@ function EvaluationResults(props) {
         selectedTeam: PropTypes.object
     }
 
-    const userContext = useContext(UserContext);
     const [evaluationData, setEvaluationData] = useState([{
         average: 0,
         count: "0",
@@ -20,10 +17,24 @@ function EvaluationResults(props) {
         team_name: "",
         f_name: "john",
         l_name: "doe",
-        ratings: [{
-            "average_rating": 0,
-            "criteria": ""
-        }]
+        ratings: [
+            {
+                "average_rating": 0,
+                "criteria": "WORK ETHIC"
+            },
+            {
+                "average_rating": 0,
+                "criteria": "COOPERATION"
+            },
+            {
+                "average_rating": 0,
+                "criteria": "CONCEPTUAL CONTRIBUTION"
+            },
+            {
+                "average_rating": 0,
+                "criteria": "PRACTICAL CONTRIBUTION"
+            }
+        ]
     }]);
 
     function returnToTeams() {
@@ -43,7 +54,7 @@ function EvaluationResults(props) {
 
     useEffect(() => {
         getResults();
-    }, [userContext.selectedCourse, getResults]);
+    }, [getResults]);
 
     return (
         <div>
@@ -57,10 +68,9 @@ function EvaluationResults(props) {
                             <th>Lastname</th>
                             <th>FirstName</th>
                             <th>Team</th>
-                            <th>Cooperation</th>
-                            <th>Conceptual Contribution</th>
-                            <th>Practical Contribution</th>
-                            <th>Work Ethic</th>
+                            {evaluationData[0].ratings.map((rating, i) => (
+                                <th key={`th${i}`}> {rating.criteria}</th>
+                            ))}
                             <th>Average</th>
                             <th># responses</th>
                             <th>Detailed Result</th>
@@ -76,7 +86,7 @@ function EvaluationResults(props) {
                                 {student.ratings.map((rating, i) => (
                                     <td key={`crit${i}`}> {rating.average_rating} </td>
                                 ))}
-                                <td>{student.average}</td>
+                                <td>{Number(student.average).toPrecision(2)}</td>
                                 <td> {student.count} </td>
                                 <td className="view-result-btn">View</td>
                             </tr>
