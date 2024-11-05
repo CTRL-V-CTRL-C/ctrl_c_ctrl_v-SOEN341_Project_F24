@@ -1,0 +1,16 @@
+.TableStyle {
+    background-color:white;
+    margin: 1rem;
+    text-wrap: wrap;
+    width: fit-content;
+    place-self: center;
+    
+}
+
+.view-result-btn {
+    text-decoration: underline;
+}
+
+.view-result-btn:hover {
+    cursor: pointer;
+}
