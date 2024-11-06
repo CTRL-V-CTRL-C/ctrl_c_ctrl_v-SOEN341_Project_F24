@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import UserContext from '../../Context/UserContext';
 import { postData } from '../../Controller/FetchModule';
 import './Styles/PopUp.css';
@@ -15,6 +15,7 @@ function PopUp(props) {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         triggerSuccessPopup: PropTypes.func.isRequired,
+        fetchTeams: PropTypes.func.isRequired
     };
 
     const handleDragOver = (e) => {
@@ -146,7 +147,7 @@ function PopUp(props) {
             return false; //Return false on any error
         }
     }
-    
+
     return (props.trigger) ? (
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
