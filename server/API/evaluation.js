@@ -1,9 +1,10 @@
 import express from 'express';
 import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation, getEvaluationSummary } from '../database/evaluation.js';
+import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary } from '../database/evaluation.js';
 import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
 import log from '../logger.js';
+import { requireIsInCourse } from './course.js';
 
 const router = express.Router();
 
@@ -119,7 +120,18 @@ router.get("/get-summary/:teamId", requireAuth, requireTeacher, async (req, res,
     return;
   }
 
-  const result = await getEvaluationSummary(db, req.params.teamId);
+  const result = await getTeamEvaluationSummary(db, req.params.teamId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result);
+  }
+  next();
+});
+
+router.get("/get-course-summary/:courseId", requireAuth, requireTeacher, requireIsInCourse, async (req, res, next) => {
+
+  const result = await getCourseEvaluationSummary(db, req.params.courseId);
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });
   } else {
