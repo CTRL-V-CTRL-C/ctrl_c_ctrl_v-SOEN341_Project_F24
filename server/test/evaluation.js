@@ -7,6 +7,7 @@ import { createUser } from '../database/API.js';
 import { createCourse } from '../database/course.js';
 import { createTeam } from '../database/team.js';
 import { createOrUpdateEvaluation } from '../database/evaluation.js';
+import log from '../logger.js';
 
 async function loginUser(email, password) {
   const response = await request(app)
@@ -233,25 +234,23 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     const summary = [
       {
         school_id: "STUD2004",
-        team_name: "The test team",
-        count: 0,
         f_name: "john",
         l_name: "smith",
-        average: null,
+        team_name: "The test team",
         ratings: [
           {
             criteria: null,
             average_rating: null,
-          }
-        ]
+          },
+        ],
+        average: null,
+        count: 0,
       },
       {
         school_id: "STUD2005",
-        team_name: "The test team",
-        count: 2,
         f_name: "john",
         l_name: "smith",
-        average: 2,
+        team_name: "The test team",
         ratings: [
           {
             criteria: "COOPERATION",
@@ -269,21 +268,23 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
             criteria: "WORK ETHIC",
             average_rating: 1,
           },
-        ]
+        ],
+        average: 2,
+        count: 2,
       },
       {
         school_id: "STUD2006",
-        team_name: "The test team",
-        count: 0,
         f_name: "john",
         l_name: "smith",
-        average: null,
+        team_name: "The test team",
         ratings: [
           {
             criteria: null,
             average_rating: null,
-          }
-        ]
+          },
+        ],
+        average: null,
+        count: 0,
       },
     ]
     const response = await request(app)
@@ -307,4 +308,76 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     assert.equal(response.status, 400);
   });
 
+  it("Should respond with 200 when getting the evaluation details for a specific team", async () => {
+    const expected = {
+      evaluatee_name: "john smith",
+      evaluatee_school_id: "STUD2005",
+      evaluations: [
+        {
+          evaluatior_name: "john smith",
+          average_rating: 1,
+          ratings: [
+            {
+              criteria: "COOPERATION",
+              rating: 1,
+              comment: "",
+            },
+            {
+              criteria: "CONCEPTUAL CONTRIBUTION",
+              rating: 1,
+              comment: "",
+            },
+            {
+              criteria: "PRACTICAL CONTRIBUTION",
+              rating: 1,
+              comment: "",
+            },
+            {
+              criteria: "WORK ETHIC",
+              rating: 1,
+              comment: "",
+            },
+          ],
+          evaluator_school_id: "STUD2004",
+        },
+        {
+          evaluatior_name: "john smith",
+          average_rating: 3,
+          ratings: [
+            {
+              criteria: "COOPERATION",
+              rating: 2,
+              comment: "",
+            },
+            {
+              criteria: "CONCEPTUAL CONTRIBUTION",
+              rating: 4,
+              comment: "",
+            },
+            {
+              criteria: "PRACTICAL CONTRIBUTION",
+              rating: 5,
+              comment: "",
+            },
+            {
+              criteria: "WORK ETHIC",
+              rating: 1,
+              comment: "",
+            },
+          ],
+          evaluator_school_id: "STUD2006",
+        },
+      ],
+      count: 2,
+    };
+
+    const response = await request(app)
+      .get(`/api/evaluation/get-details/${teamId}/STUD2005`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, expected);
+  });
 });

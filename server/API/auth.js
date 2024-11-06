@@ -5,6 +5,7 @@ import { db } from '../database/db.js';
 import dotenv from 'dotenv';
 import log from '../logger.js';
 import argon2 from 'argon2';
+import { teacherMadeTeam } from '../database/team.js';
 dotenv.config();
 
 const router = express.Router();
@@ -75,6 +76,32 @@ const requireNoAuth = (req, res, next) => {
   } else {
     next(); // User not authenticated, continue to next middleware
   }
+}
+
+/**
+ * a middleware to make sure that the logged in user made the team that is in the request parameters
+ * @param {express.Request} req the request
+ * @param {express.Response} res the response
+ * @param {express.NextFunction} next the function to call the next middleware
+ */
+async function requireTeacherMadeTeam(req, res, next) {
+  if (!req.params.teamId) {
+    res.status(400).json({ msg: "The id of team is required for this query" });
+    return;
+  }
+  const goodInstructor = await teacherMadeTeam(db, req.params.teamId, req.session.user.userId);
+
+  if (goodInstructor instanceof Error) {
+    res.status(500).json({ msg: goodInstructor.message });
+    return;
+  }
+
+  if (!goodInstructor) {
+    res.status(400).json({ msg: `You must teach the team you are trying to get the evaluations of` });
+    return;
+  }
+
+  next();
 }
 
 //Login with correct email and password
@@ -153,4 +180,4 @@ router.post("/test-authentication", requireAuth, (req, res) => {
   });
 });
 
-export { router, requireAuth, requireTeacher, requireStudent };
+export { router, requireAuth, requireTeacher, requireStudent, requireTeacherMadeTeam };
