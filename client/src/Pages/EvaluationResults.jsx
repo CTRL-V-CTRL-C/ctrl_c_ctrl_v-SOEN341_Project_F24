@@ -3,6 +3,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import "./Components/Styles/EvaluationResults.css";
 import { fetchData } from '../Controller/FetchModule';
 import { useCallback, useEffect, useState } from 'react';
+import EvaluationDetailsPopup from './Components/EvaluationDetailsPopup';
 
 function EvaluationResults(props) {
 
@@ -11,6 +12,12 @@ function EvaluationResults(props) {
         selectedTeam: PropTypes.object
     }
 
+    const [openDetailPopup, setOpenDetailPopup] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState({
+        school_id: "",
+        f_name: "",
+        l_name: "",
+    });
     const [evaluationData, setEvaluationData] = useState([{
         average: 0,
         count: "0",
@@ -81,12 +88,26 @@ function EvaluationResults(props) {
                                 <td> {student.ratings[3]?.average_rating || "N/A"} </td>
                                 <td>{Number(student.average).toPrecision(2) == 0.0 ? "N/A" : Number(student.average).toPrecision(2)}</td>
                                 <td> {student.count == 0 ? "N/A" : student.count} </td>
-                                <td className="view-result-btn">View</td>
+                                <td className="view-result-btn" onClick={() => {
+                                    setOpenDetailPopup(true); setSelectedStudent({
+                                        school_id: student.school_id,
+                                        f_name: student.f_name,
+                                        l_name: student.l_name,
+                                    });
+                                }}>View</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            <EvaluationDetailsPopup
+                trigger={openDetailPopup}
+                setTrigger={setOpenDetailPopup}
+                class
+                team_id={props.selectedTeam.team_id}
+                team_name={props.selectedTeam.team_name}
+                evaluatee={selectedStudent}
+            />
         </div>
     );
 }
