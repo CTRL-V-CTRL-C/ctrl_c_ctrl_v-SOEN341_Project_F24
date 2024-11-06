@@ -34,7 +34,6 @@ function EvaluationResults(props) {
         const response = await fetchData(`/api/evaluation/get-summary/${props.selectedTeam.team_id}`);
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             setEvaluationData(data);
         } else {
             console.log("something went wrong fetching the evaluation results");
