@@ -102,12 +102,12 @@ async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
 /**
  * Gets the summary of evaluations for all team members in a team
  * @param {pg.Pool} db the database
- * @param {int} teamId the name of the course
+ * @param {int} teamId the Id of the team
  * @returns {Promise<Error | Array<JSON>>}
  */
-async function getEvaluationSummary(db, teamId) {
-  const getEvaluationSummaryQuery = {
-    name: `get-evaluation-summary ${teamId}`,
+async function getTeamEvaluationSummary(db, teamId) {
+  const getTeamEvaluationSummaryQuery = {
+    name: `get-team-evaluation-summary ${teamId}`,
     text: `WITH avg_ratings AS (
         SELECT u.school_id, u.f_name, u.l_name, t.team_name, ed.criteria, AVG(ed.rating), COUNT(ed.criteria) 
         FROM users u 
@@ -117,6 +117,7 @@ async function getEvaluationSummary(db, teamId) {
         FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id --Need to keep the students with no evaluations
         WHERE t.team_id = $1 
         GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria
+        ORDER BY u.school_id, ed.criteria
       ) 
       SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, avg(ar.avg) average, ar.count 
       FROM avg_ratings ar 
@@ -127,7 +128,7 @@ async function getEvaluationSummary(db, teamId) {
 
   try {
 
-    let result = await db.query(getEvaluationSummaryQuery);
+    let result = await db.query(getTeamEvaluationSummaryQuery);
 
     return result.rows;
 
@@ -138,4 +139,44 @@ async function getEvaluationSummary(db, teamId) {
   }
 }
 
-export { createOrUpdateEvaluation, getEvaluation, getEvaluationSummary }
+/**
+ * Gets the summary of evaluations for all students in a course
+ * @param {pg.Pool} db the database
+ * @param {int} courseId the Id of the course
+ * @returns {Promise<Error | Array<JSON>>}
+ */
+async function getCourseEvaluationSummary(db, courseId) {
+  const getCourseEvaluationSummaryQuery = {
+    name: `get-course-evaluation-summary ${courseId}`,
+    text: `WITH avg_ratings AS (
+        SELECT u.school_id, u.f_name, u.l_name, t.team_name, ed.criteria, AVG(ed.rating), COUNT(ed.criteria) 
+        FROM users u 
+        JOIN team_members tm ON tm.user_id = u.user_id 
+        JOIN teams t ON t.team_id = tm.team_id 
+        FULL JOIN evaluations e ON e.evaluatee_id = u.user_id --Not every student has an evaluation
+        FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id --Need to keep the students with no evaluations
+        WHERE t.course_id = $1 
+        GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria
+        ORDER BY u.school_id, ed.criteria
+      ) 
+      SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, avg(ar.avg) average, ar.count 
+      FROM avg_ratings ar 
+      GROUP BY ar.school_id, ar.f_name, ar.l_name, ar.team_name, ar.count 
+      ORDER BY ar.team_name, ar.school_id;`,
+    values: [courseId]
+  };
+
+  try {
+
+    let result = await db.query(getCourseEvaluationSummaryQuery);
+
+    return result.rows;
+
+  } catch (error) {
+    log.error(`There was an error while getting the evaluation summary for course ${courseId}`);
+    log.error(error);
+    return error;
+  }
+}
+
+export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary }
