@@ -117,6 +117,7 @@ async function getTeamEvaluationSummary(db, teamId) {
         FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id --Need to keep the students with no evaluations
         WHERE t.team_id = $1 
         GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria
+        ORDER BY u.school_id, ed.criteria
       ) 
       SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, avg(ar.avg) average, ar.count 
       FROM avg_ratings ar 
@@ -156,6 +157,7 @@ async function getCourseEvaluationSummary(db, courseId) {
         FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id --Need to keep the students with no evaluations
         WHERE t.course_id = $1 
         GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria
+        ORDER BY u.school_id, ed.criteria
       ) 
       SELECT ar.school_id, ar.f_name, ar.l_name, ar.team_name, JSON_AGG(JSON_BUILD_OBJECT('criteria', ar.criteria, 'average_rating', ar.avg)) ratings, avg(ar.avg) average, ar.count 
       FROM avg_ratings ar 
@@ -177,4 +179,4 @@ async function getCourseEvaluationSummary(db, courseId) {
   }
 }
 
-export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary }
+export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary }

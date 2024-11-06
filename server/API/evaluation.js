@@ -1,7 +1,7 @@
 import express from 'express';
 import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary } from '../database/evaluation.js';
+import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary } from '../database/evaluation.js';
 import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
 import log from '../logger.js';
 import { requireIsInCourse } from './course.js';
