@@ -43,8 +43,6 @@ function OtherTeams() {
     }, [userContext.selectedCourse, fetchTeams]);
 
     function viewResults(team) {
-        console.log("viewing results")
-        console.log(team)
         setSelectedTeam(team);
         setShowingResults(true);
     }
