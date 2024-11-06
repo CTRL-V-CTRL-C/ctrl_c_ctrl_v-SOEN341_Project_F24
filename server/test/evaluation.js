@@ -163,7 +163,7 @@ suite("POST and GET evaluations as a student", async () => {
 });
 
 
-suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
+suite("GET evaluations summary as an instructor (both team and course)", async () => {
   let cookies;
   let courseId;
   let teamId;
@@ -219,9 +219,9 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     await db.query("DELETE FROM users WHERE email = 'test.student4@mail.com' OR email = 'test.student5@mail.com' OR email = 'test.student6@mail.com' OR email = 'test.instructor2@mail.com'");
   });
 
-  it("Should respond with 200 when getting the summary of evaluations", async (t) => {
+  it("Should respond with 200 when getting the summary of evaluations for a team", async (t) => {
     const response = await request(app)
-      .get(`/api/evaluation/get-summary/${teamId}`)
+      .get(`/api/evaluation/get-team-summary/${teamId}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
@@ -229,7 +229,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     assert.equal(response.status, 200);
   });
 
-  it("Should respond with the correct average and count for the summary of evaluations", async (t) => {
+  it("Should respond with the correct average and count for the summary of evaluations for a team", async (t) => {
     const summary = [
       {
         school_id: "STUD2004",
@@ -287,7 +287,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
       },
     ]
     const response = await request(app)
-      .get(`/api/evaluation/get-summary/${teamId}`)
+      .get(`/api/evaluation/get-team-summary/${teamId}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
@@ -299,12 +299,100 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
 
   it("Should respond with 400 when getting the evaluation summary of a team not in your course", async (t) => {
     const response = await request(app)
-      .get(`/api/evaluation/get-summary/${teamId + 1}`)
+      .get(`/api/evaluation/get-team-summary/${teamId + 1}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
     assert.match(response.headers["content-type"], /json/);
     assert.equal(response.status, 400);
+  });
+
+  it("Should respond with 200 when getting the summary of evaluations for a course", async (t) => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-course-summary/${courseId}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.match(response.headers["content-type"], /json/);
+    assert.equal(response.status, 200);
+  });
+
+  it("Should respond with the correct average and count for the summary of evaluations for a course", async (t) => {
+    const summary = [
+      {
+        school_id: "STUD2004",
+        team_name: "The test team",
+        count: 0,
+        f_name: "john",
+        l_name: "smith",
+        average: null,
+        ratings: [
+          {
+            criteria: null,
+            average_rating: null,
+          }
+        ]
+      },
+      {
+        school_id: "STUD2005",
+        team_name: "The test team",
+        count: 2,
+        f_name: "john",
+        l_name: "smith",
+        average: 2,
+        ratings: [
+          {
+            criteria: "COOPERATION",
+            average_rating: 1.5,
+          },
+          {
+            criteria: "CONCEPTUAL CONTRIBUTION",
+            average_rating: 2.5,
+          },
+          {
+            criteria: "PRACTICAL CONTRIBUTION",
+            average_rating: 3,
+          },
+          {
+            criteria: "WORK ETHIC",
+            average_rating: 1,
+          },
+        ]
+      },
+      {
+        school_id: "STUD2006",
+        team_name: "The test team",
+        count: 0,
+        f_name: "john",
+        l_name: "smith",
+        average: null,
+        ratings: [
+          {
+            criteria: null,
+            average_rating: null,
+          }
+        ]
+      },
+    ]
+    const response = await request(app)
+      .get(`/api/evaluation/get-course-summary/${courseId}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.match(response.headers["content-type"], /json/);
+    assert.equal(response.status, 200);
+    assert.deepEqual(response._body, summary);
+
+  });
+
+  it("Should respond with 401 when getting the evaluation summary of a course you do not teach", async (t) => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-course-summary/${courseId + 1}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.match(response.headers["content-type"], /json/);
+    assert.equal(response.status, 401);
   });
 
 });

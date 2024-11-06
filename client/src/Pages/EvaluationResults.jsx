@@ -38,7 +38,7 @@ function EvaluationResults(props) {
     }
 
     const getResults = useCallback(async () => {
-        const response = await fetchData(`/api/evaluation/get-summary/${props.selectedTeam.team_id}`);
+        const response = await fetchData(`/api/evaluation/get-team-summary/${props.selectedTeam.team_id}`);
         if (response.ok) {
             const data = await response.json();
             setEvaluationData(data);
@@ -66,10 +66,10 @@ function EvaluationResults(props) {
                             <th>Lastname</th>
                             <th>FirstName</th>
                             <th>Team</th>
-                            <th> Work Ethic </th>
                             <th> Cooperation </th>
                             <th> Conceptual Contribution </th>
                             <th> Practical Contribution </th>
+                            <th> Work Ethic </th>
                             <th>Average</th>
                             <th># responses</th>
                             <th>Detailed Result</th>
