@@ -1,5 +1,5 @@
 // MembersPage.js
-import React, { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import UserContext from "../../../Context/UserContext";
 import '../Styles/MembersPage.css';
 
@@ -9,8 +9,7 @@ function MembersPage() {
     const [loading, setLoading] = useState(true); // State to manage loading state
     const [error, setError] = useState(null); // State to hold error messages
 
-    const fetchStudents = async () => {
-        
+    const fetchStudents = useCallback(async () => {
         if (!selectedCourse || selectedCourse.course_id === 0) return; // Ensure selectedCourse is valid
         setLoading(true);
         try {
@@ -25,11 +24,11 @@ function MembersPage() {
         } finally {
             setLoading(false); // Set loading to false after fetching
         }
-    };
+    }, [selectedCourse]);
 
     useEffect(() => {
         fetchStudents(); // Fetch students when selectedCourse changes
-    }, [selectedCourse]);
+    }, [selectedCourse, fetchStudents]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -38,7 +37,7 @@ function MembersPage() {
         <div id="whole">
             <div id="TitlePosition"><p id="PageTitle">Student List for {selectedCourse.course_name}</p></div>
             <div>
-                <table id="TableStyle">
+                <table className="TableStyle">
                     <thead>
                         <tr>
                             <th>Name</th>
