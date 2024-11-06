@@ -380,4 +380,14 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
     assert.equal(response.status, 200);
     assert.deepEqual(response.body, expected);
   });
+
+  it("Should respond with 400 when getting the evaluation detailed of a team not in your course", async (t) => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-summary/${teamId + 1}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.match(response.headers["content-type"], /json/);
+    assert.equal(response.status, 400);
+  });
 });
