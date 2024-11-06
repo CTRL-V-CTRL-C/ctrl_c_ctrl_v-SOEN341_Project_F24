@@ -56,7 +56,7 @@ async function createUser(db, userObject) {
     }
     const table = "users"
     const query = {
-        name: "register-user",
+        name: `register-user ${userObject.email}`,
         text: `INSERT INTO ${table} (hash, f_name, l_name, email, school_id, role) 
         VALUES ($1, $2, $3, $4, $5, $6)`,
         values: [

@@ -23,7 +23,7 @@
     font-size: xx-large;
     font-weight: bold;
 }
-#TableStyle{
+.TableStyle{
 width: 100%;
  border-collapse: collapse;
 }

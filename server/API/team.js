@@ -72,11 +72,20 @@ router.post("/create", requireAuth, requireTeacher, async (req, res, next) => {
 
 router.post("/delete", requireAuth, requireTeacher, async (req, res, next) => {
   const teamID = req.body.teamID;
-  if (!(await teacherMadeTeam(db, teamID, req.session.user.userId))) {
+  const goodInstructor = await await teacherMadeTeam(db, teamID, req.session.user.userId);
+
+  if (goodInstructor instanceof Error) {
+    res.status(500).json({ msg: goodInstructor.message });
+    next();
+    return;
+  }
+
+  if (!goodInstructor) {
     res.status(403).json({ error: "You are not the teacher of that course" });
     next();
     return;
   }
+
   const result = await deleteTeam(db, teamID);
   if (result instanceof Error) {
     res.status(500).json({ error: "there was an error while deleting the team" });

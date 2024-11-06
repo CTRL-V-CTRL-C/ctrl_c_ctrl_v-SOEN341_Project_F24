@@ -10,7 +10,7 @@ import log from '../logger.js'
  */
 async function createCourse(db, instructorID, courseName) {
     const query = {
-        name: "create-course",
+        name: `create-course ${instructorID}`,
         text: "INSERT INTO courses (course_name, instructor_id) VALUES ($1, $2) RETURNING course_id;",
         values: [courseName, instructorID]
     }
