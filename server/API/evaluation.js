@@ -1,9 +1,11 @@
 import express from 'express';
 import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher, requireTeacherMadeTeam } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation, getEvaluationDetails, getEvaluationSummary } from '../database/evaluation.js';
+import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getEvaluationDetails, getCourseEvaluationSummary } from '../database/evaluation.js';
+
 import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
 import log from '../logger.js';
+import { requireIsInCourse } from './course.js';
 
 const router = express.Router();
 
@@ -104,8 +106,19 @@ router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStuden
   next();
 });
 
-router.get("/get-summary/:teamId", requireAuth, requireTeacher, requireTeacherMadeTeam, async (req, res, next) => {
-  const result = await getEvaluationSummary(db, req.params.teamId);
+router.get("/get-team-summary/:teamId", requireAuth, requireTeacher, requireTeacherMadeTeam, async (req, res, next) => {
+
+  const result = await getTeamEvaluationSummary(db, req.params.teamId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result);
+  }
+  next();
+});
+
+router.get("/get-course-summary/:courseId", requireAuth, requireTeacher, requireIsInCourse, async (req, res, next) => {
+  const result = await getCourseEvaluationSummary(db, req.params.courseId);
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });
   } else {
