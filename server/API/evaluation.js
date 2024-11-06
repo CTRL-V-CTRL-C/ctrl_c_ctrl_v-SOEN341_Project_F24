@@ -105,7 +105,7 @@ router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStuden
   next();
 });
 
-router.get("/get-summary/:teamId", requireAuth, requireTeacher, async (req, res, next) => {
+router.get("/get-team-summary/:teamId", requireAuth, requireTeacher, async (req, res, next) => {
   const goodInstructor = await teacherMadeTeam(db, req.params.teamId, req.session.user.userId);
 
   if (goodInstructor instanceof Error) {

@@ -221,7 +221,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
 
   it("Should respond with 200 when getting the summary of evaluations", async (t) => {
     const response = await request(app)
-      .get(`/api/evaluation/get-summary/${teamId}`)
+      .get(`/api/evaluation/get-team-summary/${teamId}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
@@ -287,7 +287,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
       },
     ]
     const response = await request(app)
-      .get(`/api/evaluation/get-summary/${teamId}`)
+      .get(`/api/evaluation/get-team-summary/${teamId}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
@@ -299,7 +299,7 @@ suite("POST and GET evaluations as an instructor (The dashboard)", async () => {
 
   it("Should respond with 400 when getting the evaluation summary of a team not in your course", async (t) => {
     const response = await request(app)
-      .get(`/api/evaluation/get-summary/${teamId + 1}`)
+      .get(`/api/evaluation/get-team-summary/${teamId + 1}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes

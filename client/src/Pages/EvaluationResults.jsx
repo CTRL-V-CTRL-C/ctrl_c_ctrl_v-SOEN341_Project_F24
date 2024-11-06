@@ -31,7 +31,7 @@ function EvaluationResults(props) {
     }
 
     const getResults = useCallback(async () => {
-        const response = await fetchData(`/api/evaluation/get-summary/${props.selectedTeam.team_id}`);
+        const response = await fetchData(`/api/evaluation/get-team-summary/${props.selectedTeam.team_id}`);
         if (response.ok) {
             const data = await response.json();
             setEvaluationData(data);
