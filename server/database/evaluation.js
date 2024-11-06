@@ -98,4 +98,34 @@ async function getEvaluation(db, evaluatorId, evaluateeId, teamId) {
   }
 }
 
+async function getEvaluationDetails(db, teamId) {
+  const query = {
+    name: `get-evaluation-summary ${teamId}`,
+    text: `
+WITH team_reviews AS (
+  select users.user_id, f_name || ' ' || l_name as evaluatee_name, team_name, evaluatee_id, evaluator_id, rating, comment, criteria
+  from team_members tm
+  FULL join evaluations ev on tm.user_id = ev.evaluatee_id
+  FULL join evaluation_details ed on ev.evaluation_id = ed.evaluation_id
+  join teams on teams.team_id = tm.team_id
+  join users on users.user_id = tm.user_id
+  where tm.team_id = $1
+), -- getting teams and reviews
+tr_with_evaluator AS (
+  select f_name || ' ' || l_name as evaluator_name, evaluatee_name, team_name, evaluatee_id, evaluator_id, rating, comment, criteria
+  from team_reviews
+  join users on users.user_id = evaluator_id
+), -- adding their evaluator's name
+tw_with_average AS (
+  SELECT evaluatee_id, evaluator_name, evaluatee_name, AVG(rating) average_rating, JSON_AGG(JSON_BUILD_OBJECT('criteria', criteria, 'rating', rating, 'comment', comment)) ratings
+  FROM tr_with_evaluator
+  GROUP BY evaluatee_id, evaluator_id, evaluator_name, evaluatee_name
+) -- adding average
+SELECT evaluatee_name, JSON_AGG(JSON_BUILD_OBJECT('evaluations', evaluator_name, 'average_rating', average_rating, 'ratings', ratings)) evaluations, count(*)
+FROM tw_with_average
+GROUP BY evaluatee_id, evaluatee_name; -- grouping by evaluatee`,
+    values: [teamId]
+  }
+}
+
 export { createOrUpdateEvaluation, getEvaluation }
