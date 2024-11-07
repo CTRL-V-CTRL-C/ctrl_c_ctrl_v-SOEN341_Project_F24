@@ -21,7 +21,7 @@ describe('All register test functions',()=> {
         
     })
 
-  // Student registration
+    // Student registration
         it('Verification for student input', () =>{
             cy.visit('/registerAccount') // link to the page
             cy.get('.switch > :nth-child(2)').click(); // clicks on the student tab
@@ -29,8 +29,19 @@ describe('All register test functions',()=> {
             cy.get(':nth-child(2) > .field-label').type('testing'); // enter last name
             cy.get(':nth-child(4) > .field-label').type('testtesting@gmail.com'); // enter email
             cy.get(':nth-child(5) > .field-label').type('STUD0000');
+            cy.get(':nth-child(6) > .field-label').type('test123');
+            cy.get(':nth-child(7) > .field-label').type('test123');
+        })
+
+    // Instructor registration
+        it('Verification for student input', () =>{
+            cy.visit('/registerAccount') // link to the page
+            cy.get('.switch > :nth-child(3)').click(); // clicks on the student tab
+            cy.get(':nth-child(1) > .field-label').type('tester'); // enter First name
+            cy.get(':nth-child(2) > .field-label').type('test'); // enter last name
+            cy.get(':nth-child(4) > .field-label').type('testertest@gmail.com'); // enter email
+            cy.get(':nth-child(5) > .field-label').type('INST0000');
             cy.get(':nth-child(6) > .field-label').type('tester123');
             cy.get(':nth-child(7) > .field-label').type('tester123');
-
         })
 })
