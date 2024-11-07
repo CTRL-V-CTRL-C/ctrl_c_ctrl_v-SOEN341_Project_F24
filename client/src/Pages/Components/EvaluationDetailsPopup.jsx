@@ -14,34 +14,71 @@ function EvaluationDetailsPopup(props) {
         evaluatee: PropTypes.object.isRequired
     };
 
-    const [studentData, setStudentData] = useState([{
-        f_name: "test",
-        l_name: "testing",
-        school_id: 0,
-        average_rating: 0,
-        comments: "",
-        ratings: [
-            {
-                "given_rating": 0,
-                "criteria": "Work Ethic"
-            },
-            {
-                "given_rating": 0,
-                "criteria": "Cooperation"
-            },
-            {
-                "given_rating": 0,
-                "criteria": "Conceptual Contribution"
-            },
-            {
-                "given_rating": 0,
-                "criteria": "Practical Contribution"
-            }
-        ]
-    }]);
+    const [studentData, setStudentData] = useState(
+        {
+            evaluatee_name: "john smith",
+            evaluatee_school_id: "STUD2005",
+            evaluations: [
+                {
+                    evaluator_name: "john smith 1",
+                    average_rating: 1,
+                    ratings: [
+                        {
+                            criteria: "COOPERATION",
+                            rating: 1,
+                            comment: "",
+                        },
+                        {
+                            criteria: "CONCEPTUAL CONTRIBUTION",
+                            rating: 1,
+                            comment: "",
+                        },
+                        {
+                            criteria: "PRACTICAL CONTRIBUTION",
+                            rating: 1,
+                            comment: "",
+                        },
+                        {
+                            criteria: "WORK ETHIC",
+                            rating: 1,
+                            comment: "",
+                        },
+                    ],
+                    evaluator_school_id: "STUD2004",
+                },
+                {
+                    evaluator_name: "john smith 2",
+                    average_rating: 3,
+                    ratings: [
+                        {
+                            criteria: "COOPERATION",
+                            rating: 2,
+                            comment: "",
+                        },
+                        {
+                            criteria: "CONCEPTUAL CONTRIBUTION",
+                            rating: 4,
+                            comment: "",
+                        },
+                        {
+                            criteria: "PRACTICAL CONTRIBUTION",
+                            rating: 5,
+                            comment: "",
+                        },
+                        {
+                            criteria: "WORK ETHIC",
+                            rating: 1,
+                            comment: "",
+                        },
+                    ],
+                    evaluator_school_id: "STUD2006",
+                },
+            ],
+            count: 2,
+        });
 
     const getResultDetails = useCallback(async () => {
-        const response = await fetchData(`/api/evaluation/get-summary/${props.team_id}/${props.evaluatee.school_id}`);
+        const response = await fetchData(`/api/evaluation/get-team-details/${props.team_id}/${props.evaluatee.school_id}`);
         if (response.ok) {
             const data = await response.json();
             console.log(data)
@@ -68,30 +105,30 @@ function EvaluationDetailsPopup(props) {
                     <table className="EvalTableStyle">
                         <thead>
                             <tr>
-                                <th>Evaluator</th>
+                                <th> Evaluator </th>
                                 <th> Work Ethic </th>
                                 <th> Cooperation </th>
                                 <th> Conceptual Contribution </th>
                                 <th> Practical Contribution </th>
-                                <th>Average Across All</th>
+                                <th> Average Across All </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {studentData.map((student, i) => (
+                            {studentData.evaluations.map((evaluator, i) => (
                                 <tr key={i}>
-                                    <td> {student.l_name} {student.f_name} - {student.school_id} </td>
-                                    <td> {student.ratings[0]?.given_rating || "N/A"} </td>
-                                    <td> {student.ratings[1]?.given_rating || "N/A"} </td>
-                                    <td> {student.ratings[2]?.given_rating || "N/A"} </td>
-                                    <td> {student.ratings[3]?.given_rating || "N/A"} </td>
-                                    <td>{Number(student.average_rating).toPrecision(2) == 0.0 ? "N/A" : Number(student.average_rating).toPrecision(2)}</td>
+                                    {console.log(evaluator)}
+                                    <td> {evaluator.evaluator_name} - {evaluator.evaluator_school_id} </td>
+                                    {evaluator.ratings.map((rating, i) => (
+                                        <td key={i}> {rating.rating} </td>
+                                    ))}
+                                    <td>{Number(evaluator.average_rating).toPrecision(2) == 0.0 ? "N/A" : Number(evaluator.average_rating).toPrecision(2)}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </div >
     ) : "";
 }
 
