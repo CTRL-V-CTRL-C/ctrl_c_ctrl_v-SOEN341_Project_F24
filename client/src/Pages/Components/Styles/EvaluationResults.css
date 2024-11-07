@@ -63,3 +63,15 @@
     box-shadow: 10px 10px 10px rgb(209, 179, 179);
     overflow: hidden;
 }
+
+.comment-container .rating-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-left: 1rem;
+    line-height: normal;
+}
+
+.comment {
+    margin-left: 1rem;
+}

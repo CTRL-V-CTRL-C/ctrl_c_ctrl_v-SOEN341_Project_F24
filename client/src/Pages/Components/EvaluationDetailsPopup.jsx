@@ -26,7 +26,7 @@ function EvaluationDetailsPopup(props) {
                         {
                             criteria: "COOPERATION",
                             rating: 1,
-                            comment: "",
+                            comment: "Very good cooperation and no problem so far",
                         },
                         {
                             criteria: "CONCEPTUAL CONTRIBUTION",
@@ -41,7 +41,7 @@ function EvaluationDetailsPopup(props) {
                         {
                             criteria: "WORK ETHIC",
                             rating: 1,
-                            comment: "",
+                            comment: "blado iweuhdowu qehdpwueh oijnd ewudhm",
                         },
                     ],
                     evaluator_school_id: "STUD2004",
@@ -53,7 +53,7 @@ function EvaluationDetailsPopup(props) {
                         {
                             criteria: "COOPERATION",
                             rating: 2,
-                            comment: "",
+                            comment: "pweunpfoquwniuen",
                         },
                         {
                             criteria: "CONCEPTUAL CONTRIBUTION",
@@ -126,6 +126,18 @@ function EvaluationDetailsPopup(props) {
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="comment-container">
+                    <p style={{ fontWeight: 700 }}> Comments </p>
+                    {studentData.evaluations.map((evaluator, i) => (
+                        <div className="rating-container" key={i}>
+                            <p style={{ fontWeight: 700 }}> {evaluator.evaluator_name} - {evaluator.evaluator_school_id} : </p>
+                            {evaluator.ratings.map((rating, j) => (
+                                rating.comment && <p className='comment' key={j}> {rating.criteria.toLowerCase()}: {rating.comment}</p>
+                            ))}
+                            <hr />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div >
