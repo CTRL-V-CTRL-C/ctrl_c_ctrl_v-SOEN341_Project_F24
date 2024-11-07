@@ -1,8 +1,9 @@
 import express from 'express';
 import { db } from '../database/db.js';
-import { requireAuth, requireStudent, requireTeacher } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary } from '../database/evaluation.js';
-import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
+import { requireAuth, requireStudent, requireTeacher, requireTeacherMadeTeam } from './auth.js';
+import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getEvaluationDetails, getCourseEvaluationSummary } from '../database/evaluation.js';
+
+import { areInSameTeam, teacherMadeTeam, userIsInTeam } from '../database/team.js';
 import log from '../logger.js';
 import { requireIsInCourse } from './course.js';
 
@@ -105,20 +106,7 @@ router.get("/get-my-evaluation/:teamId/:evaluateeId", requireAuth, requireStuden
   next();
 });
 
-router.get("/get-team-summary/:teamId", requireAuth, requireTeacher, async (req, res, next) => {
-  const goodInstructor = await teacherMadeTeam(db, req.params.teamId, req.session.user.userId);
-
-  if (goodInstructor instanceof Error) {
-    res.status(500).json({ msg: goodInstructor.message });
-    next();
-    return;
-  }
-
-  if (!goodInstructor) {
-    res.status(400).json({ msg: `You must teach the team you are trying to get the evaluations of` });
-    next();
-    return;
-  }
+router.get("/get-team-summary/:teamId", requireAuth, requireTeacher, requireTeacherMadeTeam, async (req, res, next) => {
 
   const result = await getTeamEvaluationSummary(db, req.params.teamId);
   if (result instanceof Error) {
@@ -130,8 +118,23 @@ router.get("/get-team-summary/:teamId", requireAuth, requireTeacher, async (req,
 });
 
 router.get("/get-course-summary/:courseId", requireAuth, requireTeacher, requireIsInCourse, async (req, res, next) => {
-
   const result = await getCourseEvaluationSummary(db, req.params.courseId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result);
+  }
+  next();
+});
+
+router.get("/get-team-details/:teamId/:schoolId", requireAuth, requireTeacher, requireTeacherMadeTeam, async (req, res, next) => {
+  const inTeam = await userIsInTeam(db, req.params.schoolId, req.params.teamId);
+  if (!inTeam) {
+    res.status(400).json({ msg: "The user you are trying to access is not in that team" });
+    next();
+    return;
+  }
+  const result = await getEvaluationDetails(db, req.params.teamId, req.params.schoolId);
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });
   } else {
