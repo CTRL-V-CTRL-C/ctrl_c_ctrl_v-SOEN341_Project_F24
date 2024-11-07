@@ -97,7 +97,7 @@ async function requireTeacherMadeTeam(req, res, next) {
   }
 
   if (!goodInstructor) {
-    res.status(400).json({ msg: `You must teach the team you are trying to get the evaluations of` });
+    res.status(401).json({ msg: `You must be the teacher for this specific team to be able to access this endpoint` });
     return;
   }
 

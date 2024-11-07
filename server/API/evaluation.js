@@ -3,7 +3,7 @@ import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher, requireTeacherMadeTeam } from './auth.js';
 import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getEvaluationDetails, getCourseEvaluationSummary } from '../database/evaluation.js';
 
-import { areInSameTeam, teacherMadeTeam } from '../database/team.js';
+import { areInSameTeam, teacherMadeTeam, userIsInTeam } from '../database/team.js';
 import log from '../logger.js';
 import { requireIsInCourse } from './course.js';
 
@@ -127,7 +127,13 @@ router.get("/get-course-summary/:courseId", requireAuth, requireTeacher, require
   next();
 });
 
-router.get("/get-details/:teamId/:schoolId", requireAuth, requireTeacher, requireTeacherMadeTeam, async (req, res, next) => {
+router.get("/get-team-details/:teamId/:schoolId", requireAuth, requireTeacher, requireTeacherMadeTeam, async (req, res, next) => {
+  const inTeam = await userIsInTeam(db, req.params.schoolId, req.params.teamId);
+  if (!inTeam) {
+    res.status(400).json({ msg: "The user you are trying to access is not in that team" });
+    next();
+    return;
+  }
   const result = await getEvaluationDetails(db, req.params.teamId, req.params.schoolId);
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });

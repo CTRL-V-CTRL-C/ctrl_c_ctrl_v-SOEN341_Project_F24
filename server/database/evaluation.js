@@ -135,7 +135,7 @@ tw_with_average AS (
   GROUP BY evaluatee_id, evaluator_id, evaluator_school_id, evaluatee_school_id, evaluator_name, evaluatee_name
 ) -- adding average
 SELECT evaluatee_name, evaluatee_school_id, JSON_AGG(
-  JSON_BUILD_OBJECT('evaluatior_name', evaluator_name, 'average_rating', average_rating, 'ratings', ratings, 'evaluator_school_id', evaluator_school_id)
+  JSON_BUILD_OBJECT('evaluator_name', evaluator_name, 'average_rating', average_rating, 'ratings', ratings, 'evaluator_school_id', evaluator_school_id)
 ) evaluations, count(*)::int
 FROM tw_with_average
 GROUP BY evaluatee_id, evaluatee_school_id, evaluatee_name; -- grouping by evaluatee`,

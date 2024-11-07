@@ -190,4 +190,29 @@ async function teacherMadeTeam(db, teamID, teacherID) {
     }
 }
 
-export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam };
+/**
+ * 
+ * @param {pg.Pool} db the database
+ * @param {number} schoolId the school id of the student
+ * @param {number} teamId the id of the team
+ */
+async function userIsInTeam(db, schoolId, teamId) {
+    const query = {
+        name: `user-is-in-team ${schoolId} ${teamId}`,
+        text: `
+        SELECT count(*) = 1 AS result
+        FROM team_members
+        JOIN users
+        ON users.user_id = team_members.user_id
+            WHERE school_id = $1 AND team_id = $2;
+        `,
+        values: [schoolId, teamId]
+    }
+    const result = await queryAndReturnError(db, query, "There was an error while checking if a user is in a team")
+    if (result instanceof Error) {
+        return false;
+    }
+    return result.rows[0].result;
+}
+
+export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam, userIsInTeam };
