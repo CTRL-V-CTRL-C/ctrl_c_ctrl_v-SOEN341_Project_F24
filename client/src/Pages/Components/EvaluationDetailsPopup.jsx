@@ -4,6 +4,41 @@ import './Styles/EvaluationResults.css';
 import PropTypes from 'prop-types';
 import { fetchData } from '../../Controller/FetchModule';
 
+const emptyStudentData = {
+    evaluatee_name: "",
+    evaluatee_school_id: "",
+    evaluations: [
+        {
+            evaluator_name: "",
+            average_rating: 0,
+            ratings: [
+                {
+                    criteria: "COOPERATION",
+                    rating: 0,
+                    comment: "",
+                },
+                {
+                    criteria: "CONCEPTUAL CONTRIBUTION",
+                    rating: 0,
+                    comment: "",
+                },
+                {
+                    criteria: "PRACTICAL CONTRIBUTION",
+                    rating: 0,
+                    comment: "",
+                },
+                {
+                    criteria: "WORK ETHIC",
+                    rating: 0,
+                    comment: "",
+                },
+            ],
+            evaluator_school_id: "",
+        }
+    ],
+    count: 0,
+}
+
 function EvaluationDetailsPopup(props) {
 
     EvaluationDetailsPopup.propTypes = {
@@ -14,48 +49,17 @@ function EvaluationDetailsPopup(props) {
         evaluatee: PropTypes.object.isRequired
     };
 
-    const [studentData, setStudentData] = useState({
-        evaluatee_name: "",
-        evaluatee_school_id: "",
-        evaluations: [
-            {
-                evaluator_name: "",
-                average_rating: 0,
-                ratings: [
-                    {
-                        criteria: "COOPERATION",
-                        rating: 0,
-                        comment: "",
-                    },
-                    {
-                        criteria: "CONCEPTUAL CONTRIBUTION",
-                        rating: 0,
-                        comment: "",
-                    },
-                    {
-                        criteria: "PRACTICAL CONTRIBUTION",
-                        rating: 0,
-                        comment: "",
-                    },
-                    {
-                        criteria: "WORK ETHIC",
-                        rating: 0,
-                        comment: "",
-                    },
-                ],
-                evaluator_school_id: "",
-            }
-        ],
-        count: 0,
-    });
+    const [studentData, setStudentData] = useState(emptyStudentData);
 
     const getResultDetails = useCallback(async () => {
         const response = await fetchData(`/api/evaluation/get-team-details/${props.team_id}/${props.evaluatee.school_id}`);
         if (response.ok) {
-            const data = await response.json();
-            setStudentData(data);
-        } else {
-            console.log("something went wrong fetching the evaluation results");
+            const data = await response.text();
+            if (!data) {
+                setStudentData(emptyStudentData);
+            } else {
+                setStudentData(JSON.parse(data));
+            }
         }
     }, [props.team_id, props.evaluatee.school_id]);
 
