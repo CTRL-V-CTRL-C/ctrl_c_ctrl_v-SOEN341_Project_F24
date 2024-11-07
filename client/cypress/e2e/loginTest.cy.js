@@ -31,4 +31,11 @@ describe('All login Test functions', function(){
         cy.get('button').should('be.visible')
         cy.get(':nth-child(3) > .navlink').click();//login out
     })  
+    it('error message if we have wrong credentials ', ()=>{
+        cy.visit('/loginAccount'); 
+        cy.get(':nth-child(2) > .field-label').type('jamenorth@gmail.com');
+        cy.get(':nth-child(3) > .field-label').type('password1');
+        cy.get('.submit').click();
+        cy.get('.error-message > p').should('be.visible');
+    })
 })
