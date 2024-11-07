@@ -494,5 +494,26 @@ suite("GET evaluation details as an instructor (both team and course)", async ()
       .timeout(1000);
 
     assert.equal(response.status, 401, response.body.msg);
-  })
+  });
+
+  it("Should respond with 400 when a user is not part of that team", async () => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-team-details/${teamId}/STUD0001`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 400, response.body.msg);
+  });
+
+  it("Should return an empty body when a user does not have any reviews", async () => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-team-details/${teamId}/${testUsers[0].schoolID}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 200, response.body.msg);
+    assert.ok(response.body === '');
+  });
 })
