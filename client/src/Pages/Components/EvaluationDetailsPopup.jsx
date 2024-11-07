@@ -53,7 +53,6 @@ function EvaluationDetailsPopup(props) {
         const response = await fetchData(`/api/evaluation/get-team-details/${props.team_id}/${props.evaluatee.school_id}`);
         if (response.ok) {
             const data = await response.json();
-            // console.log(data)
             setStudentData(data);
         } else {
             console.log("something went wrong fetching the evaluation results");
@@ -78,7 +77,6 @@ function EvaluationDetailsPopup(props) {
                     :
                     <>
                         <div className="table-container">
-
                             <table className="EvalTableStyle">
                                 <thead>
                                     <tr>
@@ -90,8 +88,6 @@ function EvaluationDetailsPopup(props) {
                                         <th> Average Across All </th>
                                     </tr>
                                 </thead>
-
-
                                 <tbody>
                                     {studentData.evaluations.map((evaluator, i) => (
                                         <tr key={i}>
@@ -104,7 +100,6 @@ function EvaluationDetailsPopup(props) {
                                     ))}
                                 </tbody>
                             </table>
-
                         </div>
                         <div className="comment-container">
                             <p style={{ fontWeight: 700 }}> Comments </p>
