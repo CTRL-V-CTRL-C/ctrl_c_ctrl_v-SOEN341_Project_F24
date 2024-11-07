@@ -7,6 +7,8 @@ import { createUser } from '../database/API.js';
 import { createCourse } from '../database/course.js';
 import { createTeam } from '../database/team.js';
 import { createOrUpdateEvaluation } from '../database/evaluation.js';
+import { createUserAPI, UserRole } from './apiUtils.js';
+import { randomLetters } from './utils.js';
 
 async function loginUser(email, password) {
   const response = await request(app)
@@ -66,8 +68,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 1, comment: "" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "WORK ETHIC", rating: 1, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
   });
 
   it("Should respond with 200 when re-evaluating a student in the same team", async (t) => {
@@ -77,8 +79,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 2, comment: "Hey" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "WORK ETHIC", rating: 1, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
   });
 
   it("Should respond with 400 when evaluating a student they are not in a team with", async (t) => {
@@ -88,8 +90,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2 + 1, evaluation_details: [{ criteria: "COOPERATION", rating: 1, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 400, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
   });
 
   it("Should respond with 400 when evaluating a student with invalid rating", async (t) => {
@@ -99,8 +101,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 7, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 400, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
   });
 
   it("Should respond with 400 when evaluating a student with invalid criteria", async (t) => {
@@ -110,8 +112,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION STUFF", rating: 2, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 400, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
   });
 
   it("Should respond with 400 when evaluating a student with an invalid evaluation (missing criteria)", async (t) => {
@@ -121,8 +123,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 2, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 400, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
     assert.match(response._body.msg, /[Mm]issing/);
   });
 
@@ -133,8 +135,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Cookie", cookies)
       .send({ team_id: teamId, user_id: studentId2, evaluation_details: [{ criteria: "COOPERATION", rating: 2, comment: "" }, { criteria: "COOPERATION", rating: 2, comment: "Hey" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: 1, comment: "" }, { criteria: "WORK ETHIC", rating: 1, comment: "" }] })
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 400, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
     assert.match(response._body.msg, /[Dd]uplicate/);
   });
 
@@ -144,8 +146,8 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
     assert.equal(response._body.length, 4);
   });
 
@@ -155,11 +157,9 @@ suite("POST and GET evaluations as a student", async () => {
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 400, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
   });
-
-
 });
 
 
@@ -225,33 +225,31 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
   });
 
   it("Should respond with the correct average and count for the summary of evaluations for a team", async (t) => {
     const summary = [
       {
         school_id: "STUD2004",
-        team_name: "The test team",
-        count: 0,
         f_name: "john",
         l_name: "smith",
-        average: null,
+        team_name: "The test team",
         ratings: [
           {
             criteria: null,
             average_rating: null,
-          }
-        ]
+          },
+        ],
+        average: null,
+        count: 0,
       },
       {
         school_id: "STUD2005",
-        team_name: "The test team",
-        count: 2,
         f_name: "john",
         l_name: "smith",
-        average: 2,
+        team_name: "The test team",
         ratings: [
           {
             criteria: "COOPERATION",
@@ -269,21 +267,23 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
             criteria: "WORK ETHIC",
             average_rating: 1,
           },
-        ]
+        ],
+        average: 2,
+        count: 2,
       },
       {
         school_id: "STUD2006",
-        team_name: "The test team",
-        count: 0,
         f_name: "john",
         l_name: "smith",
-        average: null,
+        team_name: "The test team",
         ratings: [
           {
             criteria: null,
             average_rating: null,
-          }
-        ]
+          },
+        ],
+        average: null,
+        count: 0,
       },
     ]
     const response = await request(app)
@@ -291,20 +291,19 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
     assert.deepEqual(response._body, summary);
-
   });
 
-  it("Should respond with 400 when getting the evaluation summary of a team not in your course", async (t) => {
+  it("Should respond with 401 when getting the evaluation summary of a team not in your course", async (t) => {
     const response = await request(app)
       .get(`/api/evaluation/get-team-summary/${teamId + 1}`)
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 401, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 400);
   });
 
   it("Should respond with 200 when getting the summary of evaluations for a course", async (t) => {
@@ -313,8 +312,8 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
   });
 
   it("Should respond with the correct average and count for the summary of evaluations for a course", async (t) => {
@@ -379,8 +378,8 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 200, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 200);
     assert.deepEqual(response._body, summary);
 
   });
@@ -391,8 +390,130 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
       .set("Accept", "application/json")
       .set("Cookie", cookies)
       .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(response.status, 401, response.body.msg);
     assert.match(response.headers["content-type"], /json/);
-    assert.equal(response.status, 401);
+  });
+});
+
+suite("GET evaluation details as an instructor (both team and course)", async () => {
+  const testUsers = [];
+  let teacher;
+  let teamId;
+  let cookies;
+
+  async function setupUsers() {
+    teacher = await createUserAPI(app, UserRole.Instructor);
+    const userId = (await db.query(`SELECT user_id FROM users WHERE school_id = '${teacher.schoolID}'`)).rows[0].user_id;
+    teacher.userId = userId;
+    for (let i = 0; i < 5; i++) {
+      const user = await createUserAPI(app, UserRole.Student);
+      const userId = (await db.query(`SELECT user_id FROM users WHERE school_id = '${user.schoolID}'`)).rows[0].user_id;
+      user.userId = userId;
+      testUsers.push(user);
+    }
+  }
+
+
+  before(async () => {
+    await setupUsers();
+    const courseId = await createCourse(db, teacher.userId, "test course" + randomLetters());
+    const emails = testUsers.map(user => user.email);
+    teamId = await createTeam(db, courseId, randomLetters(), emails);
+    for (let i = 0; i < 4; i++) {
+      await createOrUpdateEvaluation(db, testUsers[i].userId, testUsers[i + 1].userId, teamId, [{ criteria: "COOPERATION", rating: i + 1, comment: "" }, { criteria: "CONCEPTUAL CONTRIBUTION", rating: i + 1, comment: "" }, { criteria: "PRACTICAL CONTRIBUTION", rating: i + 1, comment: "" }, { criteria: "WORK ETHIC", rating: i + 1, comment: "" }]);
+    }
+    cookies = await loginUser(teacher.email, teacher.password);
   });
 
-});
+
+  after(async () => {
+    await logoutUser(cookies);
+    testUsers.push(teacher);
+    const orQuery = testUsers
+      .map(user => user.userId)
+      .reduce((accumulator, current, i) => {
+        if (i == 0) {
+          return `user_id = ${current} `;
+        }
+        return accumulator + ` OR user_id =  ${current} `
+      }, "")
+    await db.query("DELETE FROM users WHERE " + orQuery + ";");
+  })
+
+  it("Should respond with 200 when getting the evaluation details for a specific team", async () => {
+    const expected = {
+      evaluatee_name: "john smith",
+      evaluatee_school_id: testUsers[1].schoolID,
+      evaluations: [
+        {
+          evaluator_name: "john smith",
+          average_rating: 1,
+          ratings: [
+            {
+              criteria: "COOPERATION",
+              rating: 1,
+              comment: "",
+            },
+            {
+              criteria: "CONCEPTUAL CONTRIBUTION",
+              rating: 1,
+              comment: "",
+            },
+            {
+              criteria: "PRACTICAL CONTRIBUTION",
+              rating: 1,
+              comment: "",
+            },
+            {
+              criteria: "WORK ETHIC",
+              rating: 1,
+              comment: "",
+            },
+          ],
+          evaluator_school_id: testUsers[0].schoolID,
+        },
+      ],
+      count: 1,
+    }
+
+    const response = await request(app)
+      .get(`/api/evaluation/get-team-details/${teamId}/${testUsers[1].schoolID}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 200, response.body.msg);
+    assert.deepEqual(response.body, expected, response.body.msg);
+  });
+
+  it("Should respond with 401 when getting a team that is not form this teacher", async () => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-team-details/${teamId + 1}/${testUsers[0].schoolID}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 401, response.body.msg);
+  });
+
+  it("Should respond with 400 when a user is not part of that team", async () => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-team-details/${teamId}/STUD0001`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 400, response.body.msg);
+  });
+
+  it("Should return an empty body when a user does not have any reviews", async () => {
+    const response = await request(app)
+      .get(`/api/evaluation/get-team-details/${teamId}/${testUsers[0].schoolID}`)
+      .set("Accept", "application/json")
+      .set("Cookie", cookies)
+      .timeout(1000);
+
+    assert.equal(response.status, 200, response.body.msg);
+    assert.ok(response.body === '');
+  });
+})
