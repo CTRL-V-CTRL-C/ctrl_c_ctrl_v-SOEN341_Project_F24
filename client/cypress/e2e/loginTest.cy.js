@@ -11,9 +11,7 @@ describe('All login Test functions', function(){
         cy.get('.submit').should('be.visible');
         cy.get('.signin').should('be.visible'); //sign in link
     });
-
     it('should login instuctor with correct credentials',()=>{
-
         //loging in the instructor
         cy.visit('/loginAccount'); 
         cy.get(':nth-child(2) > .field-label').type('jamesnorth@gmail.com');
@@ -25,5 +23,12 @@ describe('All login Test functions', function(){
         cy.get('button').should('be.visible')
         cy.get(':nth-child(3) > .navlink').click();//login out
     })  
-    
+    it('should login as a student with correct credentials', () =>{
+        cy.visit('/loginAccount'); 
+        cy.get(':nth-child(2) > .field-label').type('joeparker@gmail.com');
+        cy.get(':nth-child(3) > .field-label').type('password');
+        cy.get('.submit').click(); //login
+        cy.get('button').should('be.visible')
+        cy.get(':nth-child(3) > .navlink').click();//login out
+    })  
 })
