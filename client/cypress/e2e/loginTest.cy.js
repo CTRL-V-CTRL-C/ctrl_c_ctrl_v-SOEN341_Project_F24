@@ -30,8 +30,9 @@ describe('All login Test functions', function(){
         cy.get(':nth-child(3) > .field-label').type('password'); //entering the password 
         cy.get('.submit').click(); //login
         //after they login must show students view (correct switch menu)
-        cy.get('button').should('be.visible')
-        cy.get(':nth-child(3) > .navlink').click();//login out
+        cy.get('.switch > :nth-child(2)').should('be.visible');
+        cy.get('.switch > :nth-child(3)').should('be.visible')
+        cy.get(':nth-child(3) > .navlink').should('be.visible').click();//login out
     })  
     it('error message if we have wrong credentials ', ()=>{
         //loggin in with incorrect credentials will get an error message
