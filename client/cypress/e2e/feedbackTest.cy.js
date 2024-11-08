@@ -76,6 +76,28 @@ it('Student can successfully give feeback', ()=>{
      cy.get(':nth-child(4) > :nth-child(3)').should('be.visible');
      //**cy.get(':nth-child(4) > :nth-child(3)').should('contain','good work ethic').should('be.visible');**/
 
+     //submit the form
+     cy.get('.cancel-button').should('be.visible').click(); //click cnacel button should bring us back to the review form
+     cy.get(':nth-child(4) > .criteria-section > .sc-blHHSb > :nth-child(5) > .sc-egkSDF > svg > path').click()//can change one part of the review
+     cy.get(':nth-child(4) > .comment-box').type('excellent work ethic');
+     cy.get('.button__text').click();//resubmit the form
+     cy.get(':nth-child(4) > :nth-child(3)').should('contain','excellent work ethic').should('be.visible');//make sure the updates are made 
+     cy.get('.confirm-button').should('be.visible').click();//confirm the form
+
+     //refresh page 
+     cy.get('.switch > :nth-child(3)').click();//swtich views
+     cy.get('.switch > :nth-child(2)').click();//switch back to team page
+     cy.get(':nth-child(2) > .review-btn').click();//click on the evaluation we just made 
+
+     //confirm all the information is there and is correct 
+     // cy.get(':nth-child(1) > .comment-box').should('contain','cooperation wasnt good');
+     // cy.get(':nth-child(2) > .comment-box').should('contain', 'ok conceptual contribution');
+     // cy.get(':nth-child(3) > .comment-box').should('contain','average practical contribution');
+     // cy.get(':nth-child(4) > .comment-box').should('contain','excellent work ethic');
+
+     //reset the form
+     
+
 
 
 })
