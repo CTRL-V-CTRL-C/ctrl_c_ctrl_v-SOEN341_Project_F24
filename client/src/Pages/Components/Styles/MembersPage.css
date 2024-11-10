@@ -1,0 +1,39 @@
+@media screen and (max-width: 300px) {
+    
+    #whole{
+       margin-right: 100px;
+        margin-left: 50px;
+        margin-top: 35px;
+    }
+}
+*:not(path){
+    color:black;
+}
+#whole{
+    margin-right: 200px;
+    margin-left: 100px;
+    margin-top: 70px;
+}
+#TitlePosition{
+    width: fit-content;
+}
+#PageTitle{
+    color:black;
+    font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+}
+.TableStyle{
+width: 100%;
+ border-collapse: collapse;
+}
+th, td {
+    border: 1px solid black;
+    padding-left: 8px;
+    padding-right:8px;
+  }
+  
+  th {
+    background-color:#dddaa4;
+    text-align: left;
+  }

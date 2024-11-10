@@ -2,28 +2,7 @@ import { suite, it, after, before } from 'node:test';
 import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
-import { db } from '../database/db.js';
-import { randomLetters, uniqueRandomNumber } from './utils.js'
-
-
-async function loginUser(email, password) {
-  const response = await request(app)
-    .post("/api/login")
-    .set("Accept", "application/json")
-    .send({ email, password })
-    .expect(200);
-  return response.headers['set-cookie'];
-}
-
-async function logoutUser(cookies) {
-  const response = await request(app)
-    .post("/api/logout")
-    .set("Accept", "application/json")
-    .set("Cookie", cookies)
-    .expect(200);
-  return response.headers['set-cookie'];
-}
-
+import { createUserAPI, createCourseAPI, loginUser, logoutUser, UserRole } from './apiUtils.js';
 //Tests based on populate scripts
 suite("GET teams as an instructor", async () => {
   let cookies;
@@ -31,11 +10,11 @@ suite("GET teams as an instructor", async () => {
 
   // disconnect from the database after the tests
   after(async () => {
-    await logoutUser(cookies);
+    await logoutUser(app, cookies);
   });
 
   before(async () => {
-    cookies = await loginUser("joeparker13@gmail.com", "password");
+    cookies = await loginUser(app, "joeparker13@gmail.com", "password");
   });
 
   it("Should respond with 200 when getting teams in a course they teach", async (t) => {
@@ -76,11 +55,11 @@ suite("GET my team and other teams as a student", async () => {
 
   // disconnect from the database after the tests
   after(async () => {
-    await logoutUser(cookies);
+    await logoutUser(app, cookies);
   });
 
   before(async () => {
-    cookies = await loginUser("joeparker1@gmail.com", "password");
+    cookies = await loginUser(app, "joeparker1@gmail.com", "password");
   });
 
   it("Should respond with 200 when getting other teams in a course they are part of", async (t) => {
@@ -116,48 +95,6 @@ suite("GET my team and other teams as a student", async () => {
   });
 });
 
-const UserRole = {
-  Student: "STUD",
-  Instructor: "INST"
-}
-
-async function createUser(userRole) {
-  if (userRole == undefined) {
-    userRole = UserRole.Student;
-  }
-  const email = `test.${randomLetters()}@mail.com`;
-  const password = "password";
-  const user = {
-    password,
-    firstName: "test-user",
-    lastName: "test-user",
-    email,
-    schoolID: userRole + uniqueRandomNumber(4),
-    role: userRole
-  }
-  await request(app)
-    .post("/api/user/create")
-    .set("Accept", "application/json")
-    .send(user)
-    .timeout(1000)
-    .expect(200);
-  return { email, password };
-}
-
-async function createCourse(loginCookie) {
-  const course = {
-    courseName: `TEST ${uniqueRandomNumber(3)}`,
-  };
-  const response = await request(app)
-    .post("/api/course/create")
-    .set("Accept", "application/json")
-    .send(course)
-    .set("Cookie", loginCookie)
-    .timeout(1000);
-  assert.equal(response.status, 200);
-  return response.body.courseID;
-}
-
 /**
  * @type {string[]}
  */
@@ -168,15 +105,15 @@ suite("POST requests to create a team", async () => {
   before(async () => {
     const teamSize = 3;
     for (let index = 0; index < teamSize; index++) {
-      const student = await createUser(UserRole.Student)
+      const student = await createUserAPI(app, UserRole.Student)
       testEmails.push(student.email);
     }
   });
 
   it("should respond with 200 when creating a team with no members", async (t) => {
-    const teacher = await createUser(UserRole.Instructor);
-    const loginCookie = await loginUser(teacher.email, teacher.password);
-    const courseID = await createCourse(loginCookie);
+    const teacher = await createUserAPI(app, UserRole.Instructor);
+    const loginCookie = await loginUser(app, teacher.email, teacher.password);
+    const courseID = await createCourseAPI(app, loginCookie);
     const team = {
       teamName: "test_team",
       courseID,
@@ -194,9 +131,9 @@ suite("POST requests to create a team", async () => {
   });
 
   it("should respond with 200 when creating a team with some members", async (t) => {
-    const teacher = await createUser(UserRole.Instructor);
-    const loginCookie = await loginUser(teacher.email, teacher.password);
-    const courseID = await createCourse(loginCookie);
+    const teacher = await createUserAPI(app, UserRole.Instructor);
+    const loginCookie = await loginUser(app, teacher.email, teacher.password);
+    const courseID = await createCourseAPI(app, loginCookie);
     const team = {
       teamName: "test_team",
       courseID,
@@ -231,9 +168,9 @@ suite("POST requests to create a team", async () => {
 suite("POST requests to delete teams", async () => {
 
   it("should respond with 200 when deleting a team", async () => {
-    const teacher = await createUser(UserRole.Instructor);
-    const loginCookie = await loginUser(teacher.email, teacher.password);
-    const courseID = await createCourse(loginCookie);
+    const teacher = await createUserAPI(app, UserRole.Instructor);
+    const loginCookie = await loginUser(app, teacher.email, teacher.password);
+    const courseID = await createCourseAPI(app, loginCookie);
     const team = {
       teamName: "test_team",
       courseID,

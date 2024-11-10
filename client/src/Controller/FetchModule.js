@@ -4,7 +4,7 @@
  * url and return a json object with the contained data
  * 
  * @param {String} url 
- * @returns {JSON} data
+ * @returns {Promise<JSON>} data
  */
 async function fetchData(route) {
     const url = new URL(route, location.origin);
@@ -26,7 +26,6 @@ async function putData(route, body) {
  * @param {String} url 
  * @param {Object} body 
  * @param {String} method 
- * @returns {Object}
  */
 async function sendData(route, body, method) {
     const url = new URL(route, location.origin);

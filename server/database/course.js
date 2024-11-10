@@ -6,11 +6,11 @@ import log from '../logger.js'
  * @param {pg.Pool} db the database
  * @param {string} instructorID the id of the instructor
  * @param {string} courseName the name of the course
- * @returns {Promise<Error | string>}
+ * @returns {Promise<Error | string>} the course id or an error if any
  */
 async function createCourse(db, instructorID, courseName) {
     const query = {
-        name: "create-course",
+        name: `create-course ${instructorID}`,
         text: "INSERT INTO courses (course_name, instructor_id) VALUES ($1, $2) RETURNING course_id;",
         values: [courseName, instructorID]
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const UserContext = React.createContext(
     {
         userLoggedIn: false,
@@ -8,8 +9,10 @@ const UserContext = React.createContext(
         setUserID: () => { },
         isInstructor: false,
         setIsInstructor: () => { },
-        selectedCourse: 0,
+        selectedCourse: { course_name: "", course_id: 0 },
         setSelectedCourse: () => { },
+        hasCourses: false,
+        setHasCourses: () => { }
     }
 );
 

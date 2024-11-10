@@ -87,6 +87,23 @@ for (let eval_id = 1; eval_id <= numberOfEvaluations; eval_id++) {
     await db.query("INSERT INTO evaluation_details VALUES($1,$2,$3,$4)", [eval_id, crit, j++, "Some review"]);
   }
 }
+await db.query("INSERT INTO evaluations (team_id, evaluator_id, evaluatee_id) VALUES($1,$2,$3)", [1, 2, 1]);
+await db.query("INSERT INTO evaluations (team_id, evaluator_id, evaluatee_id) VALUES($1,$2,$3)", [1, 2, 3]);
+await db.query("INSERT INTO evaluations (team_id, evaluator_id, evaluatee_id) VALUES($1,$2,$3)", [1, 2, 4]);
+await db.query("INSERT INTO evaluations (team_id, evaluator_id, evaluatee_id) VALUES($1,$2,$3)", [1, 2, 5]);
+for (let i = 0; i < criteria.length; i++) {
+  await db.query("INSERT INTO evaluation_details VALUES($1,$2,$3,$4)", [6, criteria[i], 5 - i, "Some review"]);
+}
+for (let i = 0; i < criteria.length; i++) {
+  await db.query("INSERT INTO evaluation_details VALUES($1,$2,$3,$4)", [7, criteria[i], 5 - i, "Some review"]);
+}
+for (let i = 0; i < criteria.length; i++) {
+  await db.query("INSERT INTO evaluation_details VALUES($1,$2,$3,$4)", [8, criteria[i], 5 - i, "Some review"]);
+}
+for (let i = 0; i < criteria.length; i++) {
+  await db.query("INSERT INTO evaluation_details VALUES($1,$2,$3,$4)", [9, criteria[i], 5 - i, "Some review"]);
+}
+
 console.log("Populated evaluations table")
 
 db.end();

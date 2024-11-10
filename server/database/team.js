@@ -28,7 +28,7 @@ function verifyMembers(members) {
  */
 async function areInSameTeam(db, teamId, userId1, userId2) {
     const query = {
-        name: "check-same-team",
+        name: `check-same-team ${teamId} ${userId1} ${userId2}`,
         text: "SELECT * FROM team_members WHERE team_id = $1 AND (user_id = $2 OR user_id = $3);",
         values: [teamId, userId1, userId2]
     };
@@ -55,7 +55,6 @@ async function getUserIds(db, emails) {
     }
     values = values.substring(0, values.length - 1);
     const query = {
-        name: 'get-users',
         text: `SELECT (user_id) FROM users WHERE email IN (${values})`,
         values: emails,
     };
@@ -72,7 +71,7 @@ async function getUserIds(db, emails) {
  */
 async function createTeam(db, courseID, teamName, emails) {
     const query = {
-        name: 'create-team',
+        name: `create-team ${courseID} ${teamName} `,
         text: "INSERT INTO teams (team_name, course_id) VALUES ($1, $2) RETURNING team_id;",
         values: [teamName, courseID]
     }
@@ -118,7 +117,10 @@ async function addTeamMembers(db, teamId, members) {
     }
 
     const values = userIds.flatMap((member) => [teamId, member]);
-
+    if (values.length == 0) {
+        log.info('None of the team members exist')
+        return null; //there are no users that exist
+    }
     let preparedValues = "";
     for (let index = 1; index <= values.length; index += 2) {
         preparedValues += `($${index}, $${index + 1}),`
@@ -126,7 +128,7 @@ async function addTeamMembers(db, teamId, members) {
     preparedValues = preparedValues.substring(0, preparedValues.length - 1);
     const sqlQuery = `INSERT INTO team_members (team_id, user_id) VALUES ${preparedValues};`
     const query = {
-        name: "add-team-members",
+        name: `add-team-members ${teamId}`,
         text: sqlQuery,
         values: values
     }
@@ -147,7 +149,7 @@ async function addTeamMembers(db, teamId, members) {
  */
 async function deleteTeam(db, teamID) {
     const query = {
-        name: "delete-team-members",
+        name: `delete-team-members ${teamID}`,
         text: "DELETE FROM teams WHERE team_id = $1",
         values: [teamID]
     }
@@ -169,7 +171,7 @@ async function deleteTeam(db, teamID) {
  */
 async function teacherMadeTeam(db, teamID, teacherID) {
     const query = {
-        name: "teacher-made-team",
+        name: `teacher-made-team ${teamID} ${teacherID}`,
         text:
             `SELECT COUNT(*) = 1 AS result FROM teams t 
             JOIN courses c
@@ -178,8 +180,39 @@ async function teacherMadeTeam(db, teamID, teacherID) {
                 AND c.instructor_id = $2`,
         values: [teamID, teacherID]
     }
-    const result = await db.query(query);
+    try {
+        const result = await db.query(query);
+        return result.rows[0].result;
+    } catch (error) {
+        log.error(`There was an error trying to check if ${instructorId} teaches team ${teamId}`);
+        log.error(error);
+        return error;
+    }
+}
+
+/**
+ * 
+ * @param {pg.Pool} db the database
+ * @param {number} schoolId the school id of the student
+ * @param {number} teamId the id of the team
+ */
+async function userIsInTeam(db, schoolId, teamId) {
+    const query = {
+        name: `user-is-in-team ${schoolId} ${teamId}`,
+        text: `
+        SELECT count(*) = 1 AS result
+        FROM team_members
+        JOIN users
+        ON users.user_id = team_members.user_id
+            WHERE school_id = $1 AND team_id = $2;
+        `,
+        values: [schoolId, teamId]
+    }
+    const result = await queryAndReturnError(db, query, "There was an error while checking if a user is in a team")
+    if (result instanceof Error) {
+        return false;
+    }
     return result.rows[0].result;
 }
 
-export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam };
+export { createTeam, deleteTeam, teacherMadeTeam, areInSameTeam, userIsInTeam };
