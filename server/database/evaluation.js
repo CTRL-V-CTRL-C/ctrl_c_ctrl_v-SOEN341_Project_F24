@@ -114,10 +114,10 @@ async function getEvaluationDetails(db, teamId, schoolId) {
 WITH team_reviews AS (
   select users.user_id, f_name || ' ' || l_name as evaluatee_name, school_id evaluatee_school_id, team_name, evaluatee_id, evaluator_id, rating, comment, criteria
   from team_members tm
-  FULL join evaluations ev on tm.user_id = ev.evaluatee_id
-  FULL join evaluation_details ed on ev.evaluation_id = ed.evaluation_id
   join teams on teams.team_id = tm.team_id
   join users on users.user_id = tm.user_id
+  FULL join evaluations ev on tm.user_id = ev.evaluatee_id AND ev.team_id = teams.team_id
+  FULL join evaluation_details ed on ev.evaluation_id = ed.evaluation_id
   WHERE tm.team_id = $1 AND users.school_id = $2
 ), -- getting teams and reviews
 tr_with_evaluator AS (
@@ -163,7 +163,7 @@ async function getTeamEvaluationSummary(db, teamId) {
         FROM users u 
         JOIN team_members tm ON tm.user_id = u.user_id 
         JOIN teams t ON t.team_id = tm.team_id 
-        FULL JOIN evaluations e ON e.evaluatee_id = u.user_id --Not every student has an evaluation
+        FULL JOIN evaluations e ON e.evaluatee_id = u.user_id AND e.team_id = t.team_id --Not every student has an evaluation
         FULL JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id --Need to keep the students with no evaluations
         WHERE t.team_id = $1 
         GROUP BY u.school_id,u.f_name,u.l_name,t.team_name, ed.criteria
