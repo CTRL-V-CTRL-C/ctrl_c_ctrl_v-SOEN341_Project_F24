@@ -1,21 +1,22 @@
 import pg from 'pg'
 import log from '../logger.js'
 import { queryAndReturnError } from './db.js';
-
+import { createUser, verifyUser } from './user.js';
+import { generatePasswordHash } from '../internal/password.js';
+import { sendTempPasswordEmail } from '../internal/email.js';
 
 /**
- * @param {string[]} members the array containing the user ids of the members
+ * 
+ * @param {import('./user.js').User[]} members the array containing the user ids of the members
  */
 function verifyMembers(members) {
-    if (members.length == 0) {
-        log.debug("The team was not created since there are no members");
-        return false;
+    for (const member of members) {
+        const error = verifyUser(member);
+        if (error) {
+            return error;
+        }
     }
-    const allStrings = members.every((member) => typeof member === 'string');
-    if (!allStrings) {
-        log.debug("Not all the ids of the team members are strings");
-    }
-    return allStrings;
+    return null;
 }
 
 /**
@@ -45,31 +46,34 @@ async function areInSameTeam(db, teamId, userId1, userId2) {
 
 /**
  * @param {pg.Pool} db
- * @param {string[]} emails the emails of the users
+ * @param {string[]} schoolIDs the studentIDs of the users
  */
-async function getUserIds(db, emails) {
+async function getUserIds(db, schoolIDs) {
 
     let values = "";
-    for (let index = 1; index <= emails.length; index++) {
+    for (let index = 1; index <= schoolIDs.length; index++) {
         values += `$${index},`
     }
     values = values.substring(0, values.length - 1);
     const query = {
-        text: `SELECT (user_id) FROM users WHERE email IN (${values})`,
-        values: emails,
+        text: `SELECT user_id, school_id FROM users WHERE school_id IN (${values})`,
+        values: schoolIDs,
     };
     const result = await db.query(query);
-    return result.rows.map((row) => row.user_id);
+    return result.rows.reduce((accumulator, current) => {
+        accumulator[current.school_id] = current.user_id;
+        return accumulator
+    }, {});
 }
 
 /**
  * @param {pg.Pool} db the database to query
  * @param {int} courseID the id of the course for which the team must be created
  * @param {string} teamName the name of the team
- * @param {string[]} emails the emails of the members of the team
+ * @param {import('./user.js').User[]} members the info of the members of the team
  * @returns {Promise<Error | string>} an error if the team could not be created, a string containing the id of the team created otherwise
  */
-async function createTeam(db, courseID, teamName, emails) {
+async function createTeam(db, courseID, teamName, members) {
     const query = {
         name: `create-team ${courseID} ${teamName} `,
         text: "INSERT INTO teams (team_name, course_id) VALUES ($1, $2) RETURNING team_id;",
@@ -85,10 +89,10 @@ async function createTeam(db, courseID, teamName, emails) {
         log.error(error);
         return error;
     }
-    if (!(Array.isArray(emails) && emails.length != 0)) {
+    if (!Array.isArray(members) || members.length == 0) {
         return teamId;
     }
-    const error = await addTeamMembers(db, teamId, emails);
+    const error = await addTeamMembers(db, teamId, members);
     if (error) {
         return error;
     }
@@ -98,25 +102,39 @@ async function createTeam(db, courseID, teamName, emails) {
 /**
  * @param {pg.Pool} db
  * @param {string} teamId the id of the team
- * @param {string[]} members the emails of the member of
+ * @param {import('./user.js').User[]} members the info of the member of the team
  * @returns {Promise<Error | null>} an error if the members could not be added to the team, null otherwise
  */
 async function addTeamMembers(db, teamId, members) {
-    if (!verifyMembers(members)) {
-        log.info("Team members were not added");
-        return new Error("the team members could not be verified");
-    }
-
-    let userIds = undefined;
-    try {
-        userIds = await getUserIds(db, members);
-    } catch (error) {
-        log.error("There was an error while getting the user id's");
-        log.error(error);
+    const error = verifyMembers(members);
+    if (error) {
+        log.debug("Team members were not added");
+        log.debug(error);
         return error;
     }
 
-    const values = userIds.flatMap((member) => [teamId, member]);
+    const schoolIDs = members.map(member => member.schoolID);
+    let userIdMap = await getUserIds(db, schoolIDs);
+
+    // some members don't have an account
+    if (Object.keys(userIdMap).length != members.length) {
+        const uncreatedMembers = members.filter(member => userIdMap[member.studentID] === undefined)
+        for (const member of uncreatedMembers) {
+            const errorOrPassword = await createStudentAccount(db, member);
+            if (errorOrPassword instanceof Error) {
+                log.error("There was an error while creating the user");
+                return error;
+            } else {
+                // send the email on async so it doesn't block this function
+                sendTempPasswordEmail(member.email, errorOrPassword);
+            }
+        }
+        const schoolIDs = members.map(member => member.schoolID);
+        const otherIdsMap = await getUserIds(db, schoolIDs);
+        userIdMap = Object.assign({}, userIdMap, otherIdsMap);
+    }
+
+    const values = Object.values(userIdMap).flatMap((member) => [teamId, member]);
     if (values.length == 0) {
         log.info('None of the team members exist')
         return null; //there are no users that exist
@@ -140,6 +158,29 @@ async function addTeamMembers(db, teamId, members) {
         return error;
     }
     return null;
+}
+
+/**
+ * creates a new user in the database with a new password for when a team member doesn't exist
+ * @param {pg.Pool} db the database connection
+ * @param {import('./user.js').User} user the user to create
+ * @returns an error if any occured or the password that was created
+ */
+async function createStudentAccount(db, user) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let password = "";
+    for (let i = 0; i < 10; i++) {
+        const randomCharacter = characters.charAt(Math.random() * characters.length);
+        password += randomCharacter;
+    }
+    const passwordHash = await generatePasswordHash(password);
+    user.password_hash = passwordHash;
+
+    const error = await createUser(db, user);
+    if (error) {
+        return error;
+    }
+    return password;
 }
 
 /**

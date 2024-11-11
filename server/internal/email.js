@@ -32,7 +32,7 @@ async function createTransporter() {
     });
     return transport;
 }
-const htmlTemplatePath = path.join(import.meta.dirname, '..', '..', 'assets', 'email-template', 'email.html');
+const htmlTemplatePath = path.join(import.meta.dirname, '..', 'assets', 'email-template', 'email.html');
 const htmlTemplate = fs.readFileSync(htmlTemplatePath)
     .toString();
 
@@ -48,7 +48,7 @@ function createTempPasswordHTML(email, password) {
         .replace(/\{\{password\}\}/g, password);
 }
 
-const txtTemplatePath = path.join(import.meta.dirname, '..', '..', 'assets', 'email-template', 'email.txt');
+const txtTemplatePath = path.join(import.meta.dirname, '..', 'assets', 'email-template', 'email.txt');
 const txtTemplate = fs.readFileSync(txtTemplatePath)
     .toString();
 
@@ -57,7 +57,7 @@ const txtTemplate = fs.readFileSync(txtTemplatePath)
  * @param {string} email the email of the user
  * @param {string} password the password of the user
  */
-async function createTempPasswordTXT(email, password) {
+function createTempPasswordTXT(email, password) {
     return txtTemplate
         .replace(/\{\{email\}\}/g, email)
         .replace(/\{\{password\}\}/g, password);
@@ -68,11 +68,11 @@ async function createTempPasswordTXT(email, password) {
  * @param {string} mailTo the user to send the email to
  * @param {string} password the passowrd of the user
  */
-async function sendTempPasswordEmail(mailTo, password) {
+function sendTempPasswordEmail(mailTo, password) {
     const html = createTempPasswordHTML(mailTo, password);
     const txt = createTempPasswordTXT(mailTo, password);
 
-    return await transport.sendMail({
+    transport.sendMail({
         from: process.env.EMAIL_CLIENT_EMAIL,
         to: mailTo,
         subject: 'Your PeerCheck account has been created',
@@ -82,14 +82,21 @@ async function sendTempPasswordEmail(mailTo, password) {
             {
                 filename: 'image-1.png',
                 cid: 'image-1',
-                path: path.join('..', '..', 'assets', 'email-template', 'images', 'image-1.png')
+                path: path.join(import.meta.dirname, '..', 'assets', 'email-template', 'images', 'image-1.png')
             },
             {
                 filename: 'image-2.png',
                 cid: 'image-2',
-                path: path.join('..', '..', 'assets', 'email-template', 'images', 'image-2.png')
+                path: path.join(import.meta.dirname, '..', 'assets', 'email-template', 'images', 'image-2.png')
             }
         ]
+    }, (error, info) => {
+        if (error) {
+            log.error("There was an error while sending the email");
+            log.error(error);
+        } else {
+            log.info("An email has been sent");
+        }
     });
 }
 
