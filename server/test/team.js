@@ -3,6 +3,8 @@ import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
 import { createUserAPI, createCourseAPI, loginUser, logoutUser, UserRole } from './apiUtils.js';
+import { generateEmail, generateSchoolID, uniqueRandomNumber } from './utils.js';
+import { db } from '../database/db.js';
 //Tests based on populate scripts
 suite("GET teams as an instructor", async () => {
   let cookies;
@@ -95,27 +97,38 @@ suite("GET my team and other teams as a student", async () => {
   });
 });
 
-/**
- * @type {string[]}
- */
-const testEmails = [];
+
 
 suite("POST requests to create a team", async () => {
-
+  /**
+   * @type {import('../database/user.js').User[]}
+   */
+  const testMembers = [];
+  let teacher;
+  let loginCookie;
+  let courseID;
   before(async () => {
+    teacher = await createUserAPI(app, UserRole.Instructor);
+    loginCookie = await loginUser(app, teacher.email, teacher.password);
+    courseID = await createCourseAPI(app, loginCookie);
     const teamSize = 3;
     for (let index = 0; index < teamSize; index++) {
-      const student = await createUserAPI(app, UserRole.Student)
-      testEmails.push(student.email);
+      const student = await createUserAPI(app, UserRole.Student);
+      testMembers.push(student);
     }
   });
 
+  after(async () => {
+    await db.query(`DELETE FROM users WHERE school_id = '${teacher.schoolID}'`);
+    testMembers.forEach(async (member) => {
+      await db.query(`DELETE FROM users WHERE school_id = '${member.schoolID}'`);
+    });
+  })
+
   it("should respond with 200 when creating a team with no members", async (t) => {
-    const teacher = await createUserAPI(app, UserRole.Instructor);
-    const loginCookie = await loginUser(app, teacher.email, teacher.password);
-    const courseID = await createCourseAPI(app, loginCookie);
+
     const team = {
-      teamName: "test_team",
+      teamName: "test_team_" + uniqueRandomNumber(6),
       courseID,
       members: [],
     }
@@ -131,13 +144,11 @@ suite("POST requests to create a team", async () => {
   });
 
   it("should respond with 200 when creating a team with some members", async (t) => {
-    const teacher = await createUserAPI(app, UserRole.Instructor);
-    const loginCookie = await loginUser(app, teacher.email, teacher.password);
-    const courseID = await createCourseAPI(app, loginCookie);
+
     const team = {
-      teamName: "test_team",
+      teamName: "test_team_" + uniqueRandomNumber(6),
       courseID,
-      members: testEmails,
+      members: testMembers,
     }
     const response = await request(app)
       .post("/api/team/create")
@@ -152,9 +163,9 @@ suite("POST requests to create a team", async () => {
 
   it("should respond with 401 when trying to create a team with no login", async () => {
     const team = {
-      teamName: "test_team",
+      teamName: "test_team_" + uniqueRandomNumber(6),
       courseID: 1,
-      members: testEmails,
+      members: testMembers,
     }
     const response = await request(app)
       .post("/api/team/create")
@@ -163,18 +174,61 @@ suite("POST requests to create a team", async () => {
       .timeout(1000); // timesout after 1 second in case the app crashes
     assert.equal(401, response.status);
   });
+
+  it("should create a user when that user doesn't exist in a team", async () => {
+    const newMember = {
+      firstName: "John",
+      lastName: "Sith",
+      email: generateEmail(),
+      schoolID: generateSchoolID("STUD"),
+      role: "STUD"
+    };
+    // adding this member to the test members so it gets delete after
+    testMembers.push(newMember);
+    const team = {
+      teamName: "test_team_" + uniqueRandomNumber(7),
+      courseID: 1,
+      members: [newMember],
+    }
+    const response = await request(app)
+      .post("/api/team/create")
+      .set("Accept", "application/json")
+      .set("Cookie", loginCookie)
+      .send(team)
+      .timeout(1000); // timesout after 1 second in case the app crashes
+    assert.equal(200, response.status);
+  });
 });
 
 suite("POST requests to delete teams", async () => {
+  let teacher;
+  let loginCookie;
+  let courseID;
+  const testMembers = [];
+
+  before(async () => {
+    teacher = await createUserAPI(app, UserRole.Instructor);
+    loginCookie = await loginUser(app, teacher.email, teacher.password);
+    courseID = await createCourseAPI(app, loginCookie);
+    const teamSize = 3;
+    for (let index = 0; index < teamSize; index++) {
+      const student = await createUserAPI(app, UserRole.Student);
+      testMembers.push(student);
+    }
+  });
+
+  after(async () => {
+    await db.query(`DELETE FROM users WHERE school_id = '${teacher.schoolID}'`);
+    testMembers.forEach(async (member) => {
+      await db.query(`DELETE FROM users WHERE school_id = '${member.schoolID}'`);
+    });
+  });
 
   it("should respond with 200 when deleting a team", async () => {
-    const teacher = await createUserAPI(app, UserRole.Instructor);
-    const loginCookie = await loginUser(app, teacher.email, teacher.password);
-    const courseID = await createCourseAPI(app, loginCookie);
     const team = {
       teamName: "test_team",
       courseID,
-      members: testEmails,
+      members: testMembers,
     }
 
     // creating a team

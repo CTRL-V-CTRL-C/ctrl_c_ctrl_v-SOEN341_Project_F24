@@ -72,7 +72,7 @@ router.post("/create", requireAuth, requireTeacher, async (req, res, next) => {
 
 router.post("/delete", requireAuth, requireTeacher, async (req, res, next) => {
   const teamID = req.body.teamID;
-  const goodInstructor = await await teacherMadeTeam(db, teamID, req.session.user.userId);
+  const goodInstructor = await teacherMadeTeam(db, teamID, req.session.user.userId);
 
   if (goodInstructor instanceof Error) {
     res.status(500).json({ msg: goodInstructor.message });

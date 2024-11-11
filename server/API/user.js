@@ -1,7 +1,7 @@
 import express from 'express';
-import { createUser } from '../database/API.js';
+import { createUser } from '../database/user.js';
 import { db } from '../database/db.js';
-import argon2 from 'argon2';
+import { generatePasswordHash } from '../internal/password.js';
 
 const router = express.Router();
 
@@ -15,15 +15,7 @@ router.post("/create", async (req, res, next) => {
         schoolID: req.body.schoolID.normalize("NFKC").toLocaleUpperCase(),
         role: req.body.role.normalize("NFKC").toLocaleUpperCase()
     }
-    const argon2Options = {
-        memoryCost: 19 * 2 ** 10, // 19MiB
-        hashLength: 32,
-        timeCost: 2,
-        parallelism: 1,
-        type: argon2.argon2id,
-        saltLength: 16,
-    }
-    userObject.password_hash = await argon2.hash(userObject.password, argon2Options);
+    userObject.password_hash = await generatePasswordHash(userObject.password);
     const error = await createUser(db, userObject);
     if (error) {
         res.status(400).json({ msg: error.message });
