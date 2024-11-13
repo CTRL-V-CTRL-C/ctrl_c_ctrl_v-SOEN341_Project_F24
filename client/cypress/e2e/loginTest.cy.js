@@ -2,8 +2,8 @@ describe('All login Test functions', function(){
 
     it('should have all elements on page', () => {
         cy.visit('/loginAccount'); 
-        cy.get(':nth-child(3) > .navlink').should('be.visible');//login link
-        cy.get(':nth-child(3) > .navlink').should('be.visible');//signup link
+        cy.get('#LoginNav').should('be.visible');//login link
+        cy.get('#SignupNav').should('be.visible');//signup link
         cy.get('.form').should('be.visible'); 
         cy.get('.title').should('be.visible');
         cy.get(':nth-child(2) > .field-label').should('be.visible'); //username box
@@ -21,7 +21,7 @@ describe('All login Test functions', function(){
         cy.get('.switch > :nth-child(2)').should('be.visible')// the teams page swtich bar on the left
         cy.get('.switch > :nth-child(3)').should('be.visible')//the memeberss page switch bar on the right
         cy.get('button').should('be.visible')
-        cy.get(':nth-child(3) > .navlink').click();//login out
+        cy.get('#LogoutnNav').click();//login out
     })  
     it('should login as a student with correct credentials', () =>{
         //logging in student 
@@ -32,7 +32,7 @@ describe('All login Test functions', function(){
         //after they login must show students view (correct switch menu)
         cy.get('.switch > :nth-child(2)').should('be.visible');
         cy.get('.switch > :nth-child(3)').should('be.visible')
-        cy.get(':nth-child(3) > .navlink').should('be.visible').click();//login out
+        cy.get('#LogoutnNav').should('be.visible').click();//login out
     })  
     it('error message if we have wrong credentials ', ()=>{
         //loggin in with incorrect credentials will get an error message

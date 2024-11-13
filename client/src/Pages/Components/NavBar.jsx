@@ -19,13 +19,13 @@ function NavBar() {
                     <div className="spacer" />
                     {userContext.userLoggedIn ?
                         <>
-                            <li><NavLink className="navlink" to="/teams">Teams</NavLink></li>
-                            <li><NavLink onClick={(async () => { await handleLogout() })} className="navlink" to="/">Logout</NavLink></li>
+                            <li><NavLink id="TeamsNav" className="navlink" to="/teams">Teams</NavLink></li>
+                            <li><NavLink onClick={(async () => { await handleLogout() })} id="LogoutnNav" className="navlink" to="/">Logout</NavLink></li>
                         </>
                         :
                         <>
-                            <li><NavLink className="navlink" to="/loginAccount">Login</NavLink></li>
-                            <li><NavLink className="navlink" to="/registerAccount">Sign Up</NavLink></li>
+                            <li><NavLink id="LoginNav" className="navlink" to="/loginAccount">Login</NavLink></li>
+                            <li><NavLink id="SignupNav" className="navlink" to="/registerAccount">Sign Up</NavLink></li>
                         </>
                     }
                 </ul>
