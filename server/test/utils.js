@@ -12,6 +12,18 @@ function randomNumber(length) {
 }
 
 /**
+ * generates a random school id that hasn't been generated yet by this test run
+ * @param {"INST" | "STUD"} instructorOrStudent 
+ */
+function generateSchoolID(instructorOrStudent) {
+    return instructorOrStudent + uniqueRandomNumber(4)
+}
+
+function generateEmail() {
+    return `some.email.${uniqueRandomNumber(5)}@gmail.com`
+}
+
+/**
  * @type {Map<number, Set<number>>}
  * a map of already used random numbers that are categorized by length
  */
@@ -36,4 +48,4 @@ function uniqueRandomNumber(length) {
     return generated;
 }
 
-export { randomLetters, randomNumber, uniqueRandomNumber }
+export { randomLetters, randomNumber, uniqueRandomNumber, generateSchoolID, generateEmail }

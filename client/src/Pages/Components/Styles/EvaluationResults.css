@@ -52,3 +52,26 @@
     font-weight: bolder;
     font-size: 2rem;
 }
+
+.eval-popup-inner {
+    border-style: solid;
+    position: relative;
+    padding: 50px;
+    background-color: hwb(0 98% 2%);
+    border-radius: 15px;
+    border-width: 3px;
+    box-shadow: 10px 10px 10px rgb(209, 179, 179);
+    overflow: hidden;
+}
+
+.comment-container .rating-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-left: 1rem;
+    line-height: normal;
+}
+
+.comment {
+    margin-left: 1rem;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import UserContext from '../../Context/UserContext';
 import { postData } from '../../Controller/FetchModule';
 import './Styles/PopUp.css';
@@ -15,6 +15,7 @@ function PopUp(props) {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         triggerSuccessPopup: PropTypes.func.isRequired,
+        fetchTeams: PropTypes.func.isRequired
     };
 
     const handleDragOver = (e) => {
@@ -121,22 +122,23 @@ function PopUp(props) {
         try {
             for (let team of official_team.teams) {
                 const requestBody = {
+                    courseID: userContext.selectedCourse.course_id, //get class ID from context
                     teamName: team.name, // The team's name
                     //other info will be needed later
-                    members: team.members.map(member =>
-                        //fname: member.fname,
-                        //lname: member.lname,
-                        //studentID: member.studentID, 
-                        member.email,
-                    ),
-                    courseID: userContext.selectedCourse.course_id //get class ID from API
+                    members: team.members.map(member => {
+                        return {
+                            firstName: member.fname,
+                            lastName: member.lname,
+                            schoolID: member.studentID,
+                            email: member.email,
+                            role: "STUD"
+                        }
+                    }),
                 };
                 console.log("Sending data to API:", requestBody); //Debug the request body can delete after 
 
                 const response = await postData("/api/team/create", requestBody);
                 if (response.status !== 200) {
-                    //const error = await response.json();
-                    //throw new Error(error.msg);
                     continue;
                 }
             }
@@ -146,7 +148,7 @@ function PopUp(props) {
             return false; //Return false on any error
         }
     }
-    
+
     return (props.trigger) ? (
         <div className="popup">
             <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>

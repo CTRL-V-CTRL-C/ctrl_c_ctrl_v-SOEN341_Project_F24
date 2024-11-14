@@ -45,8 +45,8 @@ function LoginPage() {
         <div className="registration-form">
             <form className="form login-form" onSubmit={(e) => loginAccount(e)}>
                 <p className="title">Login </p>
-                <FormInput fieldName={"Email"} fieldType={"email"} setField={setEmail} />
-                <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} />
+                <FormInput id="LoginEmail" fieldName={"Email"} fieldType={"email"} setField={setEmail} />
+                <FormInput id="LoginPassword" fieldName={"Password"} fieldType={"password"} setField={setPassword} />
                 <div className="error-message">
                     {message && <p>{message}</p>}
                 </div>

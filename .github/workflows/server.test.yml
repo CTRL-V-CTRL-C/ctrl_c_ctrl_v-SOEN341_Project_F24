@@ -54,4 +54,8 @@ jobs:
         test_db_database: ${{ secrets.test_db_database }}
         test_db_certificate: ${{ secrets.test_db_certificate }}
         SECRET: ${{ secrets.SECRET }}
+        EMAIL_CLIENT_SECRET: ${{ secrets.EMAIL_CLIENT_SECRET }}
+        EMAIL_CLIENT_ID: ${{ secrets.EMAIL_CLIENT_ID }}
+        EMAIL_REFRESH_TOKEN: ${{ secrets.EMAIL_REFRESH_TOKEN }}
+        EMAIL_CLIENT_EMAIL: ${{ secrets.EMAIL_CLIENT_EMAIL }}
       run: cd server && npm test

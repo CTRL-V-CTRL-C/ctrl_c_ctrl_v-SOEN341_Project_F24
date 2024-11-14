@@ -1,0 +1,13 @@
+Hello,
+
+We have sent you this email in response to your instructor creating a PeerCheck account on your behalf.
+
+Please note down your credentials bellow:
+
+Email: {{email}}
+
+Password: {{password}}
+
+Contact
+1455 Blvd. De Maisonneuve Ouest, Montreal, Quebec H3G 1M8
+peer.check.service@gmail.com

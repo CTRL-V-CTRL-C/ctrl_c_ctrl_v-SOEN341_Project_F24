@@ -78,4 +78,6 @@ async function queryAndReturnError(db, query, message) {
     }
 }
 
+pg.types.setTypeParser(pg.types.builtins.NUMERIC, (a) => parseFloat(a));
+
 export { pool as db, queryAndReturnError };
