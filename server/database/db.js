@@ -2,9 +2,7 @@ import pg from 'pg'
 import fs from 'node:fs'
 import dotenv from 'dotenv'
 import log from '../logger.js';
-import path from 'node:path';
-dotenv.config({ path: path.join(import.meta.dirname, '..', '..', '.env') })
-
+dotenv.config()
 // all the configs to connect to the production database
 const user = process.env.db_user;
 const password = process.env.db_password;

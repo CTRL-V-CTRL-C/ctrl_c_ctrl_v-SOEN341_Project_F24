@@ -89,8 +89,8 @@ function RegisterAccountPage() {
         <p className="title">Create an Account </p>
         <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
           <input type="checkbox" id="filter" checked={isInstructor} onChange={() => setIsInstructor(!isInstructor)} />
-          <span id="student">STUDENT</span>
-          <span id="instructor">INSTRUCTOR</span>
+          <span id="StudentAccountSelect">STUDENT</span>
+          <span id="InstructorAccountSelect">INSTRUCTOR</span>
         </label>
 
         <div className="flex">

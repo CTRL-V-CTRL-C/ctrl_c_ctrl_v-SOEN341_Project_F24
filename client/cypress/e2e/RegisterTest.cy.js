@@ -12,15 +12,15 @@ describe('All register test functions',()=> {
 
         cy.get('.form').should('be.visible'); // form
         cy.get('.title').should('be.visible'); // title
-        cy.get('#student').should('be.visible'); //student tab
-        cy.get('#instructor').should('be.visible'); // instructor tab
+        cy.get('#StudentAccountSelect').should('be.visible'); //student tab
+        cy.get('#InstructorAccountSelect').should('be.visible'); // instructor tab
 
-        cy.get(':nth-child(1) > .input').should('be.visible'); // fist name box
-        cy.get(':nth-child(2) > .input').should('be.visible'); // last name box 
-        cy.get(':nth-child(4) > .input').should('be.visible'); //email 
-        cy.get(':nth-child(5) > .input').should('be.visible'); // Id
-        cy.get(':nth-child(6) > .input').should('be.visible'); // password
-        cy.get(':nth-child(7) > .input').should('be.visible'); // password confirmed
+        cy.get('#RegisterFirstName').should('be.visible'); // fist name box
+        cy.get('#RegisterFirstName').should('be.visible'); // last name box 
+        cy.get('#RegisterEmail').should('be.visible'); //email 
+        cy.get('#RegisterId').should('be.visible'); // Id
+        cy.get('#RegisterPassword').should('be.visible'); // password
+        cy.get('#RegisterConfirmPassword').should('be.visible'); // password confirmed
         
     })
 
