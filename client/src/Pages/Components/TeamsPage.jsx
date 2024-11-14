@@ -25,8 +25,8 @@ function TeamsPage() {
                     checked={!teamsView}
                     onChange={() => setTeamsView(!teamsView)}
                 />
-                <span>{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
-                <span>{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
+                <span id = "firstView">{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
+                <span id = "secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
             </label>
             {userContext.hasCourses ?
                 (teamsView ?
