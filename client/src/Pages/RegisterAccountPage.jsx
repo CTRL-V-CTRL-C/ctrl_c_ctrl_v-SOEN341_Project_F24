@@ -94,13 +94,13 @@ function RegisterAccountPage() {
         </label>
 
         <div className="flex">
-          <FormInput fieldName={"Firstname"} pattern={namePattern} fieldType={"text"} setField={setFirstname} />
-          <FormInput fieldName={"Lastname"} pattern={namePattern} fieldType={"text"} setField={setLastname} />
+          <FormInput id ="RegisterFirstName" fieldName={"Firstname"} pattern={namePattern} fieldType={"text"} setField={setFirstname} />
+          <FormInput id ="RegisterLastName" fieldName={"Lastname"} pattern={namePattern} fieldType={"text"} setField={setLastname} />
         </div>
-        <FormInput fieldName={"Email"} pattern={emailPattern} fieldType={"email"} setField={setEmail} />
-        <FormInput fieldName={isInstructor ? "Instructor ID" : "Student ID"} pattern={isInstructor ? InstructorIDPattern : studentIDPattern} fieldType={"text"} setField={setUserID} />
-        <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
-        <FormInput fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
+        <FormInput id ="RegisterEmail" fieldName={"Email"} pattern={emailPattern} fieldType={"email"} setField={setEmail} />
+        <FormInput id ="RegisterId" fieldName={isInstructor ? "Instructor ID" : "Student ID"} pattern={isInstructor ? InstructorIDPattern : studentIDPattern} fieldType={"text"} setField={setUserID} />
+        <FormInput id ="RegisterPassword" fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
+        <FormInput id ="RegisterConfirmPassword" fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
         <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>
         <div className="error-message">
           {feedbackMessage && <p>{feedbackMessage}</p>}
