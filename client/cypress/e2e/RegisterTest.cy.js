@@ -7,12 +7,14 @@ describe('All register test functions',()=> {
 
         // General page 
         cy.get('.spacer').should('be.visible'); //nav bar
-        cy.get(':nth-child(2) > .navlink').should('be.visible'); // login
-        cy.get(':nth-child(3) > .navlink').should('be.visible'); // sign up
+        cy.get('#LoginNav').should('be.visible'); // login
+        cy.get('#SignupNav').should('be.visible'); // sign up
+
         cy.get('.form').should('be.visible'); // form
         cy.get('.title').should('be.visible'); // title
-        cy.get('.switch > :nth-child(2)').should('be.visible'); //student tab
-        cy.get('.switch > :nth-child(3)').should('be.visible'); // instructor tab
+        cy.get('#student').should('be.visible'); //student tab
+        cy.get('#instructor').should('be.visible'); // instructor tab
+
         cy.get(':nth-child(1) > .input').should('be.visible'); // fist name box
         cy.get(':nth-child(2) > .input').should('be.visible'); // last name box 
         cy.get(':nth-child(4) > .input').should('be.visible'); //email 
@@ -27,25 +29,25 @@ describe('All register test functions',()=> {
             const schoolId = `STUD${uniqueRandomNumber(4)}`;
             const email = `EMAIL${randomLetters()}@gmail.com`;
             cy.visit('/registerAccount') // link to the page
-            cy.get(':nth-child(1) > .field-label').type('Student'); // enter First name
-            cy.get(':nth-child(2) > .field-label').type('testing'); // enter last name
-            cy.get(':nth-child(4) > .field-label').type(email); // enter email
-            cy.get(':nth-child(5) > .field-label').type(schoolId); // enter id
-            cy.get(':nth-child(6) > .field-label').type('test1234'); // enter password
-            cy.get(':nth-child(7) > .field-label').type('test1234'); // confirm password
-            cy.get('.submit').click() // submit
+            cy.get('#RegisterFirstName').type('Student'); // enter First name
+            cy.get('#RegisterLastName').type('testing'); // enter last name
+            cy.get('#RegisterEmail').type(email); // enter email
+            cy.get('#RegisterId').type(schoolId); // enter id
+            cy.get('#RegisterPassword').type('test1234'); // enter password
+            cy.get('#RegisterConfirmPassword').type('test1234'); // confirm password
+            cy.get('#SignUp').click() // submit
         })
 
     // Student registration (error)
            it('Verification for student input  with invalid credential', () =>{
             cy.visit('/registerAccount') // link to the page
-            cy.get(':nth-child(1) > .field-label').type('Student'); // enter First name
-            cy.get(':nth-child(2) > .field-label').type('testing'); // enter last name
-            cy.get(':nth-child(4) > .field-label').type('Studentbad@gmail.com'); // enter email
-            cy.get(':nth-child(5) > .field-label').type('INST0000'); // enter id
-            cy.get(':nth-child(6) > .field-label').type('test1234'); // enter password
-            cy.get(':nth-child(7) > .field-label').type('test1234'); // confirm password
-            cy.get('.submit').click() // submit
+            cy.get('#RegisterFirstName').type('Student'); // enter First name
+            cy.get('#RegisterLastName').type('testing'); // enter last name
+            cy.get('#RegisterEmail').type('Studentbad@gmail.com'); // enter email
+            cy.get('#RegisterId').type('INST0000'); // enter id
+            cy.get('#RegisterPassword').type('test1234'); // enter password
+            cy.get('#RegisterConfirmPassword').type('test1234'); // confirm password
+            cy.get('#SignUp').click() // submit
         })
 
     // Instructor registration
@@ -54,26 +56,26 @@ describe('All register test functions',()=> {
             const email = `EMAIL${randomLetters()}@gmail.com`;
             cy.visit('/registerAccount') // link to the page
             cy.get('.switch > :nth-child(3)').click(); // clicks on the student tab
-            cy.get(':nth-child(1) > .field-label').type('Instructor'); // enter First name
-            cy.get(':nth-child(2) > .field-label').type('test'); // enter last name
-            cy.get(':nth-child(4) > .field-label').type(email); // enter email
-            cy.get(':nth-child(5) > .field-label').type(schoolId); // enter id
-            cy.get(':nth-child(6) > .field-label').type('tester123'); // enter password
-            cy.get(':nth-child(7) > .field-label').type('tester123'); // confirm password
-            cy.get('.submit').click() // submit 
+            cy.get('#RegisterFirstName').type('Instructor'); // enter First name
+            cy.get('#RegisterLastName').type('test'); // enter last name
+            cy.get('#RegisterEmail').type(email); // enter email
+            cy.get('#RegisterId').type(schoolId); // enter id
+            cy.get('#RegisterPassword').type('tester123'); // enter password
+            cy.get('#RegisterConfirmPassword').type('tester123'); // confirm password
+            cy.get('#SignUp').click() // submit 
         })
 
  // Instructor registration (error)
         it('Verification for Instructor with invalid credential ', () =>{
             cy.visit('/registerAccount') // link to the page
             cy.get('.switch > :nth-child(3)').click(); // clicks on the student tab
-            cy.get(':nth-child(1) > .field-label').type('Instructor'); // enter First name
-            cy.get(':nth-child(2) > .field-label').type('test'); // enter last name
-            cy.get(':nth-child(4) > .field-label').type('Instructorbad@gmail.com'); // enter email
-            cy.get(':nth-child(5) > .field-label').type('STUD0000'); // enter id
-            cy.get(':nth-child(6) > .field-label').type('tester123'); // enter password
-            cy.get(':nth-child(7) > .field-label').type('tester123'); // confirm password
-            cy.get('.submit').click() // submit 
+            cy.get('#RegisterFirstName').type('Instructor'); // enter First name
+            cy.get('#RegisterLastName').type('test'); // enter last name
+            cy.get('#RegisterEmail').type('Instructorbad@gmail.com'); // enter email
+            cy.get('#RegisterId').type('STUD0000'); // enter id
+            cy.get('#RegisterPassword').type('tester123'); // enter password
+            cy.get('#RegisterConfirmPassword').type('tester123'); // confirm password
+            cy.get('#SignUp').click() // submit 
         })
 
 })

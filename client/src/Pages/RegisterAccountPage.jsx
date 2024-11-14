@@ -89,8 +89,8 @@ function RegisterAccountPage() {
         <p className="title">Create an Account </p>
         <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
           <input type="checkbox" id="filter" checked={isInstructor} onChange={() => setIsInstructor(!isInstructor)} />
-          <span>STUDENT</span>
-          <span>INSTRUCTOR</span>
+          <span id="student">STUDENT</span>
+          <span id="instructor">INSTRUCTOR</span>
         </label>
 
         <div className="flex">
@@ -101,7 +101,7 @@ function RegisterAccountPage() {
         <FormInput id ="RegisterId" fieldName={isInstructor ? "Instructor ID" : "Student ID"} pattern={isInstructor ? InstructorIDPattern : studentIDPattern} fieldType={"text"} setField={setUserID} />
         <FormInput id ="RegisterPassword" fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
         <FormInput id ="RegisterConfirmPassword" fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
-        <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>
+        <button disabled={!submitEnabled} className="submit" type='submit' id="SignUp">Sign Up</button>
         <div className="error-message">
           {feedbackMessage && <p>{feedbackMessage}</p>}
         </div> <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
