@@ -11,19 +11,24 @@ const rolePattern = /^(STUD|INST)$/v;
 const isInstructorPattern = /^INST$/v;
 
 /**
+ * @typedef {Object} User
+ * @property {string} password_hash
+ * @property {string} firstName
+ * @property {string} lastName
+ * @property {string} email
+ * @property {string} schoolID
+ * @property {"STUD" | "INST"} role
+ */
+
+/**
  * 
- * @param {object} userObject the object containing all the information about a user
- * @param {string} userObject.password_hash
- * @param {string} userObject.firstName
- * @param {string} userObject.lastName
- * @param {string} userObject.email
- * @param {string} userObject.schoolID
- * @param {string} userObject.role
+ * @param {User} userObject the object containing all the information about a user
  * @returns {Error | null} an error if the user creation has failed. null otherwise
  */
 function verifyUser(userObject) {
-    for (const [key, value] of Object.entries(userObject)) {
-        if (!value) {
+    const keys = ["firstName", "lastName", "email", "schoolID", "role"];
+    for (const key of keys) {
+        if (userObject[key] === undefined) {
             return new Error(`The key: ${key} is necessary for this request`);
         }
     }
@@ -44,7 +49,7 @@ function verifyUser(userObject) {
 /**
  * 
  * @param {pg.Pool} db the database to query
- * @param userObject the object containing all the information about a user
+ * @param {User} userObject the object containing all the information about a user
  * @returns {Promise<Error|null>} an Error if any, null otherwise
 */
 async function createUser(db, userObject) {
@@ -75,4 +80,4 @@ async function createUser(db, userObject) {
     return null;
 }
 
-export { createUser };
+export { createUser, verifyUser };

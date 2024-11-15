@@ -56,10 +56,12 @@ async function createUserAPI(app, userRole) {
     const email = `test.${randomLetters()}@mail.com`;
     const password = "password";
     const schoolID = userRole + uniqueRandomNumber(4);
+    const firstName = "John";
+    const lastName = "Smith";
     const user = {
         password,
-        firstName: "John",
-        lastName: "smith",
+        firstName,
+        lastName,
         email,
         schoolID,
         role: userRole
@@ -70,7 +72,7 @@ async function createUserAPI(app, userRole) {
         .send(user)
         .timeout(1000);
     assert.equal(response.status, 200, response.body.msg);
-    return { email, password, schoolID };
+    return user;
 }
 
 export { createUserAPI, createCourseAPI, loginUser, logoutUser, UserRole }
