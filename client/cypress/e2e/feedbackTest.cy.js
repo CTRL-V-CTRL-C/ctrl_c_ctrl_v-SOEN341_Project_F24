@@ -1,8 +1,8 @@
 it('Student can successfully give feeback', ()=>{
      //logging in student 
      cy.visit('/loginAccount'); 
-     cy.get(':nth-child(2) > .field-label').type('joeparker1@gmail.com'); //entering the email
-     cy.get(':nth-child(3) > .field-label').type('password'); //entering the password 
+     cy.get('#LoginEmail').type('joeparker1@gmail.com'); //entering the email
+     cy.get('#LoginPassword').type('password'); //entering the password 
      cy.get('.submit').click(); //login
      //after user logs in makes sure they are apart of a team 
      cy.get('.course-title').should('be.visible'); //make sure person is registered for a course
