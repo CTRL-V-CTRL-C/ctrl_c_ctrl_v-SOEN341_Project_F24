@@ -172,7 +172,7 @@ function PopUp(props) {
                         setHighlighted(false);
                     }}
                 >
-                    <h4 style={{ color: 'black' }}>Drag CVS file to upload</h4>
+                    <h4 id="cvsTitle"style={{ color: 'black' }}>Drag CVS file to upload</h4>
                     <div className="bu">
                         <input
                             type="file"
@@ -181,10 +181,10 @@ function PopUp(props) {
                             accept=".csv"
                             onChange={(e) => handleFileChange(e.target.files[0])}
                         />
-                        <label htmlFor="fileUpload" className="upload-button">Choose a file</label>
-                        <button className="upload-button" onClick={handleUpload}>Upload</button>
+                        <label id='cvsChoseFileButton' htmlFor="fileUpload" className="upload-button">Choose a file</label>
+                        <button id ='cvsUploadFileButton' className="upload-button" onClick={handleUpload}>Upload</button>
                     </div>
-                    <div className="file-outline">
+                    <div id ='cvsFileDetails' className="file-outline">
                         {file && (
                             <div className="file-details">
                                 File details:
