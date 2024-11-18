@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import dotenv from 'dotenv'
 import log from '../logger.js';
 dotenv.config()
-
 // all the configs to connect to the production database
 const user = process.env.db_user;
 const password = process.env.db_password;

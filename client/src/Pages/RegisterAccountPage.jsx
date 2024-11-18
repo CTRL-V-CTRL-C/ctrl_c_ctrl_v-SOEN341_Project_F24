@@ -89,19 +89,19 @@ function RegisterAccountPage() {
         <p className="title">Create an Account </p>
         <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
           <input type="checkbox" id="filter" checked={isInstructor} onChange={() => setIsInstructor(!isInstructor)} />
-          <span>STUDENT</span>
-          <span>INSTRUCTOR</span>
+          <span id="StudentAccountSelect">STUDENT</span>
+          <span id="InstructorAccountSelect">INSTRUCTOR</span>
         </label>
 
         <div className="flex">
-          <FormInput fieldName={"Firstname"} pattern={namePattern} fieldType={"text"} setField={setFirstname} />
-          <FormInput fieldName={"Lastname"} pattern={namePattern} fieldType={"text"} setField={setLastname} />
+          <FormInput id ="RegisterFirstName" fieldName={"Firstname"} pattern={namePattern} fieldType={"text"} setField={setFirstname} />
+          <FormInput id ="RegisterLastName" fieldName={"Lastname"} pattern={namePattern} fieldType={"text"} setField={setLastname} />
         </div>
-        <FormInput fieldName={"Email"} pattern={emailPattern} fieldType={"email"} setField={setEmail} />
-        <FormInput fieldName={isInstructor ? "Instructor ID" : "Student ID"} pattern={isInstructor ? InstructorIDPattern : studentIDPattern} fieldType={"text"} setField={setUserID} />
-        <FormInput fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
-        <FormInput fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
-        <button disabled={!submitEnabled} className="submit" type='submit'>Sign Up</button>
+        <FormInput id ="RegisterEmail" fieldName={"Email"} pattern={emailPattern} fieldType={"email"} setField={setEmail} />
+        <FormInput id ="RegisterId" fieldName={isInstructor ? "Instructor ID" : "Student ID"} pattern={isInstructor ? InstructorIDPattern : studentIDPattern} fieldType={"text"} setField={setUserID} />
+        <FormInput id ="RegisterPassword" fieldName={"Password"} fieldType={"password"} setField={setPassword} isPasswordValid={isPasswordValid} />
+        <FormInput id ="RegisterConfirmPassword" fieldName={"Confirm Password"} fieldType={"password"} setField={setConfirmPassword} isPasswordValid={isPasswordConfirmed} />
+        <button disabled={!submitEnabled} className="submit" type='submit' id="SignUp">Sign Up</button>
         <div className="error-message">
           {feedbackMessage && <p>{feedbackMessage}</p>}
         </div> <p className="signin">Already have an account ? <a href="/loginPage">Sign in</a> </p>
