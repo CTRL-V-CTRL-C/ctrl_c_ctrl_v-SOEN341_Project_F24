@@ -151,11 +151,11 @@ function PopUp(props) {
 
     return (props.trigger) ? (
         <div className="popup">
-            <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
+            <div id ='cvsInnerPopup'className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
                 {/* X button to close the popup */}
                 <button className="close-x" onClick={handleClose}>×</button>
-                <h2 style={{ color: 'black' }}>Upload File</h2>
-                <div className={`dropZone ${highlighted ? "border-green bg-green" : "border-inner"}`}
+                <h2 id='cvsTitle'style={{ color: 'black' }}>Upload File</h2>
+                <div id='cvsDropZone'className={`dropZone ${highlighted ? "border-green bg-green" : "border-inner"}`}
                     onDragEnter={() => {
                         setHighlighted(true);
                     }}
@@ -172,7 +172,7 @@ function PopUp(props) {
                         setHighlighted(false);
                     }}
                 >
-                    <h4 id="cvsTitle"style={{ color: 'black' }}>Drag CVS file to upload</h4>
+                    <h4 id="cvsDragAndDrop"style={{ color: 'black' }}>Drag CVS file to upload</h4>
                     <div className="bu">
                         <input
                             type="file"
