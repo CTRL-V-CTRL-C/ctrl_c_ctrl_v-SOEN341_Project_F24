@@ -11,8 +11,8 @@ it('Should desplay proper message after teams are created', () => {
     cy.get('#cvsTitle').should("be.visible").should('contain', 'Upload File');
     cy.get('#cvsDropZone').should('be.visible');
     cy.get('#cvsDragAndDrop').should('contain', 'Drag CVS file to upload');
-    cy.get('#cvsUploadFileButton').should('be.visible').should('contain', 'Choose a file');
-    cy.get('#cvsChoseFileButton').should('be.visible').should('contain','Upload');
+    cy.get('#cvsUploadFileButton').should('be.visible').should('contain','Upload').click();
+    cy.get('#cvsErrorMessage').should('be.visible').should('contain', 'Please select a file before uploading.')
+    cy.get('#cvsChoseFileButton').should('be.visible').should('contain', 'Choose a file').click();
     cy.get('.close-x').should('be.visible');
-
 });

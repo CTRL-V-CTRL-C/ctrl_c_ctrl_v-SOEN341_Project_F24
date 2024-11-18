@@ -195,7 +195,7 @@ function PopUp(props) {
                             </div>
                         )}
                     </div>
-                    {error && <p className="error-message">{error}</p>} {/* Display error message */}
+                    {error && <p id='cvsErrorMessage'className="error-message">{error}</p>} {/* Display error message */}
                 </div>
             </div>
         </div>
