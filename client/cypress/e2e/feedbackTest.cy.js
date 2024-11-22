@@ -18,7 +18,7 @@ it('Student can successfully give feeback', ()=>{
      cy.get(':nth-child(1) > .criteria-section > .criteria-name').should('contain',"COOPERATION").should('be.visible');
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(1) > .sc-egkSDF > svg > path').should('be.visible')
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(2) > .sc-egkSDF > svg > path').should('be.visible').click();
-     cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').should('be.visible');
+     cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').should('be.visible').click();
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(4) > .sc-egkSDF > svg > path').should('be.visible');
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(5) > .sc-egkSDF > svg > path').should('be.visible');
      cy.get(':nth-child(1) > .evaluation-description').should('be.visible'); //description of criteria
@@ -57,9 +57,8 @@ it('Student can successfully give feeback', ()=>{
      cy.get('h3').should('contain','Are you sure you want to submit the following evaluation ?').should('be.visible');
     
      cy.get('.confirmation-details > :nth-child(1) > :nth-child(1)').should('contain','Criteria: COOPERATION').should('be.visible');
-     cy.get('.confirmation-details > :nth-child(1) > :nth-child(2)').should("be.visible");//rating is visible
-     cy.get('.confirmation-details > :nth-child(1) > :nth-child(2)').should('be.visible');//comment is visible 
-     //**cy.get('.confirmation-details > :nth-child(1) > :nth-child(2)').should('contain','cooperation wasn't good')should('be.visible'); **/
+     cy.get('.confirmation-details > :nth-child(1) > :nth-child(2)').should("be.visible").should('contain', 'Rating: 3');//rating is visible
+     cy.get('.confirmation-details > :nth-child(1) > :nth-child(2)').should('be.visible').should('contain', "Comment: cooperation wasn't good");//comment is visible 
     
      cy.get('.confirmation-details > :nth-child(2) > :nth-child(1)').should('contain','Criteria: CONCEPTUAL CONTRIBUTION').should('be.visible');
      cy.get('.confirmation-details > :nth-child(2) > :nth-child(2)').should('be.visible');
@@ -96,7 +95,9 @@ it('Student can successfully give feeback', ()=>{
      // cy.get(':nth-child(4) > .comment-box').should('contain','excellent work ethic');
 
      //reset the form
+     cy. task("deleteEvaluation", { teamId: 1, evaluatorId: 1, evaluateeId: 2 } )
      
+
      //logout
      cy.get(':nth-child(3) > .navlink').click();
 
