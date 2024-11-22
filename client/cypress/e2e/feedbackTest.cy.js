@@ -107,7 +107,4 @@ it('Student can successfully give feeback', ()=>{
      
      //logout
      cy.get(':nth-child(3) > .navlink').click();
-
-
-
 })
