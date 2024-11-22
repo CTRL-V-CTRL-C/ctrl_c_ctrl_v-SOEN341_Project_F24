@@ -47,7 +47,7 @@ for (let course_id = 1; course_id <= numberOfCourses; course_id++) {
 console.log("Populated courses table");
 
 //Populate Documents table
-const fileData = fs.readFileSync("./database/scripts/test_db.js");
+const fileData = fs.readFileSync("../README.md");
 for (let course_id = 1; course_id <= numberOfCourses; course_id++) {
   await db.query("INSERT INTO documents (course_id, document_name, document) VALUES ($1,$2,$3)",
     [course_id, `TestFile${course_id}`, fileData]
