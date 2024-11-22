@@ -232,5 +232,21 @@ async function getCourseEvaluationSummary(db, courseId) {
   }
 }
 
-export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary, getEvaluationDetails }
+/**
+ * deletes an evaluation from the database
+ * @param {pg.Pool} db the database connection
+ * @param {int} teamId the id of the team
+ * @param {int} evaluatorId the id of the evaluator
+ * @param {int} evaluateeId the id of the evaluatee
+ */
+async function deleteEvaluation(db, teamId, evaluatorId, evaluateeId) {
+  const query = {
+    name: `delete-evaluation-${teamId}-${evaluatorId}-${evaluateeId}`,
+    text: "DELETE FROM evaluations WHERE team_id = $1 AND evaluator_id = $2 AND evaluatee_id = $3",
+    values: [teamId, evaluatorId, evaluateeId]
+  }
+  return await queryAndReturnError(db, query);
+}
+
+export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary, getEvaluationDetails, deleteEvaluation }
 
