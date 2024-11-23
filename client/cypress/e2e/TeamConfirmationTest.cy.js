@@ -18,10 +18,11 @@ describe('CSV Upload and Success Popup', () => {
 
         // Attach a valid CSV file
         const filePath = 'test.csv';
-        
         cy.get('button').click();
-        cy.get('#cvsChoseFileButton').attachFile(filePath);
 
+        cy.get('#fileUpload').attachFile(filePath);
+        cy.get('#cvsFileDetails').should('contain', 'Name: test.csv');
+    
         // Click the upload button
         cy.get('#cvsUploadFileButton').click();
 
