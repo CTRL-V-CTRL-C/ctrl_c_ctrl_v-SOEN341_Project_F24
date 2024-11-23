@@ -46,4 +46,30 @@ async function getAllDocuments(db, courseId) {
   }
 }
 
-export { uploadDocument, getAllDocuments }
+/**
+ * Get a document from a given course
+ * @param {pg.Pool} db the database to query
+ * @param {Integer} courseId the id of the course that the document belong to
+ * @param {Integer} documentId the id of the document to get
+ */
+async function getDocument(db, courseId, documentId) {
+  const getAllDocumentsQuery = {
+    name: `get-document ${courseId} ${documentId} ${Math.random()}`,
+    text: "SELECT document, document_name FROM documents WHERE course_id = $1 AND document_id = $2;",
+    values: [courseId, documentId]
+  };
+
+  try {
+
+    let result = await db.query(getAllDocumentsQuery);
+
+    return result.rows;
+
+  } catch (error) {
+    log.error(`There was an error while getting all the documents for course ${courseId}`);
+    log.error(error);
+    return error;
+  }
+}
+
+export { uploadDocument, getAllDocuments, getDocument }
