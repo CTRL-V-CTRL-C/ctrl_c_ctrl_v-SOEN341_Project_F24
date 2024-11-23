@@ -47,7 +47,6 @@ a:visited {
 
 .nav {
   max-width: -webkit-fill-available;
-  width: 100vw;
   height: 65px;
   line-height: 65px;
   text-align: center;
