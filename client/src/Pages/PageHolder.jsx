@@ -3,7 +3,8 @@ import RegisterAccountPage from './RegisterAccountPage';
 import LoginPage from './LoginPage';
 import TeamsPage from './Components/TeamsPage';
 import RequireAuth from './RequireAuth';
-import DocumentUpload from './DocumentUpload';
+import UnauthorizedPage from './Unauthorized';
+import DocumentsPage from './DocumentsPage';
 
 function PageHolder() {
     return (
@@ -16,8 +17,9 @@ function PageHolder() {
             </Route>
             <Route exact path='/loginAccount' element={<LoginPage />} />
             <Route element={<RequireAuth />} >
-                <Route exact path="/documents" element={<DocumentUpload />} />
+                <Route exact path="/documents" element={<DocumentsPage />} />
             </Route>
+            <Route exact path="/youShouldNotBeHere" element={<UnauthorizedPage />} />
         </Routes>
     );
 }

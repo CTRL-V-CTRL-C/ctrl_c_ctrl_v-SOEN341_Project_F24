@@ -4,12 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import MembersPage from "./Teams/MembersPage";
 import MyTeam from "./Teams/MyTeam";
 import OtherTeams from "./Teams/OtherTeams";
-import { useNavigate } from "react-router-dom";
 
 function TeamsPage() {
 
     const userContext = useContext(UserContext);
-    const navigate = useNavigate();
     const [teamsView, setTeamsView] = useState(true);
 
     return (

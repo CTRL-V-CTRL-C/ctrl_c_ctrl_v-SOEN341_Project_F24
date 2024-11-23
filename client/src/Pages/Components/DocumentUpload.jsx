@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import PopupButGeneric from "./Components/PopupButGeneric";
-import UserContext from "../Context/UserContext";
-import { postData, postFile } from "../Controller/FetchModule";
+import PopupButGeneric from "./PopupButGeneric";
+import UserContext from "../../Context/UserContext";
+import { postData, postFile } from "../../Controller/FetchModule";
 
 function DocumentUpload() {
     const [popupOpen, setPopupOpen] = useState(false);
@@ -14,12 +14,12 @@ function DocumentUpload() {
      * @param {File} file the file
      */
     async function handleUpload(file) {
-
-        try {
-            const response = await postFile(`/document/upload/${userContext.selectedCourse.course_id}`, file);
+        setUploadError("");
+        const response = await postFile(`/api/document/upload/${userContext.selectedCourse.course_id}`, file);
+        if (response.status === 200) {
             setSuccessMessage("The file was uploaded successfully");
-        } catch (error) {
-            setUploadError(error);
+        } else {
+            setUploadError(`${response.status} ${response.statusText}, ${await response.text()}`);
         }
     }
 

@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import './Styles/PopUp.css';
 import PropTypes from 'prop-types';
 
-function PopupButGeneric({ shouldOpen, setOpen, title, fileType, onUpload, fileExtension }) {
+function FileModal({ shouldOpen, setOpen, title, fileType, onUpload, fileExtension }) {
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
@@ -57,6 +57,7 @@ function PopupButGeneric({ shouldOpen, setOpen, title, fileType, onUpload, fileE
 
         onUpload(file);
         setOpen(false);
+        setFile(null);
     };
 
     if (!shouldOpen) {
@@ -114,7 +115,7 @@ function PopupButGeneric({ shouldOpen, setOpen, title, fileType, onUpload, fileE
     </div>
 }
 // Prop validation
-PopupButGeneric.propTypes = {
+FileModal.propTypes = {
     shouldOpen: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -123,4 +124,4 @@ PopupButGeneric.propTypes = {
     fileExtension: PropTypes.string
 };
 
-export default PopupButGeneric;
+export default FileModal;

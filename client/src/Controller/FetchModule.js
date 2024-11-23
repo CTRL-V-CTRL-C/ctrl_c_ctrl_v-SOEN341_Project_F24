@@ -39,7 +39,7 @@ async function sendJSONData(route, body, method) {
             "Content-Type": "application/json"
         },
     }
-    return await sendData(route, body, config);
+    return await sendData(route, JSON.stringify(body), config);
 }
 
 /**
@@ -49,8 +49,8 @@ async function sendJSONData(route, body, method) {
  */
 async function postFile(route, file) {
     const form = new FormData();
-    form.append("uploaded-file", file);
-    return await sendData(route, file, { method: "POST" });
+    form.append("document", file);
+    return await sendData(route, form, { method: "POST", "Content-Type": "multipart/form-data" });
 }
 
 /**
