@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import PopupButGeneric from "./PopupButGeneric";
+import FileModal from "./FileModal";
 import UserContext from "../../Context/UserContext";
 import { postData, postFile } from "../../Controller/FetchModule";
 
@@ -29,7 +29,7 @@ function DocumentUpload() {
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
         <button onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
-        <PopupButGeneric shouldOpen={popupOpen} setOpen={setPopupOpen} onUpload={handleUpload} />
+        <FileModal shouldOpen={popupOpen} setOpen={setPopupOpen} onUpload={handleUpload} />
     </div>
 }
 
