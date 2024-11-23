@@ -2,7 +2,7 @@ import express from 'express';
 import log from '../logger.js';
 import fileUpload from 'express-fileupload';
 import { db } from '../database/db.js';
-import { uploadDocument } from '../database/document.js';
+import { getAllDocuments, uploadDocument } from '../database/document.js';
 import { requireAuth, requireTeacher } from './auth.js';
 import { requireIsInCourse } from './course.js';
 
@@ -31,10 +31,23 @@ router.post("/upload/:courseId", async (req, res) => {
   let result = await uploadDocument(db, courseId, documentName, document);
 
   if (result instanceof Error) {
-    log.error(result, "Error uploading file")
+    log.error(result, "Error uploading file");
     res.status(500).json({ msg: "Something went wrong trying to upload your file, please try again in a bit" });
   } else {
     res.status(200).json({ msg: `Successfully uploaded ${documentName}` });
+  }
+});
+
+router.get("/get-all-documents/:courseId", requireAuth, requireIsInCourse, async (req, res) => {
+  let courseId = req.params.courseId;
+
+  let result = await getAllDocuments(db, courseId);
+
+  if (result instanceof Error) {
+    log.error(result, "Error getting all documents");
+    res.status(500).json({ msg: "Something went wrong trying to get all the documents, please try again in a bit" });
+  } else {
+    res.status(200).json(result);
   }
 });
 

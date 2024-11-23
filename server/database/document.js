@@ -21,4 +21,29 @@ async function uploadDocument(db, courseId, documentName, document) {
   return result;
 }
 
-export { uploadDocument }
+/**
+ * Gets all the documents of a given course
+ * @param {pg.Pool} db the database to query
+ * @param {Integer} courseId the id of the course that the documents belong to
+ */
+async function getAllDocuments(db, courseId) {
+  const getAllDocumentsQuery = {
+    name: `get-all-documents ${courseId} ${Math.random()}`,
+    text: "SELECT document_id, document_name, upload_time FROM documents WHERE course_id = $1;",
+    values: [courseId]
+  };
+
+  try {
+
+    let result = await db.query(getAllDocumentsQuery);
+
+    return result.rows;
+
+  } catch (error) {
+    log.error(`There was an error while getting all the documents for course ${courseId}`);
+    log.error(error);
+    return error;
+  }
+}
+
+export { uploadDocument, getAllDocuments }
