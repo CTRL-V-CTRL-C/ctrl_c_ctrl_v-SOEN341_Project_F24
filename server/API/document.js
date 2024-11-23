@@ -19,8 +19,7 @@ router.post("/upload/:courseId", requireAuth, requireTeacher, requireIsInCourse,
 // Actual route handler
 router.post("/upload/:courseId", async (req, res) => {
   if (!req.files || !req.files.document) {
-    console.log(req.files);
-    console.log(req.body);
+    log.debug("the file was missing when trying to upload");
     res.status(400).json({ msg: "Missing file to upload" })
     return;
   }
