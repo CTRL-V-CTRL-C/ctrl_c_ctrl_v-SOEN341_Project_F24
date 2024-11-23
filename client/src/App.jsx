@@ -60,9 +60,7 @@ function App() {
       <Router>
         <NavBar />
         <SideMenu fetchCourses={fetchCourses} courses={courseList} />
-        <div id="main-content" >
-          <PageHolder />
-        </div>
+        <PageHolder />
       </Router>
     </UserContext.Provider>
   )
