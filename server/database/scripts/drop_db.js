@@ -9,6 +9,10 @@ console.log("Dropped evaluations");
 await db.query(fs.readFileSync(import.meta.dirname + "/sql/teams_drop.sql").toString());
 console.log("Dropped teams");
 
+// Drop Evaluations
+await db.query(fs.readFileSync(import.meta.dirname + "/sql/documents_drop.sql").toString());
+console.log("Dropped documents");
+
 //Drop Courses table
 await db.query(fs.readFileSync(import.meta.dirname + "/sql/courses_drop.sql").toString());
 console.log("Dropped courses table");
