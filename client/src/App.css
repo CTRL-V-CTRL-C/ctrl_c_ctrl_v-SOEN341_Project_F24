@@ -10,6 +10,14 @@ a {
   color: inherit;
 }
 
-html, body {
+html,
+body {
   height: 100%;
+}
+
+#main-content {
+  position: fixed;
+  width: 89vw;
+  left: 11vw;
+  height: calc(100vh - 65px);
 }
