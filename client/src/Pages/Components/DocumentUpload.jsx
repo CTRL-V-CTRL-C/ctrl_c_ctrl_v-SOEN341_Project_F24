@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 
 function DocumentUpload({ onSucess }) {
+    const message = "Your students already have acess to this document :)";
     const [popupOpen, setPopupOpen] = useState(false);
     const [uploadError, setUploadError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -29,7 +30,8 @@ function DocumentUpload({ onSucess }) {
 
     return <div className="documentUpload">
         <h4>Documents</h4>
-        {uploadError ? <p className="error">{uploadError}</p> : ""}
+
+        {uploadError ? <p className="error">{message}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
         <button id="button" onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
