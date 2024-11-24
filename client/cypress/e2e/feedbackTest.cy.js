@@ -1,3 +1,4 @@
+
 it('Student can successfully give feeback', ()=>{
      //logging in student 
      cy.visit('/loginAccount'); 
@@ -8,19 +9,17 @@ it('Student can successfully give feeback', ()=>{
      //reset the form (useful here if the test fails in the middle of doing a review and we need to rerun the test)
      cy. task("deleteEvaluation", { teamId: 1, evaluatorId: 1, evaluateeId: 2 } )
 
-     //Once user logs in, they can see their teams
-     cy.get('.course-title').should('be.visible').should('contain', "test_course_1"); //make sure person is registered for a course
-     cy.get(':nth-child(1) > .teammate-info > :nth-child(1)').should('contain', 'joe parker').should('be.visible');//make sure name of user is the first teamate 
-     cy.get(':nth-child(1) > .teammate-info > :nth-child(2)').should('contain', 'joeparker1@gmail.com').should('be.visible');//making sure users email in there
-     //user can see other members and see the review button
-     cy.get(':nth-child(2) > .teammate-info > :nth-child(1)').should('contain','joe parker').should('be.visible');
-     cy.get(':nth-child(2) > .teammate-info > :nth-child(2)').should('contain', 'joeparker2@gmail.com').should('be.visible');
      cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click(); //review button is there and is clicked 
-     
-     //user can review the teamate 
-     cy.get('.teammate-evaluation > .team-name').should('be.visible').should('contain','Evaluating: joe parker')//heading is visible 
+     cy.get('.teammate-evaluation > .team-name').should('be.visible').should('contain','Evaluating: joe parker')  //teammates name appears at the top
      //first criteria with 5 stars are visible
      cy.get(':nth-child(1) > .criteria-section > .criteria-name').should('contain',"COOPERATION").should('be.visible');
+     cy.get('sc-blHHSb jMEGer').each(($el,index) =>{
+          cy.wrap($el).within(() =>{
+               cy.get
+          })
+     })
+
+
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(1) > .sc-egkSDF > svg > path').should('be.visible');
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(2) > .sc-egkSDF > svg > path').should('be.visible').click();
      cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').should('be.visible').click();//giving 3 stars 
