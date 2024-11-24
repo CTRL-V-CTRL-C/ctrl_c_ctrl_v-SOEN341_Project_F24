@@ -9,6 +9,10 @@ console.log("Created users table");
 await db.query(fs.readFileSync(import.meta.dirname + "/sql/courses.sql").toString());
 console.log("Created courses table");
 
+//Create Documents table
+await db.query(fs.readFileSync(import.meta.dirname + "/sql/documents.sql").toString());
+console.log("Created documents table");
+
 //Create Teams table
 await db.query(fs.readFileSync(import.meta.dirname + "/sql/teams.sql").toString());
 console.log("Created teams table");

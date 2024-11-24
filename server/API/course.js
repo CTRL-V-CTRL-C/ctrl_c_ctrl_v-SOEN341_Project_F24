@@ -1,6 +1,6 @@
 import express from 'express';
 import log from '../logger.js';
-import { createCourse } from '../database/course.js';
+import { areEvaluationsReleased, createCourse, releaseEvaluations } from '../database/course.js';
 import { db } from '../database/db.js';
 import { requireAuth, requireTeacher } from './auth.js';
 
@@ -10,6 +10,12 @@ const router = express.Router();
 
 async function requireIsInCourse(req, res, next) {
   const courseId = req.params.courseId;
+
+  if (!Number.isInteger(Number.parseInt(courseId))) {
+    res.status(400).json({ msg: "Course id needs to be an integer" });
+    return;
+  }
+
   try {
     let hasCourse;
     if (req.session.user.isInstructor) {
@@ -58,9 +64,9 @@ router.get("/get-courses", requireAuth, async (req, res) => {
   try {
     let courseQuery;
     if (req.session.user.isInstructor) {
-      courseQuery = await db.query("SELECT course_id, course_name FROM courses JOIN users ON instructor_id = user_id WHERE user_id = $1", [req.session.user.userId]);
+      courseQuery = await db.query("SELECT course_id, course_name, are_evaluations_released released FROM courses JOIN users ON instructor_id = user_id WHERE user_id = $1", [req.session.user.userId]);
     } else {
-      courseQuery = await db.query("SELECT c.course_id, course_name FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1", [req.session.user.userId]);
+      courseQuery = await db.query("SELECT c.course_id, course_name, are_evaluations_released released FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1", [req.session.user.userId]);
     }
 
     res.status(200).json(courseQuery.rows);
@@ -84,6 +90,28 @@ router.get("/get-students/:courseId", requireAuth, requireIsInCourse, async (req
   } catch (error) {
     log.error(error, `Something went wrong trying to get all the students in a course for ${req.session.user.email}`);
     res.status(500).json({ msg: "Something went wrong trying to get your students, please try again later" });
+  }
+});
+
+router.post("/release-evaluations/:courseId", requireAuth, requireTeacher, requireIsInCourse, async (req, res, next) => {
+  let courseId = req.params.courseId;
+  let released = await areEvaluationsReleased(db, courseId);
+  if (released instanceof Error) {
+    res.status(500).json({ msg: released.message });
+    next();
+    return;
+  } else if (released) {
+    res.status(400).json({ msg: `The evaluations have already been released for this course` });
+    next();
+    return;
+  }
+  const result = await releaseEvaluations(db, courseId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+    next();
+  } else {
+    res.status(200).json({ msg: "Evaluations have been successfully released" });
+    next();
   }
 });
 
