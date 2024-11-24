@@ -4,17 +4,11 @@ import { useContext, useEffect, useState } from "react";
 import MembersPage from "./Teams/MembersPage";
 import MyTeam from "./Teams/MyTeam";
 import OtherTeams from "./Teams/OtherTeams";
-import { useNavigate } from "react-router-dom";
 
 function TeamsPage() {
 
     const userContext = useContext(UserContext);
-    const navigate = useNavigate();
     const [teamsView, setTeamsView] = useState(true);
-
-    useEffect(() => {
-        navigate(userContext.userLoggedIn ? "/teams" : "/loginAccount");
-    }, [userContext.userLoggedIn, navigate]);
 
     return (
         <div className="teams-page">
@@ -25,8 +19,8 @@ function TeamsPage() {
                     checked={!teamsView}
                     onChange={() => setTeamsView(!teamsView)}
                 />
-                <span id = "firstView">{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
-                <span id = "secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
+                <span id="firstView">{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
+                <span id="secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
             </label>
             {userContext.hasCourses ?
                 (teamsView ?

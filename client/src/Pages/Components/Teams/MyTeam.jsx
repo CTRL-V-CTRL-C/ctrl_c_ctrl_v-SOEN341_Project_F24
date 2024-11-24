@@ -19,8 +19,13 @@ function MyTeam() {
     useEffect(() => {
         const fetchTeams = async () => {
             let response = await fetchData(`/api/team/get-my-team/${userContext.selectedCourse.course_id}`);
-            let data = await response.json();
-            setTeam(data);
+            if (response.status === 200) {
+                let data = await response.json();
+                setTeam(data);
+            } else {
+                console.log("There was an error while trying to get the teams");
+                console.log(await response.text());
+            }
         }
         if (!userContext.selectedCourse || userContext.selectedCourse.course_id === 0) return;
         fetchTeams();

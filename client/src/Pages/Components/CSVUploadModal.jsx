@@ -4,14 +4,14 @@ import { postData } from '../../Controller/FetchModule';
 import './Styles/PopUp.css';
 import PropTypes from 'prop-types';
 
-function PopUp(props) {
+function CSVUploadModal(props) {
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
     const userContext = useContext(UserContext);
 
     // Prop validation
-    PopUp.propTypes = {
+    CSVUploadModal.propTypes = {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         triggerSuccessPopup: PropTypes.func.isRequired,
@@ -202,4 +202,4 @@ function PopUp(props) {
     ) : "";
 }
 
-export default PopUp;
+export default CSVUploadModal;

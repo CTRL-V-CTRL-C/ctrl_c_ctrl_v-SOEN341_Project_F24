@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
 import { fetchData } from "../../../Controller/FetchModule";
 import SuccessPopup from '../SuccessPopup';
-import PopUp from '../PopUp'
+import CSVUploadModal from '../CSVUploadModal'
 import EvaluationResults from "../../EvaluationResults";
 
 const emptyTeam = { team_name: "", members: [{ f_name: "", l_name: "", email: "" }] }
@@ -56,7 +56,7 @@ function OtherTeams() {
                         <>
                             <button onClick={() => setButtonPopup(true)}>Upload</button>
                             {/* CSV Upload Popup */}
-                            <PopUp
+                            <CSVUploadModal
                                 trigger={openUploadPopup}
                                 setTrigger={setButtonPopup}
                                 class

@@ -85,10 +85,10 @@ function EvaluationDetailsPopup(props) {
                                 <thead>
                                     <tr>
                                         <th> Evaluator </th>
-                                        <th> Work Ethic </th>
                                         <th> Cooperation </th>
                                         <th> Conceptual Contribution </th>
                                         <th> Practical Contribution </th>
+                                        <th> Work Ethic </th>
                                         <th> Average Across All </th>
                                     </tr>
                                 </thead>
