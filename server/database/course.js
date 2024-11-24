@@ -33,7 +33,7 @@ async function createCourse(db, instructorID, courseName) {
  */
 async function areEvaluationsReleased(db, courseId) {
     const query = {
-        name: `are-evaluations-released ${courseId} ${Math.random()}`,
+        name: `are-evaluations-released ${courseId}`,
         text:
             `SELECT are_evaluations_released AS result FROM courses 
                 WHERE course_id = $1;`,
@@ -56,7 +56,7 @@ async function areEvaluationsReleased(db, courseId) {
  */
 async function releaseEvaluations(db, courseId) {
     const releaseQuery = {
-        name: `releaseEvaluations ${courseId} ${Math.random()}`,
+        name: `release-evaluations ${courseId}`,
         text:
             `UPDATE courses 
                 SET are_evaluations_released = TRUE
@@ -64,7 +64,7 @@ async function releaseEvaluations(db, courseId) {
         values: [courseId]
     }
     const getAllEmailsQuery = {
-        name: `getAllEmails ${courseId} ${Math.random()}`,
+        name: `get-all-emails ${courseId}`,
         text:
             `SELECT email, course_name FROM courses c
                 JOIN teams t ON t.course_id = c.course_id
