@@ -44,7 +44,7 @@ async function getDocumentsList(db, courseId) {
 async function getDocument(db, courseId, documentId) {
   const getAllDocumentsQuery = {
     name: `get-document ${courseId} ${documentId}`,
-    text: "SELECT document, document_name FROM documents WHERE course_id = $1 AND document_id = $2;",
+    text: "SELECT document, document_name FROM documents WHERE course_id = $1 AND document_id = $2 SORT BY upload_time",
     values: [courseId, documentId]
   };
   return await queryAndReturnError(db, getAllDocumentsQuery, `There was an error getting document ${documentId} from course ${courseId}`);
