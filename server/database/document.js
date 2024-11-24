@@ -31,7 +31,7 @@ async function getDocumentsList(db, courseId) {
     values: [courseId]
   };
 
-  return await queryAndReturnError(db, getAllDocumentsQuery);
+  return await queryAndReturnError(db, getAllDocumentsQuery, `There was an error while getting the documents list for course ${courseId}`);
 
 }
 
@@ -47,7 +47,7 @@ async function getDocument(db, courseId, documentId) {
     text: "SELECT document, document_name FROM documents WHERE course_id = $1 AND document_id = $2;",
     values: [courseId, documentId]
   };
-  return await queryAndReturnError(db, getAllDocumentsQuery);
+  return await queryAndReturnError(db, getAllDocumentsQuery, `There was an error getting document ${documentId} from course ${courseId}`);
 
 }
 
