@@ -32,12 +32,12 @@ describe('Students can give feedback', function () {
 
         //reset the form (useful here if the test fails in the middle of doing a review and we need to rerun the test)
         cy.task("deleteEvaluation", { teamId: 1, evaluatorId: 1, evaluateeId: 2 })
-        
+
         cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click(); //review button is there and is clicked 
         //first criteria
         cy.get(':nth-child(1) > .comment-box').type("cooperation wasnt good");
         cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').click();
-        
+
         //second criteria
         cy.get(':nth-child(2) > .criteria-section > .sc-blHHSb > :nth-child(2) > .sc-egkSDF > svg > path').should('be.visible').click();//giving 2 stars
         cy.get(':nth-child(2) > .comment-box').should('be.visible').type('ok conceptual contribution');
@@ -58,15 +58,29 @@ describe('Students can give feedback', function () {
             { criteria: "WORK ETHIC", Rating: "4", Comment: "good work ethic" },
         ]
         cy.get('.confirmation-details .confirmation-criteria').each(($criteria, index) => {
-            cy.wrap($criteria).find('p').first().should('be.visible').and('contain',reviewInfo[index].criteria);
+            cy.wrap($criteria).find('p').first().should('be.visible').and('contain', reviewInfo[index].criteria);
             // Check that the correct star rating is displayed based on the index
             const expectedRatings = ['3', '2 stars', '3 stars', '4 stars']; // Adjust based on expected values
             cy.wrap($criteria).find('p').eq(1).should('contain.text', reviewInfo[index].Rating);
-            // Check that the comment box for each criteria displays the correct comment
+            // Check that the comment box for each criteria displays the correct comment******************check back later
             //cy.wrap($criteria).find('p').eq(2).should('contain.text', reviewInfo[index].Comment);
         });
+        //both buttons are there 
         cy.get('.confirm-button').should('be.visible').and('contain', 'Confirm');
         cy.get('.cancel-button').should('be.visible').and('contain', 'Cancel').click();
+        //editing review 
+        cy.get(':nth-child(4) > .criteria-section > .sc-blHHSb > :nth-child(5) > .sc-egkSDF > svg > path').click();//giving 5 stars 
+        cy.get(':nth-child(4) > .comment-box').clear().type('excellent work ethic');//changing comment
+        cy.get('.button__text').click();//Submit the form
+        //recheck the criteria 
+        cy.get('.confirmation-details > :nth-child(4) > :nth-child(2)').should('contain','5')
+        cy.get(':nth-child(4) > :nth-child(3)').should('contain', 'excellent work ethic').should('be.visible');//make sure the updates are made 
+        cy.get('.confirm-button').should('be.visible').click();//confirm the form
+        cy.get('.button__text').click();//Submit the form
+        cy.get('.confirm-button').should('be.visible').and('contain', 'Confirm').click();//confirm 
+        //refresh page
+        cy.get('#secondView').click();
+        cy.get('#firstView').click();
     });
 
 });
