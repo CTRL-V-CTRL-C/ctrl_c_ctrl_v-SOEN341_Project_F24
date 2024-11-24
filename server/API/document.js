@@ -6,6 +6,7 @@ import { getDocumentsList, getDocument, uploadDocument } from '../database/docum
 import { requireAuth, requireTeacher } from './auth.js';
 import { requireIsInCourse } from './course.js';
 
+
 const router = express.Router();
 
 // All middleware for /upload
@@ -58,7 +59,7 @@ router.get("/get-document/:courseId/:documentId", requireAuth, requireIsInCourse
   let courseId = req.params.courseId;
   let documentId = req.params.documentId;
 
-  if (!Number.isInteger(praseInt(documentId))) {
+  if (!Number.isInteger(Number.parseInt(documentId))) {
     res.status(400).json({ msg: "Document id needs to be an integer" });
     next();
     return;
