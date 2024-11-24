@@ -1,0 +1,9 @@
+Hello,
+
+We have sent you this email in response to your instructor releasing your peer evaluation feedback on PeerCheck.
+
+The course in question is {{courseName}}
+
+Contact
+1455 Blvd. De Maisonneuve Ouest, Montreal, Quebec H3G 1M8
+peer.check.service@gmail.com

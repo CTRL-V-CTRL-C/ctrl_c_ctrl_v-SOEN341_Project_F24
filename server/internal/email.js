@@ -126,4 +126,46 @@ await new Promise((resolve, reject) => {
     });
 });
 
-export { sendTempPasswordEmail }
+const htmlNotificationTemplatePath = path.join(import.meta.dirname, '..', 'assets', 'email-template', 'emailNotification.html');
+const htmlNotificationTemplate = fs.readFileSync(htmlNotificationTemplatePath).toString();
+const txtNotificationTemplatePath = path.join(import.meta.dirname, '..', 'assets', 'email-template', 'emailNotification.txt');
+const txtNotificationTemplate = fs.readFileSync(txtNotificationTemplatePath).toString();
+
+/**
+ * sends an email to a user informing them that evaluations have been released
+ * @param {string} mailTo the user to send the email to
+ * @param {string} courseName the name of the course that released the evaluations
+ */
+function sendReleaseNotificationEmail(mailTo, courseName) {
+    const html = htmlNotificationTemplate.replace(/\{\{courseName\}\}/g, courseName);
+    const txt = txtNotificationTemplate.replace(/\{\{courseName\}\}/g, courseName);
+
+    transport.sendMail({
+        from: process.env.EMAIL_CLIENT_EMAIL,
+        to: mailTo,
+        subject: 'Feedback for one of your courses has been released on PeerCheck',
+        html,
+        text: txt,
+        attachments: [
+            {
+                filename: 'image-1.png',
+                cid: 'image-1',
+                path: path.join(import.meta.dirname, '..', 'assets', 'email-template', 'images', 'image-1.png')
+            },
+            {
+                filename: 'image-2.png',
+                cid: 'image-2',
+                path: path.join(import.meta.dirname, '..', 'assets', 'email-template', 'images', 'image-2.png')
+            }
+        ]
+    }, (error, info) => {
+        if (error) {
+            log.error("There was an error while sending the email");
+            log.error(error);
+        } else {
+            log.info("An email has been sent");
+        }
+    });
+}
+
+export { sendTempPasswordEmail, sendReleaseNotificationEmail }
