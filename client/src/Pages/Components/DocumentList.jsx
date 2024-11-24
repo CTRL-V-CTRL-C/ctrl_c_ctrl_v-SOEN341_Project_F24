@@ -25,7 +25,7 @@ export default function DocumentList({ documentList }) {
 }
 
 DocumentList.propTypes = {
-    document: PropTypes.arrayOf({
+    documentList: PropTypes.arrayOf({
         document_id: PropTypes.number.isRequired,
         document_name: PropTypes.string.isRequired,
         upload_time: PropTypes.instanceOf(Date)
