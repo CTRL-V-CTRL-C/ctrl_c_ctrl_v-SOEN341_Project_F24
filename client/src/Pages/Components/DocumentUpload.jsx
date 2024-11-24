@@ -1,8 +1,10 @@
+import './Styles/DocumentUpload.css'
 import { useContext, useState } from "react";
 import FileModal from "./FileModal";
 import UserContext from "../../Context/UserContext";
 import { postFile } from "../../Controller/FetchModule";
 import PropTypes from 'prop-types';
+
 
 function DocumentUpload({ onSucess }) {
     const [popupOpen, setPopupOpen] = useState(false);
@@ -30,7 +32,7 @@ function DocumentUpload({ onSucess }) {
         {uploadError ? <p className="error">{uploadError}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
-        <button onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
+        <button id="button" onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
         <FileModal shouldOpen={popupOpen} setOpen={setPopupOpen} onUpload={handleUpload} />
     </div>
 }
