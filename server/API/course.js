@@ -10,6 +10,12 @@ const router = express.Router();
 
 async function requireIsInCourse(req, res, next) {
   const courseId = req.params.courseId;
+
+  if (!Number.isInteger(courseId)) {
+    res.status(400).json({ msg: "Course id needs to be an integer" });
+    return;
+  }
+
   try {
     let hasCourse;
     if (req.session.user.isInstructor) {

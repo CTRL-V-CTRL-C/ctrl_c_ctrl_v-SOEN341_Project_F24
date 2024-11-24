@@ -16,9 +16,8 @@ async function uploadDocument(db, courseId, documentName, document) {
     values: [courseId, documentName, document]
   };
 
-  const result = await queryAndReturnError(db, uploadDocumentQuery, "There was an error while uploading the document");
+  return await queryAndReturnError(db, uploadDocumentQuery, "There was an error while uploading the document");
 
-  return result;
 }
 
 /**
@@ -26,24 +25,15 @@ async function uploadDocument(db, courseId, documentName, document) {
  * @param {pg.Pool} db the database to query
  * @param {Integer} courseId the id of the course that the documents belong to
  */
-async function getAllDocuments(db, courseId) {
+async function getDocumentsList(db, courseId) {
   const getAllDocumentsQuery = {
-    name: `get-all-documents ${courseId} ${Math.random()}`,
+    name: `get-documents-list ${courseId} ${Math.random()}`,
     text: "SELECT document_id, document_name, upload_time FROM documents WHERE course_id = $1;",
     values: [courseId]
   };
 
-  try {
+  return await queryAndReturnError(db, getAllDocumentsQuery);
 
-    let result = await db.query(getAllDocumentsQuery);
-
-    return result.rows;
-
-  } catch (error) {
-    log.error(`There was an error while getting all the documents for course ${courseId}`);
-    log.error(error);
-    return error;
-  }
 }
 
 /**
@@ -58,18 +48,8 @@ async function getDocument(db, courseId, documentId) {
     text: "SELECT document, document_name FROM documents WHERE course_id = $1 AND document_id = $2;",
     values: [courseId, documentId]
   };
+  return await queryAndReturnError(db, getAllDocumentsQuery);
 
-  try {
-
-    let result = await db.query(getAllDocumentsQuery);
-
-    return result.rows;
-
-  } catch (error) {
-    log.error(`There was an error while getting all the documents for course ${courseId}`);
-    log.error(error);
-    return error;
-  }
 }
 
-export { uploadDocument, getAllDocuments, getDocument }
+export { uploadDocument, getDocumentsList, getDocument }
