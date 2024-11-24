@@ -34,7 +34,7 @@ describe('Students can give feedback', function () {
         cy.task("deleteEvaluation", { teamId: 1, evaluatorId: 1, evaluateeId: 2 })
 
         cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click(); //review button is there and is clicked 
-        //first criteria
+        //first criteria********need to fix
         cy.get(':nth-child(1) > .comment-box').type("cooperation wasnt good");
         cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').click();
 
@@ -62,8 +62,8 @@ describe('Students can give feedback', function () {
             // Check that the correct star rating is displayed based on the index
             const expectedRatings = ['3', '2 stars', '3 stars', '4 stars']; // Adjust based on expected values
             cy.wrap($criteria).find('p').eq(1).should('contain.text', reviewInfo[index].Rating);
-            // Check that the comment box for each criteria displays the correct comment******************check back later
-            //cy.wrap($criteria).find('p').eq(2).should('contain.text', reviewInfo[index].Comment);
+            // Check that the comment box for each criteria displays the correct comment
+            //cy.wrap($criteria).find('p').eq(2).should('contain.text', reviewInfo[index].Comment); ******************check back later
         });
         //both buttons are there 
         cy.get('.confirm-button').should('be.visible').and('contain', 'Confirm');
@@ -73,7 +73,7 @@ describe('Students can give feedback', function () {
         cy.get(':nth-child(4) > .comment-box').clear().type('excellent work ethic');//changing comment
         cy.get('.button__text').click();//Submit the form
         //recheck the criteria 
-        cy.get('.confirmation-details > :nth-child(4) > :nth-child(2)').should('contain','5')
+        cy.get('.confirmation-details > :nth-child(4) > :nth-child(2)').should('contain', '5')
         cy.get(':nth-child(4) > :nth-child(3)').should('contain', 'excellent work ethic').should('be.visible');//make sure the updates are made 
         cy.get('.confirm-button').should('be.visible').click();//confirm the form
         cy.get('.button__text').click();//Submit the form
@@ -81,6 +81,17 @@ describe('Students can give feedback', function () {
         //refresh page
         cy.get('#secondView').click();
         cy.get('#firstView').click();
+        cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click();
+        //make sure the review is there with the correct information after refreshing
+        //cy.get(':nth-child(1) > .comment-box').should('contain', "cooperation wasnt good"); *********need to fix
+        cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//first criteria is 3 starts
+        cy.get(':nth-child(2) > .comment-box').should('contain', 'ok conceptual contribution');
+        cy.get(':nth-child(2) > .criteria-section > .sc-blHHSb > :nth-child(2) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//second criteria is 2 starts
+        cy.get(':nth-child(3) > .comment-box').should('contain', 'average practical contribution');
+        cy.get(':nth-child(3) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//third criteria is 3 starts
+        cy.get(':nth-child(4) > .comment-box').should('contain', 'excellent work ethic');
+        cy.get(':nth-child(4) > .criteria-section > .sc-blHHSb > :nth-child(5) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//fourth criteria is 5 starts
+
     });
 
 });
