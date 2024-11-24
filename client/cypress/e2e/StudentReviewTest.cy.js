@@ -34,7 +34,11 @@ describe('Students can give feedback', function () {
         cy.task("deleteEvaluation", { teamId: 1, evaluatorId: 1, evaluateeId: 2 })
 
         cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click(); //review button is there and is clicked 
-        //first criteria********need to fix
+        //checking error message
+        cy.get('.button__text').click();//Submit the form
+        cy.get('.error').should('be.visible').and('contain','Evaluate all criteria before submitting.');
+
+        //first criteria
         cy.get(':nth-child(1) > .comment-box').type("cooperation wasnt good");
         cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').click();
 
@@ -63,7 +67,7 @@ describe('Students can give feedback', function () {
             const expectedRatings = ['3', '2 stars', '3 stars', '4 stars']; // Adjust based on expected values
             cy.wrap($criteria).find('p').eq(1).should('contain.text', reviewInfo[index].Rating);
             // Check that the comment box for each criteria displays the correct comment
-            //cy.wrap($criteria).find('p').eq(2).should('contain.text', reviewInfo[index].Comment); ******************check back later
+            cy.wrap($criteria).find('p').eq(2).should('contain.text', reviewInfo[index].Comment);
         });
         //both buttons are there 
         cy.get('.confirm-button').should('be.visible').and('contain', 'Confirm');
@@ -83,7 +87,7 @@ describe('Students can give feedback', function () {
         cy.get('#firstView').click();
         cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click();
         //make sure the review is there with the correct information after refreshing
-        //cy.get(':nth-child(1) > .comment-box').should('contain', "cooperation wasnt good"); *********need to fix
+        cy.get(':nth-child(1) > .comment-box').should('contain', "cooperation wasnt good");
         cy.get(':nth-child(1) > .criteria-section > .sc-blHHSb > :nth-child(3) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//first criteria is 3 starts
         cy.get(':nth-child(2) > .comment-box').should('contain', 'ok conceptual contribution');
         cy.get(':nth-child(2) > .criteria-section > .sc-blHHSb > :nth-child(2) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//second criteria is 2 starts
@@ -93,5 +97,4 @@ describe('Students can give feedback', function () {
         cy.get(':nth-child(4) > .criteria-section > .sc-blHHSb > :nth-child(5) > .sc-egkSDF > svg > path').should('have.css', 'color').and('eq', "rgb(0, 0, 0)");//fourth criteria is 5 starts
 
     });
-
 });
