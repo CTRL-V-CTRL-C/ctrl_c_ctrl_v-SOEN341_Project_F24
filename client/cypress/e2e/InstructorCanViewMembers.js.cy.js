@@ -34,7 +34,17 @@ describe('Instructor view of the members', function(){
     cy.get('.studentInformation').should('be.visible');
 //Cheking if each student is present 
 
+cy.get('#studentList').each(($studentList)=>{  // getting the student list
+  cy.wrap($studentList).find('.studentInformation').each(($student, index)=>{ // wrapping the student list as an object of cypress + getting the individual students
+    cy.wrap($student).within(()=>{                                           // wrapping the individual students as objects of cypress
+      cy.contains(studentsOfTheCourse[index].name);                         // checking if each student is prensent 
+      cy.contains(studentsOfTheCourse[index].id);
+      cy.contains(studentsOfTheCourse[index].email);
 
+    });
+
+  });
+});
 
   });
 
