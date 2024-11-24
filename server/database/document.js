@@ -1,5 +1,4 @@
-import pg from 'pg'
-import log from '../logger.js'
+import pg from 'pg';
 import { queryAndReturnError } from './db.js';
 
 /**
@@ -27,7 +26,7 @@ async function uploadDocument(db, courseId, documentName, document) {
  */
 async function getDocumentsList(db, courseId) {
   const getAllDocumentsQuery = {
-    name: `get-documents-list ${courseId} ${Math.random()}`,
+    name: `get-documents-list ${courseId}`,
     text: "SELECT document_id, document_name, upload_time FROM documents WHERE course_id = $1;",
     values: [courseId]
   };
@@ -44,7 +43,7 @@ async function getDocumentsList(db, courseId) {
  */
 async function getDocument(db, courseId, documentId) {
   const getAllDocumentsQuery = {
-    name: `get-document ${courseId} ${documentId} ${Math.random()}`,
+    name: `get-document ${courseId} ${documentId}`,
     text: "SELECT document, document_name FROM documents WHERE course_id = $1 AND document_id = $2;",
     values: [courseId, documentId]
   };
