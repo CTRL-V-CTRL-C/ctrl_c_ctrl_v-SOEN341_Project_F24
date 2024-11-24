@@ -21,17 +21,17 @@ it('should display login-in user and correspoding teammates correctly', () => {
         cy.contains('joe parker');
         cy.contains('joeparker1@gmail.com');
     });
+    cy.get('.teammates-card').should('exist').and('have.length.at.least', 2);
 
     //making sure all teamate are there
-    cy.get('.teammates-card').then(($el) => {
-        const teamElements = Array.from($el).slice(1); //excluding the first element(which is the loged-in user)
-        teamElements.each(($el, index) => {
+    cy.get('.teammates-card').each(($el,index) => {
+        if (index >0){
             cy.wrap($el).within(() => { //need to wrap the team box object so that cypress can iterate over each element
                 cy.log(`Checking teammate: ${expectedTeammates[index].name}`);
-                cy.contains(expectedTeammates[index].name);
-                cy.contains(expectedTeammates[index].email);
+                cy.contains(expectedTeammates[index-1].name);
+                cy.contains(expectedTeammates[index-1].email);
             });
-        });
+        }
     });
 
 });
