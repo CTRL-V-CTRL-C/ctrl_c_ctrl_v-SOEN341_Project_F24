@@ -132,3 +132,18 @@
     background-color: rgba(138, 139, 35, 0.65);
     cursor: pointer;
 }
+
+.release-reviews-btn {
+    margin-right: 2rem;
+    border-radius: 10rem;
+    border: solid rgba(138, 139, 35, 0.65) 1px;
+    max-width: fit-content;
+    align-self: flex-end;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    background-color: rgba(137, 139, 35, 0.432);
+}
+
+.release-reviews-btn:hover {
+    background-color: rgba(138, 139, 35, 0.65);
+    cursor: pointer;
+}
