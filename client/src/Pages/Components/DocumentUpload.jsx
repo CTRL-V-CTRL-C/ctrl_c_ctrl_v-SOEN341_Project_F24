@@ -16,6 +16,7 @@ function DocumentUpload({ onSucess }) {
      */
     async function handleUpload(file) {
         setUploadError("");
+        setSuccessMessage("");
         const response = await postFile(`/api/document/upload/${userContext.selectedCourse.course_id}`, file);
         if (response.status === 200) {
             setSuccessMessage("The file was uploaded successfully");
@@ -30,7 +31,7 @@ function DocumentUpload({ onSucess }) {
         {uploadError ? <p className="error">{uploadError}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
-        <button onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
+        <button id="UploadButton"onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
         <FileModal shouldOpen={popupOpen} setOpen={setPopupOpen} onUpload={handleUpload} />
     </div>
 }
