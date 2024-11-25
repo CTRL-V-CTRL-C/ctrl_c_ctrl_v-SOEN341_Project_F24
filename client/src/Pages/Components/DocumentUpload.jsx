@@ -31,7 +31,7 @@ function DocumentUpload({ onSucess }) {
     return <div className="documentUpload">
         <h4>Documents</h4>
 
-        {uploadError ? <p className="error">{message}</p> : ""}
+        {uploadError ? <p className="success">{message}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
         <button id="button" onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
