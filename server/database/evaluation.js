@@ -232,5 +232,71 @@ async function getCourseEvaluationSummary(db, courseId) {
   }
 }
 
-export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary, getEvaluationDetails }
+/**
+ * Gets the anonymized feedback from all the other teammates in a team about the given student
+ * @param {pg.Pool} db the database
+ * @param {int} userId the user id of the student
+ * @param {int} teamId the team id of the team that the student belongs to
+ * @returns {Promise<Error | Array<JSON>>}
+ */
+async function getAnonymizedFeedback(db, userId, teamId) {
+  const getAnonymizedFeedbackQuery = {
+    name: `get-anonymized-feedback ${userId} ${teamId}`,
+    text: `
+      SELECT ed.criteria, AVG(ed.rating), COUNT(ed.criteria), JSON_AGG(ed.comment) comments
+      FROM team_members tm 
+      JOIN evaluations e ON e.evaluator_id = tm.user_id
+      JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id 
+      WHERE tm.team_id = $1  AND e.evaluatee_id = $2
+      GROUP BY ed.criteria
+      ORDER BY ed.criteria;`,
+    values: [teamId, userId]
+  };
+
+  return await queryAndReturnError(db, getAnonymizedFeedbackQuery, `There was an error getting the feeback for user ${userId} in team ${teamId}`);
+
+}
+
+/**
+ * Get whether a given team can see their feedback
+ * @param {pg.Pool} db the database
+ * @param {int} teamId The id of the team in question
+ * @returns {Promise<Error | Array<JSON>>}
+ */
+async function canTeamGetFeedback(db, teamId) {
+  const query = {
+    name: `can-team-get-feedback ${teamId}`,
+    text:
+      `SELECT are_evaluations_released AS result FROM courses c
+      JOIN teams t ON t.course_id = c.course_id
+        WHERE team_id = $1;`,
+    values: [teamId]
+  }
+  try {
+    const result = await db.query(query);
+    return result.rows[0].result;
+  } catch (error) {
+    log.error(`There was an error trying to check if team ${teamId} can see their feedback`);
+    log.error(error);
+    return error;
+  }
+}
+
+/**
+ * deletes an evaluation from the database
+ * @param {pg.Pool} db the database connection
+ * @param {int} teamId the id of the team
+ * @param {int} evaluatorId the id of the evaluator
+ * @param {int} evaluateeId the id of the evaluatee
+ */
+async function deleteEvaluation(db, teamId, evaluatorId, evaluateeId) {
+  const query = {
+    name: `delete-evaluation-${teamId}-${evaluatorId}-${evaluateeId}`,
+    text: "DELETE FROM evaluations WHERE team_id = $1 AND evaluator_id = $2 AND evaluatee_id = $3",
+    values: [teamId, evaluatorId, evaluateeId]
+  }
+  return await queryAndReturnError(db, query);
+}
+
+export { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getCourseEvaluationSummary, getEvaluationDetails, deleteEvaluation, getAnonymizedFeedback, canTeamGetFeedback }
 

@@ -1,20 +1,36 @@
 import "./Styles/TeamsPage.css";
 import UserContext from "../../Context/UserContext";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import MembersPage from "./Teams/MembersPage";
 import MyTeam from "./Teams/MyTeam";
 import OtherTeams from "./Teams/OtherTeams";
-import { useNavigate } from "react-router-dom";
+import { fetchData, postData } from "../../Controller/FetchModule";
 
 function TeamsPage() {
 
     const userContext = useContext(UserContext);
-    const navigate = useNavigate();
     const [teamsView, setTeamsView] = useState(true);
+    const [reviewsReleased, setReviewsReleased] = useState(false);
+
+    const getReleaseState = useCallback(async () => {
+        const response = await fetchData(`/api/course/are-evaluations-released/${userContext.selectedCourse.course_id}`);
+        if (response.ok) {
+            const data = await response.json()
+            setReviewsReleased(data.released)
+        }
+
+    }, [userContext.selectedCourse.course_id]);
+
+    const releaseReviews = async () => {
+        if (!reviewsReleased) {
+            await postData(`/api/course/release-evaluations/${userContext.selectedCourse.course_id}`, {});
+        }
+        await getReleaseState();
+    }
 
     useEffect(() => {
-        navigate(userContext.userLoggedIn ? "/teams" : "/loginAccount");
-    }, [userContext.userLoggedIn, navigate]);
+        getReleaseState()
+    }, [getReleaseState]);
 
     return (
         <div className="teams-page">
@@ -25,9 +41,22 @@ function TeamsPage() {
                     checked={!teamsView}
                     onChange={() => setTeamsView(!teamsView)}
                 />
-                <span id = "firstView">{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
-                <span id = "secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
+                <span id="firstView">{userContext.isInstructor ? 'Teams' : 'My Team'}</span>
+                <span id="secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
             </label>
+            {
+                userContext.isInstructor ?
+                    <button
+                        type="button"
+                        id="release-reviews"
+                        className="release-reviews-btn"
+                        disabled={reviewsReleased}
+                        onClick={async () => await releaseReviews()}
+                    > Release Reviews </button>
+                    :
+                    <></>
+            }
+
             {userContext.hasCourses ?
                 (teamsView ?
                     (userContext.isInstructor ? <OtherTeams /> : <MyTeam />) :

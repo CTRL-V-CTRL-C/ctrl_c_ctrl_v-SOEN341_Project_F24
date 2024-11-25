@@ -1,7 +1,7 @@
 import express from 'express';
 import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher, requireTeacherMadeTeam } from './auth.js';
-import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getEvaluationDetails, getCourseEvaluationSummary } from '../database/evaluation.js';
+import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getEvaluationDetails, getCourseEvaluationSummary, getAnonymizedFeedback, canTeamGetFeedback } from '../database/evaluation.js';
 
 import { areInSameTeam, teacherMadeTeam, userIsInTeam } from '../database/team.js';
 import log from '../logger.js';
@@ -139,6 +139,41 @@ router.get("/get-team-details/:teamId/:schoolId", requireAuth, requireTeacher, r
     res.status(500).json({ msg: result.message });
   } else {
     res.status(200).json(result);
+  }
+  next();
+});
+
+router.get("/get-anonymized-feedback/:teamId", requireAuth, requireStudent, async (req, res, next) => {
+  const teamId = req.params.teamId;
+
+  if (!Number.isInteger(Number.parseInt(teamId))) {
+    res.status(400).json({ msg: "Team id needs to be an integer" });
+    next();
+    return;
+  }
+
+  let released = await canTeamGetFeedback(db, teamId);
+  if (released instanceof Error) {
+    res.status(500).json({ msg: released.message });
+    next();
+    return;
+  } else if (!released) {
+    res.status(400).json({ msg: `The evaluations for this course have not been released yet` });
+    next();
+    return;
+  }
+
+  const inTeam = await userIsInTeam(db, req.session.user.schoolId, teamId);
+  if (!inTeam) {
+    res.status(400).json({ msg: "You are not part of that team" });
+    next();
+    return;
+  }
+  const result = await getAnonymizedFeedback(db, req.session.user.userId, teamId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+  } else {
+    res.status(200).json(result.rows);
   }
   next();
 });
