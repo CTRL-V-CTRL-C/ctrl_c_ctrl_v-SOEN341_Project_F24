@@ -21,10 +21,6 @@ function TeamsPage() {
 
     }, [userContext.selectedCourse.course_id]);
 
-    useEffect(() => {
-
-    }, [reviewsReleased])
-
     const releaseReviews = async () => {
         if (!reviewsReleased) {
             await postData(`/api/course/release-evaluations/${userContext.selectedCourse.course_id}`, {});
