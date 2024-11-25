@@ -17,8 +17,10 @@ function DocumentUpload({ onSucess }) {
      * handles the upload of the file
      * @param {File} file the file
      */
+   
     async function handleUpload(file) {
         setUploadError("");
+        setSuccessMessage("");
         const response = await postFile(`/api/document/upload/${userContext.selectedCourse.course_id}`, file);
         if (response.status === 200) {
             setSuccessMessage("The file was uploaded successfully");
