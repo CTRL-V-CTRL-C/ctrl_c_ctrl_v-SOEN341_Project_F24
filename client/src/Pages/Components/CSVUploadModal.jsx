@@ -181,8 +181,8 @@ function CSVUploadModal(props) {
                             accept=".csv"
                             onChange={(e) => handleFileChange(e.target.files[0])}
                         />
-                        <label id='cvsChoseFileButton' htmlFor="fileUpload" className="upload-button">Choose a file</label>
-                        <button id ='cvsUploadFileButton' className="upload-button" onClick={handleUpload}>Upload</button>
+                        <label htmlFor="fileUpload" className="upload-button">Choose a file</label>
+                        <button className="upload-button" onClick={handleUpload}>Upload</button>
                     </div>
                     <div id ='cvsFileDetails' className="file-outline">
                         {file && (
