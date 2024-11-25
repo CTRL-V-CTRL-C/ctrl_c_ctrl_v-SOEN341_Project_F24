@@ -143,7 +143,7 @@
     background-color: rgba(137, 139, 35, 0.432);
 }
 
-.release-reviews-btn:hover {
+.release-reviews-btn:enabled:hover {
     background-color: rgba(138, 139, 35, 0.65);
     cursor: pointer;
 }

@@ -1,18 +1,30 @@
 import "./Styles/TeamsPage.css";
 import UserContext from "../../Context/UserContext";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import MembersPage from "./Teams/MembersPage";
 import MyTeam from "./Teams/MyTeam";
 import OtherTeams from "./Teams/OtherTeams";
+import { fetchData } from "../../Controller/FetchModule";
 
 function TeamsPage() {
 
     const userContext = useContext(UserContext);
     const [teamsView, setTeamsView] = useState(true);
+    const [reviewsReleased, setReviewsReleased] = useState(true);
 
-    const releaseReviews = async () => {
+    const releaseReviews = useCallback(async () => {
+        console.log("bla")
+        const response = await fetchData(`/api/course/are-evaluations-released//${userContext.selectedCourse.course_id}`);
+        if (response.ok) {
+            const data = response.json()
+            setReviewsReleased(data.released)
+            console.log("test")
+        }
+    }, [userContext.selectedCourse.course_id]);
 
-    }
+    useEffect(() => {
+        releaseReviews()
+    }, [releaseReviews]);
 
     return (
         <div className="teams-page">
@@ -32,6 +44,7 @@ function TeamsPage() {
                         type="button"
                         id="release-reviews"
                         className="release-reviews-btn"
+                        disabled={reviewsReleased}
                         onClick={() => releaseReviews()}
                     > Release Reviews </button>
                     :
