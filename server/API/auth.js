@@ -105,7 +105,7 @@ async function requireTeacherMadeTeam(req, res, next) {
 }
 
 //Login with correct email and password
-router.post("/login", requireNoAuth, async (req, res) => {
+router.post("/login", requireNoAuth, async (req, res, next) => {
   const email = req.body.email.normalize("NFKC").toLocaleLowerCase();
   const password = req.body.password.normalize("NFKC");
 

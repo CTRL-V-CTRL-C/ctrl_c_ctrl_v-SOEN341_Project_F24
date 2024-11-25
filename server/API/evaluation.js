@@ -146,7 +146,7 @@ router.get("/get-team-details/:teamId/:schoolId", requireAuth, requireTeacher, r
 router.get("/get-anonymized-feedback/:teamId", requireAuth, requireStudent, async (req, res, next) => {
   const teamId = req.params.teamId;
 
-  if (!Number.isInteger(parseInt(teamId))) {
+  if (!Number.isInteger(Number.parseInt(teamId))) {
     res.status(400).json({ msg: "Team id needs to be an integer" });
     next();
     return;
