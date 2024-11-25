@@ -51,7 +51,6 @@ function ReviewEvaluationPopup(props) {
         setTrigger: PropTypes.func.isRequired,
         team_id: PropTypes.number.isRequired,
         team_name: PropTypes.string.isRequired,
-        evaluatee: PropTypes.object.isRequired
     };
 
     const [studentData, setStudentData] = useState(emptyStudentData);
@@ -86,20 +85,22 @@ function ReviewEvaluationPopup(props) {
                 <div className="table-container">
                     <table className="EvalTableStyle">
                         <thead>
-                            {studentData.map((criteria, i) => (
-                                <td key={i}> {criteria.criteria} </td>
-                            ))}
-                            <td> Avg. across all</td>
+                            <tr>
+                                {studentData.evaluations.map((criteria, i) => (
+                                    <th key={i}> {criteria.criteria} </th>
+                                ))}
+                                <th> Avg. across all</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                {studentData.map((criteria, i) => (
+                                {studentData.evaluations.map((criteria, i) => (
                                     <td key={i}> {criteria.avg == 0 ? "N/A" : criteria.avg} </td>
                                 ))}
                                 <td> {studentData.avg_across_all == 0 ? "N/A" : studentData.avg_across_all} </td>
                             </tr>
                             <tr>
-                                {studentData.map((criteria, i) => (
+                                {studentData.evaluations.map((criteria, i) => (
                                     <td key={i}>
                                         {criteria.comments.map((comment, i) => (
                                             <p key={i}> {comment}</p>
