@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import './Styles/PopUp.css';
 import PropTypes from 'prop-types';
 
