@@ -4,27 +4,37 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import MembersPage from "./Teams/MembersPage";
 import MyTeam from "./Teams/MyTeam";
 import OtherTeams from "./Teams/OtherTeams";
-import { fetchData } from "../../Controller/FetchModule";
+import { fetchData, postData } from "../../Controller/FetchModule";
 
 function TeamsPage() {
 
     const userContext = useContext(UserContext);
     const [teamsView, setTeamsView] = useState(true);
-    const [reviewsReleased, setReviewsReleased] = useState(true);
+    const [reviewsReleased, setReviewsReleased] = useState(false);
 
-    const releaseReviews = useCallback(async () => {
-        console.log("bla")
-        const response = await fetchData(`/api/course/are-evaluations-released//${userContext.selectedCourse.course_id}`);
+    const getReleaseState = useCallback(async () => {
+        const response = await fetchData(`/api/course/are-evaluations-released/${userContext.selectedCourse.course_id}`);
         if (response.ok) {
-            const data = response.json()
+            const data = await response.json()
             setReviewsReleased(data.released)
-            console.log("test")
         }
+
     }, [userContext.selectedCourse.course_id]);
 
     useEffect(() => {
-        releaseReviews()
-    }, [releaseReviews]);
+
+    }, [reviewsReleased])
+
+    const releaseReviews = async () => {
+        if (!reviewsReleased) {
+            await postData(`/api/course/release-evaluations/${userContext.selectedCourse.course_id}`, {});
+        }
+        await getReleaseState();
+    }
+
+    useEffect(() => {
+        getReleaseState()
+    }, [getReleaseState]);
 
     return (
         <div className="teams-page">
@@ -45,7 +55,7 @@ function TeamsPage() {
                         id="release-reviews"
                         className="release-reviews-btn"
                         disabled={reviewsReleased}
-                        onClick={() => releaseReviews()}
+                        onClick={async () => await releaseReviews()}
                     > Release Reviews </button>
                     :
                     <></>
