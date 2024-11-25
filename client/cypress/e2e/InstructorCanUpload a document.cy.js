@@ -1,3 +1,6 @@
+
+
+
 describe('The instructor can upload a document', () => {
  
   it('Uploading a document', ()=>{
@@ -14,5 +17,16 @@ describe('The instructor can upload a document', () => {
         //Uploading a document 
         cy.get('#UploadButton').click();
         cy.get('label.upload-button').click();
+
+        // Intercept the API call for upload document 
+        cy.intercept('POST', '/api/upload/:courseId', (req) => {
+            req.reply({
+                statusCode: 200,
+                body: { message: 'The document was successfully uploaded' },
+            });
+        }).as('upload/:courseId');
+
+        cy.get('#fileUpload').attachFile('Sprint Planning - TASKS.pdf');
+        cy.get('button.upload-button').click();
   });
 });
