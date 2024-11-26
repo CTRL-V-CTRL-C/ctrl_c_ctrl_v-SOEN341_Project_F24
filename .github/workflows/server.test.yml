@@ -10,6 +10,33 @@ on:
       - closed
       - review_requested
 jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js and cache global npm dependencies
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+
+    - name: cache node modules
+      id: node-modules-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          server/node_modules
+        key: ${{ hashFiles('server/package-lock.json') }}
+    
+    - name: download node_modules
+      if: steps.node-modules-cache.outputs.cache-hit != 'true'
+      run: cd server && npm ci
+
+    - name: analyse code
+      run: npx eslint .
+
   test:
     runs-on: ubuntu-latest
 
