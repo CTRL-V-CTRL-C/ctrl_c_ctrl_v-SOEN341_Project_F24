@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import '../Styles/PopUp.css';
 import '../Styles/EvaluationResults.css';
 import PropTypes from 'prop-types';
 import { fetchData } from '../../../Controller/FetchModule';
+import UserContext from '../../../Context/UserContext';
 
 const emptyStudentData =
 {
@@ -53,6 +54,7 @@ function ReviewEvaluationPopup(props) {
         team_name: PropTypes.string.isRequired,
     };
 
+    const userContext = useContext(UserContext);
     const [studentData, setStudentData] = useState(emptyStudentData);
 
     const getResultDetails = useCallback(async () => {
@@ -69,13 +71,17 @@ function ReviewEvaluationPopup(props) {
         }
     }, [props.team_id]);
 
+    const handleClose = useCallback(() => {
+        props.setTrigger(false);
+    }, [props.setTrigger]);
+
     useEffect(() => {
         getResultDetails();
     }, [getResultDetails]);
 
-    const handleClose = () => {
-        props.setTrigger(false);
-    };
+    useEffect(() => {
+        handleClose();
+    }, [userContext.selectedCourse.course_id, handleClose]);
 
     return (props.trigger) ? (
         <div className="popup">
@@ -106,7 +112,7 @@ function ReviewEvaluationPopup(props) {
                 <div className="comment-container">
 
                     {studentData.evaluations.map((criteria, i) => (
-                        <>
+                        <div key={`div${i}`}>
                             <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold', textAlign: 'justify' }}> {criteria.criteria} </p>
                             {criteria.comments.map((comment, i) => (
                                 comment ?
@@ -114,7 +120,7 @@ function ReviewEvaluationPopup(props) {
                                     :
                                     <></>
                             ))}
-                        </>
+                        </div>
                     ))}
                 </div>
 
