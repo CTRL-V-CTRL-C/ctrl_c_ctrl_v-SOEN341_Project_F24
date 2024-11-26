@@ -1,4 +1,11 @@
 
+@media screen and (max-width: 500px) {
+    #errorDocumentUpload {
+      margin-left: 100px;
+  }
+  }
+  
+
 #button-upload-document {
     background-color: #dddaa4;
     border-style: solid;
@@ -8,3 +15,10 @@
     border-radius: 25px;
     cursor:pointer;
 }
+
+#errorDocumentUpload {
+    color: red;
+    margin-left: 30px;
+    font-weight: bold;
+}
+
