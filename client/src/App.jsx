@@ -40,7 +40,9 @@ function App() {
     const courses = await coursesResponse.json();
     setCourseList(courses);
     setHasCourses(courses.length > 0);
-    setSelectedCourse(courses[0]);
+    if (courses.length > 0) {
+      setSelectedCourse(courses[0]);
+    }
   }
 
   return (
