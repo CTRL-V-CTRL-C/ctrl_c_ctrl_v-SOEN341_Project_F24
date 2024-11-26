@@ -11,34 +11,34 @@ const emptyStudentData =
         [
             {
                 criteria: "COOPERATION",
-                avg: 5,
-                count: 1,
+                avg: 0,
+                count: 0,
                 comments: [
-                    "Some rwedeview1"
+                    ""
                 ]
             },
             {
                 criteria: "CONCEPTUAL CONTRIBUTION",
-                avg: 1,
-                count: 1,
+                avg: 0,
+                count: 0,
                 comments: [
-                    "Some review2"
+                    ""
                 ]
             },
             {
                 criteria: "PRACTICAL CONTRIBUTION",
-                avg: 3,
-                count: 1,
+                avg: 0,
+                count: 0,
                 comments: [
-                    "Some review3"
+                    ""
                 ]
             },
             {
                 criteria: "WORK ETHIC",
-                avg: 2,
-                count: 1,
+                avg: 0,
+                count: 0,
                 comments: [
-                    "Some review4"
+                    ""
                 ]
             }
         ]
