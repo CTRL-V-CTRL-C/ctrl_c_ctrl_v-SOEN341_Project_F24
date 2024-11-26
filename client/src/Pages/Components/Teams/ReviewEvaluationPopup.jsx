@@ -107,12 +107,9 @@ function ReviewEvaluationPopup(props) {
 
                     {studentData.evaluations.map((criteria, i) => (
                         <>
-                            <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold' }}> {criteria.criteria} </p>
+                            <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold', textAlign: 'justify' }}> {criteria.criteria} </p>
                             {criteria.comments.map((comment, i) => (
-                                <>
-                                    <p key={i}> {comment}</p>
-                                    <hr />
-                                </>
+                                <p style={{ textAlign: 'justify' }} key={i}>Anonymous #{i + 1} - {comment ? comment : "N/A"}</p>
                             ))}
                         </>
                     ))}
