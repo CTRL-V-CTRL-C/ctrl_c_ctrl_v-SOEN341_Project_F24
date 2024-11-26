@@ -1,9 +1,10 @@
 
-#button {
+#button-upload-document {
     background-color: #dddaa4;
     border-style: solid;
     border-color: rgba(104, 105, 1, 0.65);
     font-size: 14px; /* Smaller font size for buttons */
     padding: 8px 15px; /* Adjust padding */
     border-radius: 25px;
+    cursor:pointer;
 }
