@@ -7,6 +7,7 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:5173',
     watchForFileChanges: false,
+    fixturesFolder: 'cypress/fixtures',
     setupNodeEvents(on, config) {
       on("task", {
         executeSQL(SQL) {
