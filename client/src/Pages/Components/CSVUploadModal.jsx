@@ -4,14 +4,14 @@ import { postData } from '../../Controller/FetchModule';
 import './Styles/PopUp.css';
 import PropTypes from 'prop-types';
 
-function PopUp(props) {
+function CSVUploadModal(props) {
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [highlighted, setHighlighted] = useState(false);
     const userContext = useContext(UserContext);
 
     // Prop validation
-    PopUp.propTypes = {
+    CSVUploadModal.propTypes = {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         triggerSuccessPopup: PropTypes.func.isRequired,
@@ -151,11 +151,11 @@ function PopUp(props) {
 
     return (props.trigger) ? (
         <div className="popup">
-            <div className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
+            <div id='cvsInnerPopup' className={`popup-inner ${highlighted ? "border-green" : "border-outer"}`}>
                 {/* X button to close the popup */}
                 <button className="close-x" onClick={handleClose}>×</button>
-                <h2 style={{ color: 'black' }}>Upload File</h2>
-                <div className={`dropZone ${highlighted ? "border-green bg-green" : "border-inner"}`}
+                <h2 id='cvsTitle' style={{ color: 'black' }}>Upload File</h2>
+                <div id='cvsDropZone' className={`dropZone ${highlighted ? "border-green bg-green" : "border-inner"}`}
                     onDragEnter={() => {
                         setHighlighted(true);
                     }}
@@ -172,7 +172,7 @@ function PopUp(props) {
                         setHighlighted(false);
                     }}
                 >
-                    <h4 style={{ color: 'black' }}>Drag CVS file to upload</h4>
+                    <h4 id="cvsDragAndDrop" style={{ color: 'black' }}>Drag CVS file to upload</h4>
                     <div className="bu">
                         <input
                             type="file"
@@ -184,7 +184,7 @@ function PopUp(props) {
                         <label htmlFor="fileUpload" className="upload-button">Choose a file</label>
                         <button className="upload-button" onClick={handleUpload}>Upload</button>
                     </div>
-                    <div className="file-outline">
+                    <div id='cvsFileDetails' className="file-outline">
                         {file && (
                             <div className="file-details">
                                 File details:
@@ -195,11 +195,11 @@ function PopUp(props) {
                             </div>
                         )}
                     </div>
-                    {error && <p className="error-message">{error}</p>} {/* Display error message */}
+                    {error && <p id='cvsErrorMessage' className="error-message">{error}</p>} {/* Display error message */}
                 </div>
             </div>
         </div>
     ) : "";
 }
 
-export default PopUp;
+export default CSVUploadModal;

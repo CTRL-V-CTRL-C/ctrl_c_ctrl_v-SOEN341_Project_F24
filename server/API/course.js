@@ -1,6 +1,6 @@
 import express from 'express';
 import log from '../logger.js';
-import { createCourse } from '../database/course.js';
+import { areEvaluationsReleased, createCourse, releaseEvaluations } from '../database/course.js';
 import { db } from '../database/db.js';
 import { requireAuth, requireTeacher } from './auth.js';
 
@@ -10,6 +10,12 @@ const router = express.Router();
 
 async function requireIsInCourse(req, res, next) {
   const courseId = req.params.courseId;
+
+  if (!Number.isInteger(Number.parseInt(courseId))) {
+    res.status(400).json({ msg: "Course id needs to be an integer" });
+    return;
+  }
+
   try {
     let hasCourse;
     if (req.session.user.isInstructor) {
@@ -86,5 +92,43 @@ router.get("/get-students/:courseId", requireAuth, requireIsInCourse, async (req
     res.status(500).json({ msg: "Something went wrong trying to get your students, please try again later" });
   }
 });
+
+router.post("/release-evaluations/:courseId", requireAuth, requireTeacher, requireIsInCourse, async (req, res, next) => {
+  let courseId = req.params.courseId;
+  let released = await areEvaluationsReleased(db, courseId);
+  if (released instanceof Error) {
+    res.status(500).json({ msg: released.message });
+    next();
+    return;
+  } else if (released) {
+    res.status(400).json({ msg: `The evaluations have already been released for this course` });
+    next();
+    return;
+  }
+  const result = await releaseEvaluations(db, courseId);
+  if (result instanceof Error) {
+    res.status(500).json({ msg: result.message });
+    next();
+  } else {
+    res.status(200).json({ msg: "Evaluations have been successfully released" });
+    next();
+  }
+});
+
+router.get("/are-evaluations-released/:courseId", requireAuth, requireIsInCourse, async (req, res, next) => {
+  let courseId = req.params.courseId;
+  let released = await areEvaluationsReleased(db, courseId);
+  if (released instanceof Error) {
+    res.status(500).json({ msg: released.message });
+    next();
+    return;
+  }
+
+  res.status(200).json({ released });
+  next();
+  return;
+
+});
+
 
 export { router, requireIsInCourse };

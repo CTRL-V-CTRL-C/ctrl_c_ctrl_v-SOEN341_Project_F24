@@ -19,6 +19,7 @@ function NavBar() {
                     <div className="spacer" />
                     {userContext.userLoggedIn ?
                         <>
+                            <li><NavLink to="/documents" className="navlink" >Documents</NavLink></li>
                             <li><NavLink id="TeamsNav" className="navlink" to="/teams">Teams</NavLink></li>
                             <li><NavLink onClick={(async () => { await handleLogout() })} id="LogoutnNav" className="navlink" to="/">Logout</NavLink></li>
                         </>
