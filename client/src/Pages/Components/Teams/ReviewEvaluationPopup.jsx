@@ -105,14 +105,15 @@ function ReviewEvaluationPopup(props) {
                 <p style={{ fontWeight: 'bold' }}> Comments </p>
                 <div className="comment-container">
 
-                    {studentData.evaluations.map((criteria) => (
+                    {studentData.evaluations.map((criteria, i) => (
                         <>
-                            <p style={{ margin: '0px', fontWeight: 'bold' }}> {criteria.criteria} </p>
-                            <p>
-                                {criteria.comments.map((comment, i) => (
+                            <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold' }}> {criteria.criteria} </p>
+                            {criteria.comments.map((comment, i) => (
+                                <>
                                     <p key={i}> {comment}</p>
-                                ))}
-                            </p>
+                                    <hr />
+                                </>
+                            ))}
                         </>
                     ))}
                 </div>
