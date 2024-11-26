@@ -44,7 +44,7 @@ function TeamsPage() {
                 <span id="secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
             </label>
             {
-                userContext.isInstructor ?
+                userContext.isInstructor && userContext.hasCourses ?
                     <button
                         type="button"
                         id="release-reviews"
