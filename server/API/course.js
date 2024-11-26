@@ -64,9 +64,9 @@ router.get("/get-courses", requireAuth, async (req, res) => {
   try {
     let courseQuery;
     if (req.session.user.isInstructor) {
-      courseQuery = await db.query("SELECT course_id, course_name, are_evaluations_released released FROM courses JOIN users ON instructor_id = user_id WHERE user_id = $1", [req.session.user.userId]);
+      courseQuery = await db.query("SELECT course_id, course_name FROM courses JOIN users ON instructor_id = user_id WHERE user_id = $1", [req.session.user.userId]);
     } else {
-      courseQuery = await db.query("SELECT c.course_id, course_name, are_evaluations_released released FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1", [req.session.user.userId]);
+      courseQuery = await db.query("SELECT c.course_id, course_name FROM courses c JOIN teams t ON c.course_id = t.course_id JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_id = $1", [req.session.user.userId]);
     }
 
     res.status(200).json(courseQuery.rows);
@@ -114,5 +114,21 @@ router.post("/release-evaluations/:courseId", requireAuth, requireTeacher, requi
     next();
   }
 });
+
+router.get("/are-evaluations-released/:courseId", requireAuth, requireIsInCourse, async (req, res, next) => {
+  let courseId = req.params.courseId;
+  let released = await areEvaluationsReleased(db, courseId);
+  if (released instanceof Error) {
+    res.status(500).json({ msg: released.message });
+    next();
+    return;
+  }
+
+  res.status(200).json({ released });
+  next();
+  return;
+
+});
+
 
 export { router, requireIsInCourse };

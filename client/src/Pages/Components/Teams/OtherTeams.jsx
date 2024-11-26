@@ -54,7 +54,7 @@ function OtherTeams() {
                 : <>
                     {userContext.isInstructor && (
                         <>
-                            <button onClick={() => setButtonPopup(true)}>Upload</button>
+                            <button id = "csvUploadButton" className="release-reviews-btn" onClick={() => setButtonPopup(true)}>Upload</button>
                             {/* CSV Upload Popup */}
                             <CSVUploadModal
                                 trigger={openUploadPopup}
