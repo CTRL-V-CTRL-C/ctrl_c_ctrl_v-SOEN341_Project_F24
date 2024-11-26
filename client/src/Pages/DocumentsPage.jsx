@@ -25,7 +25,7 @@ export default function DocumentsPage() {
     useEffect(() => {
         setDocumentList([]);
         getList();
-    }, [userContext.selectedCourse.course_id]);
+    }, [userContext.selectedCourse.course_id, getList]);
 
     return (
         <div id="documents-page">

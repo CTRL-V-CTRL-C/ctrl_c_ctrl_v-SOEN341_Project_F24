@@ -173,7 +173,7 @@ router.get("/get-anonymized-feedback/:teamId", requireAuth, requireStudent, asyn
   if (result instanceof Error) {
     res.status(500).json({ msg: result.message });
   } else {
-    res.status(200).json(result.rows);
+    res.status(200).json(result.rows[0]);
   }
   next();
 });
