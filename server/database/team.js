@@ -118,7 +118,7 @@ async function addTeamMembers(db, teamId, members) {
 
     // some members don't have an account
     if (Object.keys(userIdMap).length != members.length) {
-        const uncreatedMembers = members.filter(member => userIdMap[member.studentID] === undefined)
+        const uncreatedMembers = members.filter(member => userIdMap[member.schoolID] === undefined)
         for (const member of uncreatedMembers) {
             const errorOrPassword = await createStudentAccount(db, member);
             if (errorOrPassword instanceof Error) {
