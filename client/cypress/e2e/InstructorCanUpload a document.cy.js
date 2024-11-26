@@ -38,8 +38,8 @@ describe('The instructor can upload a document', () => {
           // Intercept the API call for upload document 
           cy.intercept('POST', '/api/upload/:courseId', (req) => {
               req.reply({
-                  statusCode: 200,
-                  body: { message: 'The document was successfully uploaded' },
+                  statusCode: 500,
+                  body: { message: result.message },
               });
           }).as('upload/:courseId');
 
