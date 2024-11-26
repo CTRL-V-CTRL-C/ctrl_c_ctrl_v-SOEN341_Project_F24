@@ -21,22 +21,26 @@
 
 .eval-close-btn {
     text-align: left;
-    border: 1px solid black;
-    border-radius: 1rem;
     width: fit-content;
+    height: fit-content;
     display: flex;
     flex-direction: row;
-    padding-left: 1rem;
-    padding-right: 1rem;
     margin-left: 1rem;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(137, 139, 35);
+
+    background-color: #dddaa4;
+    border-style: solid;
+    border-color: rgba(104, 105, 1, 0.65);
+    font-size: 14px; /* Smaller font size for buttons */
+    padding: 0px 10px; /* Adjust padding */
+    border-radius: 25px;
+    
 }
 
 .eval-close-btn:hover {
     cursor: pointer;
-    background-color: #dddaa4;
+    background-color: rgba(138, 139, 35, 0.65);
 }
 
 .EvalTableStyle:has(th) {

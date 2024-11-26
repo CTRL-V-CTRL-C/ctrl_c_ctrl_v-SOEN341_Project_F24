@@ -1,0 +1,24 @@
+
+@media screen and (max-width: 500px) {
+    #errorDocumentUpload {
+      margin-left: 100px;
+  }
+  }
+  
+
+#button-upload-document {
+    background-color: #dddaa4;
+    border-style: solid;
+    border-color: rgba(104, 105, 1, 0.65);
+    font-size: 14px; /* Smaller font size for buttons */
+    padding: 8px 15px; /* Adjust padding */
+    border-radius: 25px;
+    cursor:pointer;
+}
+
+#errorDocumentUpload {
+    color: red;
+    margin-left: 30px;
+    font-weight: bold;
+}
+
