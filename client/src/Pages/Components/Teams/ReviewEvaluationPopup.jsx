@@ -109,7 +109,10 @@ function ReviewEvaluationPopup(props) {
                         <>
                             <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold', textAlign: 'justify' }}> {criteria.criteria} </p>
                             {criteria.comments.map((comment, i) => (
-                                <p style={{ textAlign: 'justify' }} key={i}>Anonymous #{i + 1} - {comment ? comment : "N/A"}</p>
+                                comment ?
+                                    <p style={{ textAlign: 'justify' }} key={i}>Anonymous - {comment}</p>
+                                    :
+                                    <></>
                             ))}
                         </>
                     ))}

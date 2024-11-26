@@ -17,7 +17,6 @@ function TeamsPage() {
         if (response.ok) {
             const data = await response.json()
             setReviewsReleased(data.released)
-            console.log(data.released)
         }
     }, [userContext.selectedCourse.course_id]);
 
