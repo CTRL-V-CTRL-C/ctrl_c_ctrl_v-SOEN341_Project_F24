@@ -28,7 +28,7 @@ jobs:
       with:
         path: |
           server/node_modules
-        key: ${{ hashFiles('server/package-lock.json') }}
+        key: ${{ hashFiles('package-lock.json') }}
     
     - name: download node_modules
       if: steps.node-modules-cache.outputs.cache-hit != 'true'
