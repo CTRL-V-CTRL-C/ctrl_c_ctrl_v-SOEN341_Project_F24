@@ -6,7 +6,7 @@ import { fetchData } from '../../../Controller/FetchModule';
 
 const emptyStudentData =
 {
-    avg_across_all: 3,
+    avg_across_all: 0,
     evaluations:
         [
             {
@@ -99,19 +99,24 @@ function ReviewEvaluationPopup(props) {
                                 ))}
                                 <td> {studentData.avg_across_all == 0 ? "N/A" : studentData.avg_across_all} </td>
                             </tr>
-                            <tr>
-                                {studentData.evaluations.map((criteria, i) => (
-                                    <td key={i}>
-                                        {criteria.comments.map((comment, i) => (
-                                            <p key={i}> {comment}</p>
-                                        ))}
-                                    </td>
-                                ))}
-                                <td> N/A </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+                <p style={{ fontWeight: 'bold' }}> Comments </p>
+                <div className="comment-container">
+
+                    {studentData.evaluations.map((criteria) => (
+                        <>
+                            <p style={{ margin: '0px', fontWeight: 'bold' }}> {criteria.criteria} </p>
+                            <p>
+                                {criteria.comments.map((comment, i) => (
+                                    <p key={i}> {comment}</p>
+                                ))}
+                            </p>
+                        </>
+                    ))}
+                </div>
+
             </div>
         </div >
     ) : "";
