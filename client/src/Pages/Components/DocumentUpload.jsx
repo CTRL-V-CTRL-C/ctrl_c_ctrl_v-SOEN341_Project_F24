@@ -31,7 +31,7 @@ function DocumentUpload({ onSucess }) {
         {uploadError ? <p className="error">{uploadError}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
-        <button id="UploadButton"onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
+        <button id="button-upload-document"onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
         <FileModal shouldOpen={popupOpen} setOpen={setPopupOpen} onUpload={handleUpload} />
     </div>
 }

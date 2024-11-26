@@ -15,7 +15,7 @@ describe('The instructor can upload a document', () => {
         cy.get('#Documents').click();
 
         //Uploading a document 
-        cy.get('#UploadButton').click();
+        cy.get('#button-upload-document').click();
         cy.get('label.upload-button').click();
 
         // Intercept the API call for upload document 
