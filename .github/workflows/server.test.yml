@@ -27,7 +27,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          server/node_modules
+          node_modules
         key: ${{ hashFiles('package-lock.json') }}
     
     - name: download node_modules
