@@ -1,3 +1,4 @@
+
 import { useCallback, useContext, useEffect, useState } from "react";
 import UserContext from "../../../Context/UserContext";
 import { fetchData } from "../../../Controller/FetchModule";
@@ -54,7 +55,7 @@ function OtherTeams() {
                 : <>
                     {userContext.isInstructor && (
                         <>
-                            <button className="release-reviews-btn" onClick={() => setButtonPopup(true)}>Upload</button>
+                            <button id = "csvUploadButton" className="release-reviews-btn" onClick={() => setButtonPopup(true)}>Upload</button>
                             {/* CSV Upload Popup */}
                             <CSVUploadModal
                                 trigger={openUploadPopup}

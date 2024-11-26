@@ -54,10 +54,11 @@ function EvaluationResults(props) {
     return (
         <div className="eval-summary-container">
             <div className="table-title">Evaluation results of {evaluationData[0].team_name}</div>
-            <div onClick={returnToTeams} className="eval-close-btn">
+            <button onClick={returnToTeams} className="eval-close-btn">
                 <IoMdArrowBack />
                 <p> Go Back to Teams</p>
-            </div>
+            </button>
+            
             <div className="table-container">
                 <table className="EvalTableStyle">
                     <thead>
