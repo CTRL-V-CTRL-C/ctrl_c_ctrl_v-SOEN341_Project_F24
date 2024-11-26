@@ -22,18 +22,23 @@ function DocumentUpload({ onSucess }) {
         setUploadError("");
         setSuccessMessage("");
         const response = await postFile(`/api/document/upload/${userContext.selectedCourse.course_id}`, file);
+        const text = await response.text()
         if (response.status === 200) {
             setSuccessMessage("The file was uploaded successfully");
             onSucess();
-        } else {
-            setUploadError(`${response.status} ${response.statusText}, ${await response.text()}`);
+        } 
+        else if(text.includes("documents_course_id_document_name_key")){
+            setUploadError("Your students already have access to this document :)");
+        }
+        else {
+            setUploadError(`${response.status} ${response.statusText}, ${text}`);
         }
     }
 
     return <div className="documentUpload">
         <h4>Documents</h4>
 
-        {uploadError ? <p className="success">{uploadError}</p> : ""}
+        {uploadError ? <p className="error">{uploadError}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
 
         <button id="button-upload-document" onClick={() => setPopupOpen(!popupOpen)}>Upload</button>
