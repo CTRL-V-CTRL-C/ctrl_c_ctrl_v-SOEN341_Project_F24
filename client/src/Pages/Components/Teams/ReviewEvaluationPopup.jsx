@@ -81,7 +81,7 @@ function ReviewEvaluationPopup(props) {
         <div className="popup">
             <div className="eval-popup-inner border-outer">
                 <button className="close-x" onClick={handleClose}>×</button>
-
+                <p style={{ fontWeight: 'bold' }}> My Evaluation Summary       </p>
                 <div className="table-container">
                     <table className="EvalTableStyle">
                         <thead>
@@ -95,9 +95,9 @@ function ReviewEvaluationPopup(props) {
                         <tbody>
                             <tr>
                                 {studentData.evaluations.map((criteria, i) => (
-                                    <td key={i}> {criteria.avg == 0 ? "N/A" : criteria.avg} </td>
+                                    <td key={i}>{Number(criteria.avg).toPrecision(2) == 0.0 ? "N/A" : Number(criteria.avg).toPrecision(2)}</td>
                                 ))}
-                                <td> {studentData.avg_across_all == 0 ? "N/A" : studentData.avg_across_all} </td>
+                                <td> {Number(studentData.avg_across_all).toPrecision(2) == 0.0 ? "N/A" : Number(studentData.avg_across_all).toPrecision(2)} </td>
                             </tr>
                         </tbody>
                     </table>
