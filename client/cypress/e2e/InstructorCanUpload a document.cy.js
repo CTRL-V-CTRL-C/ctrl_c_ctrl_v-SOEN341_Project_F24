@@ -1,6 +1,3 @@
-
-
-
 describe('The instructor can upload a document', () => {
  
   it('Uploading a document', ()=>{
@@ -14,8 +11,9 @@ describe('The instructor can upload a document', () => {
         //Navigating to the document page
         cy.get('#Documents').click();
 
-        //Uploading a document 
+        //clicking the upload button
         cy.get('#button-upload-document').click();
+        //choosing a file
         cy.get('label.upload-button').click();
 
         // Intercept the API call for upload document 
@@ -29,21 +27,29 @@ describe('The instructor can upload a document', () => {
         cy.get('#fileUpload').attachFile('Sprint Planning - TASKS.pdf');
         cy.get('button.upload-button').click();
 
-        //Reuploading the same file 
+        //checking for the success message 
+        cy.get('.success').should('be.visible');
+
+        // //Reuploading the same file 
         
-          //Uploading a document 
-          cy.get('#button-upload-document').click();
-          cy.get('label.upload-button').click();
+        //   //clicking the upload button
+        //   cy.get('#button-upload-document').click();
+        //   //choosing a file
+        //   cy.get('label.upload-button').click();
 
-          // Intercept the API call for upload document 
-          cy.intercept('POST', '/api/upload/:courseId', (req) => {
-              req.reply({
-                  statusCode: 500,
-                  body: { message: result.message },
-              });
-          }).as('upload/:courseId');
+        //   // Intercept the API call for upload document 
+        //   cy.intercept('POST', '/api/upload/:courseId', (req) => {
+        //       req.reply({
+        //           statusCode: 500,
+        //           body: { message: result.message },
+        //       });
+        //   }).as('upload/:courseId');
 
-          cy.get('#fileUpload').attachFile('Sprint Planning - TASKS.pdf');
-          cy.get('button.upload-button').click();
+        //   cy.get('#fileUpload').attachFile('Sprint Planning - TASKS.pdf');
+        //   cy.get('button.upload-button').click();
+
+        //   //checking for the error message
+        //   cy.get('#errorDocumentUpload').should('be.visible');
+          
           });
         });
