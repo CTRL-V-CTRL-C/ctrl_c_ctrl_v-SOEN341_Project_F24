@@ -58,16 +58,15 @@ function ReviewEvaluationPopup({ trigger, setTrigger, team_id }) {
 
     const getResultDetails = useCallback(async () => {
         const response = await fetchData(`/api/evaluation/get-anonymized-feedback/${team_id}`);
-        console.log("here")
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data)
-            if (!data) {
-                setStudentData(emptyStudentData);
-            } else {
-                setStudentData(data);
-            }
+        if (!response.ok) {
+            return;
         }
+        const data = await response.json();
+        if (!data || data.evaluations === null || data.avg_across_all === null) {
+            setStudentData(emptyStudentData);
+            return;
+        }
+        setStudentData(data);
     }, [team_id]);
 
     const handleClose = useCallback(() => {
@@ -109,7 +108,6 @@ function ReviewEvaluationPopup({ trigger, setTrigger, team_id }) {
                 </div>
                 <p style={{ fontWeight: 'bold' }}> Comments </p>
                 <div className="comment-container">
-
                     {studentData.evaluations.map((criteria, i) => (
                         <div key={`div${i}`}>
                             <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold', textAlign: 'justify' }}> {criteria.criteria} </p>
@@ -117,7 +115,7 @@ function ReviewEvaluationPopup({ trigger, setTrigger, team_id }) {
                                 comment ?
                                     <p style={{ textAlign: 'justify' }} key={i}>Anonymous - {comment}</p>
                                     :
-                                    <></>
+                                    ""
                             ))}
                         </div>
                     ))}
