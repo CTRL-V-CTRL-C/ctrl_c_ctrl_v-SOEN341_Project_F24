@@ -45,7 +45,7 @@ const emptyStudentData =
         ]
 }
 
-function ReviewEvaluationPopup(props) {
+function ReviewEvaluationPopup({ trigger, setTrigger, team_id, team_name }) {
 
     ReviewEvaluationPopup.propTypes = {
         trigger: PropTypes.bool.isRequired,
@@ -58,7 +58,7 @@ function ReviewEvaluationPopup(props) {
     const [studentData, setStudentData] = useState(emptyStudentData);
 
     const getResultDetails = useCallback(async () => {
-        const response = await fetchData(`/api/evaluation/get-anonymized-feedback/${props.team_id}`);
+        const response = await fetchData(`/api/evaluation/get-anonymized-feedback/${team_id}`);
         console.log("here")
         if (response.ok) {
             const data = await response.json();
@@ -69,11 +69,11 @@ function ReviewEvaluationPopup(props) {
                 setStudentData(data);
             }
         }
-    }, [props.team_id]);
+    }, [team_id]);
 
     const handleClose = useCallback(() => {
-        props.setTrigger(false);
-    }, [props.setTrigger]);
+        setTrigger(false);
+    }, [setTrigger]);
 
     useEffect(() => {
         getResultDetails();
@@ -83,7 +83,7 @@ function ReviewEvaluationPopup(props) {
         handleClose();
     }, [userContext.selectedCourse.course_id, handleClose]);
 
-    return (props.trigger) ? (
+    return (trigger) ? (
         <div className="popup">
             <div className="eval-popup-inner border-outer">
                 <button className="close-x" onClick={handleClose}>×</button>

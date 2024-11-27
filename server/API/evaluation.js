@@ -3,7 +3,7 @@ import { db } from '../database/db.js';
 import { requireAuth, requireStudent, requireTeacher, requireTeacherMadeTeam } from './auth.js';
 import { createOrUpdateEvaluation, getEvaluation, getTeamEvaluationSummary, getEvaluationDetails, getCourseEvaluationSummary, getAnonymizedFeedback, canTeamGetFeedback } from '../database/evaluation.js';
 
-import { areInSameTeam, teacherMadeTeam, userIsInTeam } from '../database/team.js';
+import { areInSameTeam, userIsInTeam } from '../database/team.js';
 import log from '../logger.js';
 import { requireIsInCourse } from './course.js';
 

@@ -36,7 +36,7 @@ describe('Students can give feedback', function () {
         cy.get(':nth-child(2) > .review-btn').should('be.visible').should('contain', 'Review').click(); //review button is there and is clicked 
         //checking error message
         cy.get('.button__text').click();//Submit the form
-        cy.get('.error').should('be.visible').and('contain','Evaluate all criteria before submitting.');
+        cy.get('.error').should('be.visible').and('contain', 'Evaluate all criteria before submitting.');
 
         //first criteria
         cy.get(':nth-child(1) > .comment-box').type("cooperation wasnt good");
@@ -64,7 +64,6 @@ describe('Students can give feedback', function () {
         cy.get('.confirmation-details .confirmation-criteria').each(($criteria, index) => {
             cy.wrap($criteria).find('p').first().should('be.visible').and('contain', reviewInfo[index].criteria);
             // Check that the correct star rating is displayed based on the index
-            const expectedRatings = ['3', '2 stars', '3 stars', '4 stars']; // Adjust based on expected values
             cy.wrap($criteria).find('p').eq(1).should('contain.text', reviewInfo[index].Rating);
             // Check that the comment box for each criteria displays the correct comment
             cy.wrap($criteria).find('p').eq(2).should('contain.text', reviewInfo[index].Comment);

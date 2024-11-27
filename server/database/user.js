@@ -1,10 +1,11 @@
+// eslint-disable-next-line no-unused-vars
 import pg from 'pg'
 import log from '../logger.js'
 import { queryAndReturnError } from './db.js';
 
 //Account creation validation
 const namePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ\-]+$/v;
-const emailPattern = /^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$/v;
+const emailPattern = /^[\w\-.]+@([\w\-]+\.)+[\w\-]{2,4}$/v;
 const studentIDPattern = /^[Ss][Tt][Uu][Dd][0-9]{4,4}$/v;
 const instructorIDPattern = /^[Ii][Nn][Ss][Tt][0-9]{4,4}$/v;
 const rolePattern = /^(STUD|INST)$/v;
