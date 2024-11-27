@@ -5,7 +5,7 @@ import UserContext from "../../../Context/UserContext";
 import { MdOutlineRateReview, MdEmail } from "react-icons/md";
 import Evaluation from "./Evaluation";
 import { fetchData } from "../../../Controller/FetchModule";
-import ReviewEvaluationPopup from "./ReviewEValuationPopup";
+import ReviewEvaluationPopup from "./ReviewEvaluationPopup";
 
 function MyTeam(props) {
 
@@ -69,7 +69,6 @@ function MyTeam(props) {
                                 setTrigger={setOpenDetailPopup}
                                 class
                                 team_id={team.team_id}
-                                team_name={team.team_name}
                             />
                         </>
                         :

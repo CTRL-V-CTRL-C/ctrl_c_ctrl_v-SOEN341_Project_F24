@@ -8,7 +8,7 @@ export default defineConfig({
     baseUrl: 'http://localhost:5173',
     watchForFileChanges: false,
     fixturesFolder: 'cypress/fixtures',
-    setupNodeEvents(on, config) {
+    setupNodeEvents(on) {
       on("task", {
         executeSQL(SQL) {
           return db.query(SQL);

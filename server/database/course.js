@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import pg from 'pg'
 import log from '../logger.js'
 import { sendReleaseNotificationEmail } from '../internal/email.js';

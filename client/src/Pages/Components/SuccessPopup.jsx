@@ -1,6 +1,4 @@
-import React from 'react';
 import './Styles/PopUp.css';
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 function SuccessPopup({ trigger, onClose, warning }) {

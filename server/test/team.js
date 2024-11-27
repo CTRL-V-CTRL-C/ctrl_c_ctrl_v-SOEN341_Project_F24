@@ -19,7 +19,7 @@ suite("GET teams as an instructor", async () => {
     cookies = await loginUser(app, "joeparker13@gmail.com", "password");
   });
 
-  it("Should respond with 200 when getting teams in a course they teach", async (t) => {
+  it("Should respond with 200 when getting teams in a course they teach", async () => {
     const response = await request(app)
       .get("/api/team/get-teams/1")
       .set("Accept", "application/json")
@@ -30,7 +30,7 @@ suite("GET teams as an instructor", async () => {
     assert.equal(response._body.length, 3);
   });
 
-  it("Should respond with 401 when getting teams in a course that they don't teach", async (t) => {
+  it("Should respond with 401 when getting teams in a course that they don't teach", async () => {
     const response = await request(app)
       .get("/api/team/get-teams/2")
       .set("Accept", "application/json")
@@ -40,7 +40,7 @@ suite("GET teams as an instructor", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 401 when getting my team", async (t) => {
+  it("Should respond with 401 when getting my team", async () => {
     const response = await request(app)
       .get("/api/team/get-my-team/1")
       .set("Accept", "application/json")
@@ -64,7 +64,7 @@ suite("GET my team and other teams as a student", async () => {
     cookies = await loginUser(app, "joeparker1@gmail.com", "password");
   });
 
-  it("Should respond with 200 when getting other teams in a course they are part of", async (t) => {
+  it("Should respond with 200 when getting other teams in a course they are part of", async () => {
     const response = await request(app)
       .get("/api/team/get-teams/1")
       .set("Accept", "application/json")
@@ -75,7 +75,7 @@ suite("GET my team and other teams as a student", async () => {
     assert.equal(response._body.length, 2);
   });
 
-  it("Should respond with 401 when getting teams in a course they are not part of", async (t) => {
+  it("Should respond with 401 when getting teams in a course they are not part of", async () => {
     const response = await request(app)
       .get("/api/team/get-teams/6")
       .set("Accept", "application/json")
@@ -85,7 +85,7 @@ suite("GET my team and other teams as a student", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 200 when getting my team", async (t) => {
+  it("Should respond with 200 when getting my team", async () => {
     const response = await request(app)
       .get("/api/team/get-my-team/1")
       .set("Accept", "application/json")
@@ -125,7 +125,7 @@ suite("POST requests to create a team", async () => {
     });
   })
 
-  it("should respond with 200 when creating a team with no members", async (t) => {
+  it("should respond with 200 when creating a team with no members", async () => {
 
     const team = {
       teamName: "test_team_" + uniqueRandomNumber(6),
@@ -143,7 +143,7 @@ suite("POST requests to create a team", async () => {
     assert.ok(typeof response.body.teamID === 'number');
   });
 
-  it("should respond with 200 when creating a team with some members", async (t) => {
+  it("should respond with 200 when creating a team with some members", async () => {
 
     const team = {
       teamName: "test_team_" + uniqueRandomNumber(6),

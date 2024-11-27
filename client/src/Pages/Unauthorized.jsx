@@ -1,5 +1,5 @@
 function UnauthorizedPage() {
-    return <div>You shouldn't be here, you are unauthorized</div>;
+    return <div>You shouldn&apost;t be here, you are unauthorized</div>
 }
 
 export default UnauthorizedPage;
