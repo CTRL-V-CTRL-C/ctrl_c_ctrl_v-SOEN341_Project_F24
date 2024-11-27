@@ -64,7 +64,7 @@ suite("POST and GET evaluations as a student", async () => {
     await db.query("DELETE FROM users WHERE email = 'test.student1@mail.com' OR email = 'test.student2@mail.com' OR email = 'test.instructor1@mail.com'");
   });
 
-  it("Should respond with 200 when evaluating a student in the same team", async (t) => {
+  it("Should respond with 200 when evaluating a student in the same team", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -75,7 +75,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 200 when re-evaluating a student in the same team", async (t) => {
+  it("Should respond with 200 when re-evaluating a student in the same team", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -86,7 +86,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 400 when evaluating a student they are not in a team with", async (t) => {
+  it("Should respond with 400 when evaluating a student they are not in a team with", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -97,7 +97,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 400 when evaluating a student with invalid rating", async (t) => {
+  it("Should respond with 400 when evaluating a student with invalid rating", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -108,7 +108,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 400 when evaluating a student with invalid criteria", async (t) => {
+  it("Should respond with 400 when evaluating a student with invalid criteria", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -119,7 +119,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 400 when evaluating a student with an invalid evaluation (missing criteria)", async (t) => {
+  it("Should respond with 400 when evaluating a student with an invalid evaluation (missing criteria)", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -131,7 +131,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response._body.msg, /[Mm]issing/);
   });
 
-  it("Should respond with 400 when evaluating a student with an invalid evaluation (duplicate criteria)", async (t) => {
+  it("Should respond with 400 when evaluating a student with an invalid evaluation (duplicate criteria)", async () => {
     const response = await request(app)
       .post("/api/evaluation/evaluate")
       .set("Accept", "application/json")
@@ -143,7 +143,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.match(response._body.msg, /[Dd]uplicate/);
   });
 
-  it("Should respond with 200 when getting an evaluation for a student in the same team", async (t) => {
+  it("Should respond with 200 when getting an evaluation for a student in the same team", async () => {
     const response = await request(app)
       .get(`/api/evaluation/get-my-evaluation/${teamId}/${studentId2}`)
       .set("Accept", "application/json")
@@ -154,7 +154,7 @@ suite("POST and GET evaluations as a student", async () => {
     assert.equal(response._body.length, 4);
   });
 
-  it("Should respond with 400 when getting an evaluation for a student in not in the same team", async (t) => {
+  it("Should respond with 400 when getting an evaluation for a student in not in the same team", async () => {
     const response = await request(app)
       .get(`/api/evaluation/get-my-evaluation/${teamId}/${studentId2 + 1}`)
       .set("Accept", "application/json")
@@ -226,7 +226,7 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
     await db.query("DELETE FROM users WHERE email = 'test.student4@mail.com' OR email = 'test.student5@mail.com' OR email = 'test.student6@mail.com' OR email = 'test.instructor2@mail.com'");
   });
 
-  it("Should respond with 200 when getting the summary of evaluations for a team", async (t) => {
+  it("Should respond with 200 when getting the summary of evaluations for a team", async () => {
     const response = await request(app)
       .get(`/api/evaluation/get-team-summary/${teamId}`)
       .set("Accept", "application/json")
@@ -236,7 +236,7 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with the correct average and count for the summary of evaluations for a team", async (t) => {
+  it("Should respond with the correct average and count for the summary of evaluations for a team", async () => {
     const summary = [
       {
         school_id: "STUD2004",
@@ -303,7 +303,7 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
     assert.deepEqual(response._body, summary);
   });
 
-  it("Should respond with 401 when getting the evaluation summary of a team not in your course", async (t) => {
+  it("Should respond with 401 when getting the evaluation summary of a team not in your course", async () => {
     const response = await request(app)
       .get(`/api/evaluation/get-team-summary/${teamId + 1}`)
       .set("Accept", "application/json")
@@ -313,7 +313,7 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with 200 when getting the summary of evaluations for a course", async (t) => {
+  it("Should respond with 200 when getting the summary of evaluations for a course", async () => {
     const response = await request(app)
       .get(`/api/evaluation/get-course-summary/${courseId}`)
       .set("Accept", "application/json")
@@ -323,7 +323,7 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
     assert.match(response.headers["content-type"], /json/);
   });
 
-  it("Should respond with the correct average and count for the summary of evaluations for a course", async (t) => {
+  it("Should respond with the correct average and count for the summary of evaluations for a course", async () => {
     const summary = [
       {
         school_id: "STUD2004",
@@ -391,7 +391,7 @@ suite("GET evaluations summary as an instructor (both team and course)", async (
 
   });
 
-  it("Should respond with 401 when getting the evaluation summary of a course you do not teach", async (t) => {
+  it("Should respond with 401 when getting the evaluation summary of a course you do not teach", async () => {
     const response = await request(app)
       .get(`/api/evaluation/get-course-summary/${courseId + 1}`)
       .set("Accept", "application/json")

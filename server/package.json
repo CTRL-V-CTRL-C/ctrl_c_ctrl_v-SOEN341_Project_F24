@@ -41,5 +41,8 @@
   "devDependencies": {
     "pino-pretty": "^11.2.2",
     "supertest": "^7.0.0"
+  },
+  "directories": {
+    "test": "test"
   }
 }

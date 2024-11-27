@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import pg from 'pg'
 import log from '../logger.js'
 import { queryAndReturnError } from './db.js';
@@ -225,7 +226,7 @@ async function teacherMadeTeam(db, teamID, teacherID) {
         const result = await db.query(query);
         return result.rows[0].result;
     } catch (error) {
-        log.error(`There was an error trying to check if ${instructorId} teaches team ${teamId}`);
+        log.error(`There was an error trying to check if ${teacherID} teaches team ${teamID}`);
         log.error(error);
         return error;
     }

@@ -45,35 +45,33 @@ const emptyStudentData =
         ]
 }
 
-function ReviewEvaluationPopup(props) {
+function ReviewEvaluationPopup({ trigger, setTrigger, team_id }) {
 
     ReviewEvaluationPopup.propTypes = {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         team_id: PropTypes.number.isRequired,
-        team_name: PropTypes.string.isRequired,
     };
 
     const userContext = useContext(UserContext);
     const [studentData, setStudentData] = useState(emptyStudentData);
 
     const getResultDetails = useCallback(async () => {
-        const response = await fetchData(`/api/evaluation/get-anonymized-feedback/${props.team_id}`);
-        console.log("here")
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data)
-            if (!data) {
-                setStudentData(emptyStudentData);
-            } else {
-                setStudentData(data);
-            }
+        const response = await fetchData(`/api/evaluation/get-anonymized-feedback/${team_id}`);
+        if (!response.ok) {
+            return;
         }
-    }, [props.team_id]);
+        const data = await response.json();
+        if (!data || data.evaluations === null || data.avg_across_all === null) {
+            setStudentData(emptyStudentData);
+            return;
+        }
+        setStudentData(data);
+    }, [team_id]);
 
     const handleClose = useCallback(() => {
-        props.setTrigger(false);
-    }, [props.setTrigger]);
+        setTrigger(false);
+    }, [setTrigger]);
 
     useEffect(() => {
         getResultDetails();
@@ -83,7 +81,7 @@ function ReviewEvaluationPopup(props) {
         handleClose();
     }, [userContext.selectedCourse.course_id, handleClose]);
 
-    return (props.trigger) ? (
+    return (trigger) ? (
         <div className="popup">
             <div className="eval-popup-inner border-outer">
                 <button className="close-x" onClick={handleClose}>×</button>
@@ -110,7 +108,6 @@ function ReviewEvaluationPopup(props) {
                 </div>
                 <p style={{ fontWeight: 'bold' }}> Comments </p>
                 <div className="comment-container">
-
                     {studentData.evaluations.map((criteria, i) => (
                         <div key={`div${i}`}>
                             <p key={`p1${i}`} style={{ margin: '0px', fontWeight: 'bold', textAlign: 'justify' }}> {criteria.criteria} </p>
@@ -118,7 +115,7 @@ function ReviewEvaluationPopup(props) {
                                 comment ?
                                     <p style={{ textAlign: 'justify' }} key={i}>Anonymous - {comment}</p>
                                     :
-                                    <></>
+                                    ""
                             ))}
                         </div>
                     ))}

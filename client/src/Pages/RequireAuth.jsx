@@ -1,6 +1,6 @@
 import UserContext from "../Context/UserContext";
-import { useContext, useEffect } from "react";
-import { useNavigate, Route, Navigate, useLocation, Outlet } from 'react-router-dom'
+import { useContext } from "react";
+import { Navigate, useLocation, Outlet } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 const loginRoute = "/loginAccount";

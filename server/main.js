@@ -10,6 +10,6 @@ if (!port) {
     process.exit(1);
 }
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
     log.info(`Example app listening on port http://localhost:${port}`);
 })
