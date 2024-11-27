@@ -45,13 +45,12 @@ const emptyStudentData =
         ]
 }
 
-function ReviewEvaluationPopup({ trigger, setTrigger, team_id, team_name }) {
+function ReviewEvaluationPopup({ trigger, setTrigger, team_id }) {
 
     ReviewEvaluationPopup.propTypes = {
         trigger: PropTypes.bool.isRequired,
         setTrigger: PropTypes.func.isRequired,
         team_id: PropTypes.number.isRequired,
-        team_name: PropTypes.string.isRequired,
     };
 
     const userContext = useContext(UserContext);
