@@ -101,7 +101,7 @@ async function sendTempPasswordEmail(mailTo, password) {
                 path: path.join(import.meta.dirname, '..', 'assets', 'email-template', 'images', 'image-2.png')
             }
         ]
-    }, (error, info) => {
+    }, (error) => {
         if (error) {
             log.error("There was an error while sending the email");
             log.error(error);
@@ -158,7 +158,7 @@ function sendReleaseNotificationEmail(mailTo, courseName) {
                 path: path.join(import.meta.dirname, '..', 'assets', 'email-template', 'images', 'image-2.png')
             }
         ]
-    }, (error, info) => {
+    }, (error) => {
         if (error) {
             log.error("There was an error while sending the email");
             log.error(error);

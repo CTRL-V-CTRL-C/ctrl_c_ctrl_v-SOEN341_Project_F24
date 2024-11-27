@@ -1,5 +1,6 @@
 import request from 'supertest';
 import assert from 'node:assert';
+// eslint-disable-next-line no-unused-vars
 import express from 'express'
 import { randomLetters, uniqueRandomNumber } from './utils.js';
 

@@ -1,0 +1,16 @@
+{
+  "name": "ctrl_c_ctrl_v-soen341_project_f24",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^9.15.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14"
+  }
+}

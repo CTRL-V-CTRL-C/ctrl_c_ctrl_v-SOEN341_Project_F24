@@ -6,7 +6,7 @@ import { randomLetters, uniqueRandomNumber } from './utils.js'
 
 suite("POST requests to create a user", async () => {
 
-    it("should respond with 200 when creating a user with name and password", async (t) => {
+    it("should respond with 200 when creating a user with name and password", async () => {
         const user = {
             password: "password",
             firstName: "John",

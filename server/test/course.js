@@ -2,7 +2,6 @@ import { suite, it, after, before } from 'node:test';
 import assert from 'node:assert';
 import request from 'supertest';
 import { app } from '../server.js';
-import { db } from '../database/db.js';
 
 async function loginUser(email, password) {
   const response = await request(app)
@@ -34,7 +33,7 @@ suite("GET courses and students as an instructor", async () => {
     cookies = await loginUser("joeparker13@gmail.com", "password");
   });
 
-  it("Should respond with 200 when getting courses", async (t) => {
+  it("Should respond with 200 when getting courses", async () => {
     const response = await request(app)
       .get("/api/course/get-courses")
       .set("Accept", "application/json")
@@ -45,7 +44,7 @@ suite("GET courses and students as an instructor", async () => {
     assert.ok(response.body.length >= 2);
   });
 
-  it("Should respond with 200 when getting students in a course that they teach", async (t) => {
+  it("Should respond with 200 when getting students in a course that they teach", async () => {
     const response = await request(app)
       .get("/api/course/get-students/1")
       .set("Accept", "application/json")
@@ -56,7 +55,7 @@ suite("GET courses and students as an instructor", async () => {
     assert.ok(response._body.length >= 12);
   });
 
-  it("Should respond with 401 when getting students in a course that they don't teach", async (t) => {
+  it("Should respond with 401 when getting students in a course that they don't teach", async () => {
     const response = await request(app)
       .get("/api/course/get-students/2")
       .set("Accept", "application/json")
@@ -80,7 +79,7 @@ suite("GET courses and students as a student", async () => {
     cookies = await loginUser("joeparker1@gmail.com", "password");
   });
 
-  it("Should respond with 200 when getting courses", async (t) => {
+  it("Should respond with 200 when getting courses", async () => {
     const response = await request(app)
       .get("/api/course/get-courses")
       .set("Accept", "application/json")
@@ -91,7 +90,7 @@ suite("GET courses and students as a student", async () => {
     assert.ok(response._body.length >= 5);
   });
 
-  it("Should respond with 401 when trying to get students in a course", async (t) => {
+  it("Should respond with 401 when trying to get students in a course", async () => {
     const response = await request(app)
       .get("/api/course/get-students/1")
       .set("Accept", "application/json")

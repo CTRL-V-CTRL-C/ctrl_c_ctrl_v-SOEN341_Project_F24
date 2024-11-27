@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 
 
 function DocumentUpload({ onSucess }) {
-    const message = "Your students already have acess to this document :)";
     const [popupOpen, setPopupOpen] = useState(false);
     const [uploadError, setUploadError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -17,7 +16,6 @@ function DocumentUpload({ onSucess }) {
      * handles the upload of the file
      * @param {File} file the file
      */
-   
     async function handleUpload(file) {
         setUploadError("");
         setSuccessMessage("");
@@ -26,8 +24,8 @@ function DocumentUpload({ onSucess }) {
         if (response.status === 200) {
             setSuccessMessage("The file was uploaded successfully");
             onSucess();
-        } 
-        else if(text.includes("documents_course_id_document_name_key")){
+        }
+        else if (text.includes("documents_course_id_document_name_key")) {
             setUploadError("Your students already have access to this document :)");
         }
         else {
@@ -36,7 +34,7 @@ function DocumentUpload({ onSucess }) {
     }
 
     return <div className="documentUpload">
-        
+
 
         {uploadError ? <p id="errorDocumentUpload">{uploadError}</p> : ""}
         {successMessage ? <p className="success">{successMessage}</p> : ""}
