@@ -38,7 +38,7 @@ function MembersPage() {
         <div id="whole">
             <div id="TitlePosition"><p id="PageTitle">Student List for {selectedCourse.course_name}</p></div>
             <div>
-                <table className="TableStyle">
+                <table id="studentList"className="TableStyle">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -48,7 +48,7 @@ function MembersPage() {
                     </thead>
                     <tbody>
                         {students.map((student, index) => (
-                            <tr key={index}>
+                            <tr class="studentInformation" key={index}>
                                 <td>{`${student.f_name} ${student.l_name}`}</td>
                                 <td>{student.school_id}</td>
                                 <td>{student.email}</td>
