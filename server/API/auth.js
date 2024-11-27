@@ -89,6 +89,11 @@ async function requireTeacherMadeTeam(req, res, next) {
     res.status(400).json({ msg: "The id of team is required for this query" });
     return;
   }
+  
+  if (!Number.isInteger(Number.parseInt(req.params.teamId))) {
+    res.status(400).json({ msg: "The id of this team must be an integer" });
+    return;
+  }
   const goodInstructor = await teacherMadeTeam(db, req.params.teamId, req.session.user.userId);
 
   if (goodInstructor instanceof Error) {
