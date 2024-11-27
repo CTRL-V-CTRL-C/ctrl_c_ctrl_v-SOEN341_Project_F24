@@ -65,5 +65,5 @@ Open the project folder in your preferred IDE
  All code reviews must follow these coding standards before being accepted in to the current development branch.
  To allow consistency, these standards are also enforced through our static anaylsis pipeline.
 
- Full Demo Video of Wbsite: https://drive.google.com/file/d/1Bpb3mDgQ_lQAZwBwgSndPxyayLO0R0DF/view?usp=sharing
+ Full Demo Video of Website: https://drive.google.com/file/d/1Bpb3mDgQ_lQAZwBwgSndPxyayLO0R0DF/view?usp=sharing
  
