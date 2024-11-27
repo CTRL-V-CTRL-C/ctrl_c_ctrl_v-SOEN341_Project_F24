@@ -243,13 +243,14 @@ async function getAnonymizedFeedback(db, userId, teamId) {
   const getAnonymizedFeedbackQuery = {
     name: `get-anonymized-feedback ${userId} ${teamId}`,
     text: `
-      SELECT ed.criteria, AVG(ed.rating), COUNT(ed.criteria), JSON_AGG(ed.comment) comments
-      FROM team_members tm 
-      JOIN evaluations e ON e.evaluator_id = tm.user_id
-      JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id 
-      WHERE tm.team_id = $1  AND e.evaluatee_id = $2
-      GROUP BY ed.criteria
-      ORDER BY ed.criteria;`,
+      WITH feedback AS (SELECT ed.criteria, AVG(ed.rating), COUNT(ed.criteria), JSON_AGG(ed.comment) comments
+        FROM team_members tm
+        JOIN evaluations e ON e.evaluator_id = tm.user_id
+        JOIN evaluation_details ed ON ed.evaluation_id = e.evaluation_id
+        WHERE tm.team_id = $1  AND e.evaluatee_id = $2
+        GROUP BY ed.criteria
+        ORDER BY ed.criteria)
+      SELECT JSON_AGG(JSON_BUILD_OBJECT('criteria', criteria, 'avg', avg, 'count', count, 'comments', comments)) evaluations, AVG(avg) avg_across_all FROM feedback;`,
     values: [teamId, userId]
   };
 

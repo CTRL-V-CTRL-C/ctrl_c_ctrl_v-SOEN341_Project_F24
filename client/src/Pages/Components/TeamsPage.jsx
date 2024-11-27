@@ -18,7 +18,6 @@ function TeamsPage() {
             const data = await response.json()
             setReviewsReleased(data.released)
         }
-
     }, [userContext.selectedCourse.course_id]);
 
     const releaseReviews = async () => {
@@ -45,7 +44,7 @@ function TeamsPage() {
                 <span id="secondView">{userContext.isInstructor ? 'Members' : 'Other Teams'}</span>
             </label>
             {
-                userContext.isInstructor ?
+                userContext.isInstructor && userContext.hasCourses ?
                     <button
                         type="button"
                         id="release-reviews"
@@ -59,7 +58,7 @@ function TeamsPage() {
 
             {userContext.hasCourses ?
                 (teamsView ?
-                    (userContext.isInstructor ? <OtherTeams /> : <MyTeam />) :
+                    (userContext.isInstructor ? <OtherTeams /> : <MyTeam reviewsReleased={reviewsReleased} getReleaseState={getReleaseState} />) :
                     (userContext.isInstructor ? <MembersPage /> : <OtherTeams />)) :
                 <span>You are not part of any courses</span>
             }
