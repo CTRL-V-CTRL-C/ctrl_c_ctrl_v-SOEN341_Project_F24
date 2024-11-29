@@ -2,12 +2,12 @@
 
 ## Members
 
-- Mauricio Murillo
-- Rym Dallali
-- Nolan Ganz
-- Khalil Labban
-- Jaden Wright-Maurais
-- Carla Chamandi
+- Mauricio Murillo 40284427 Strange4 
+- Rym Dallali 40276844 DallaliRim
+- Nolan Ganz 40281655 CanadianMaple-Syrup
+- Khalil Labban 40282892 khalillabban
+- Jaden Wright-Maurais 40276168 JA-WRI
+- Carla Chamandi 40300354 Carlaeatdirt
 
 ## Roles
 
